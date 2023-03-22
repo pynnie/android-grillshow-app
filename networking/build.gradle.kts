@@ -1,0 +1,38 @@
+@file:Suppress("UnstableApiUsage")
+
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+import extensions.androidLibraryConfig
+import extensions.baseDependencies
+import extensions.baseTestDependencies
+
+plugins {
+    id("com.android.library")
+    id("kotlin-android")
+    kotlin("plugin.serialization")
+}
+
+androidLibraryConfig(withCompose = false) {
+    defaultConfig {
+        val key: String = gradleLocalProperties(rootDir).getProperty("youtube-data-api-key").toString()
+        buildConfigField("String", "YOUTUBE_DATA_API_KEY", key)
+        buildConfigField("String", "YOUTUBE_DATA_API_BASE_URL", "\"https://youtube.googleapis.com/youtube/v3/\"")
+        buildConfigField("String", "GRILLSHOW_UPLOADS_PLAYLIST_ID", "\"UUHqicoqlisG422NE9ZXIfJw\"")
+        buildConfigField("String", "GRILLSHOW_CHANNEL_ID", "\"UCHqicoqlisG422NE9ZXIfJw\"")
+    }
+}
+
+dependencies {
+    baseDependencies()
+    baseTestDependencies()
+
+    implementation(Koin.android)
+
+    implementation(Square.okHttp3.okHttp)
+    implementation(Square.okHttp3.loggingInterceptor)
+    implementation(Square.retrofit2.retrofit)
+    implementation(JakeWharton.retrofit2.converter.kotlinxSerialization)
+    implementation(KotlinX.serialization.core)
+    implementation(KotlinX.serialization.json)
+    debugImplementation(Chucker.library)
+    releaseImplementation(Chucker.libraryNoOp)
+}
