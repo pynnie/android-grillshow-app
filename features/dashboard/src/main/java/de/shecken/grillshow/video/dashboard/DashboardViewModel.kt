@@ -2,7 +2,7 @@ package de.shecken.grillshow.video.dashboard
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import de.shecken.grillshow.video.VideoRouter
+import de.shecken.grillshow.video.DashboardRouter
 import de.shecken.grillshow.video.dashboard.DashboardSceenState.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -10,7 +10,7 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 
 internal class DashboardViewModel(
-    private val videoRouter: VideoRouter,
+    private val dashboardRouter: DashboardRouter,
     private val interactor: DashboardInteractor) : ViewModel() {
 
     private val _dashboardSceenState = MutableStateFlow<DashboardSceenState>(Loading)
@@ -29,5 +29,5 @@ internal class DashboardViewModel(
         }
     }
 
-    fun onScreenClicked() = videoRouter.navigateToDetails()
+    fun onScreenClicked() = dashboardRouter.navigateToDetails()
 }

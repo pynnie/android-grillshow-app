@@ -7,7 +7,7 @@ import de.shecken.grillshow.video.search.SearchViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
-val documentModule = module {
+val dashboardModule = module {
 
     viewModel { DashboardViewModel(get(), get()) }
 

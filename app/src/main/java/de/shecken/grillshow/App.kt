@@ -3,7 +3,7 @@ package de.shecken.grillshow
 import android.app.Application
 import de.shecken.grillshow.database.di.databaseModule
 import de.shecken.grillshow.networking.youtube.networkModule
-import de.shecken.grillshow.video.di.documentModule
+import de.shecken.grillshow.video.di.dashboardModule
 import de.shecken.grillshow.repository.repositoryModule
 import de.shecken.grillshow.shop.di.shopModule
 import kotlinx.serialization.ExperimentalSerializationApi
@@ -31,7 +31,7 @@ internal class App : Application() {
                     repositoryModule,
                     mainModule,
                     shopModule,
-                    documentModule
+                    dashboardModule
                 )
             )
         }
