@@ -3,10 +3,10 @@ name: Build & Test
 on:
   push:
     branches:
-    - feature/**
-    - bugfix/**
-    - release/**
-    - develop
+      - 'feature/**'
+      - 'bugfix/**'
+      - 'release/**'
+      - 'develop'
   workflow_dispatch:
 
 jobs:
