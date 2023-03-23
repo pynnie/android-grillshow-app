@@ -22,9 +22,10 @@ jobs:
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
     - name: Read Secret and Write to Properties File
+      env:
+        API_KEY: ${{ secrets.YOUTUBE_DATA_API_KEY }}
       run:
-        echo "YOUTUBE_DATA_API_KEY=${{ secrets.YOUTUBE_DATA_API_KEY }}" > local.properties
-        cat local.properties
+        echo YOUTUBE_DATA_API_KEY="$API_KEY" > ./local.properties
     - name: Build with Gradle
       run: ./gradlew assemble
 
