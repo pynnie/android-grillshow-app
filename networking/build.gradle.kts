@@ -1,9 +1,11 @@
 @file:Suppress("UnstableApiUsage")
 
-import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 import extensions.androidLibraryConfig
 import extensions.baseDependencies
 import extensions.baseTestDependencies
+import java.io.File
+import java.io.FileInputStream
+import java.util.*
 
 plugins {
     id("com.android.library")
@@ -13,7 +15,10 @@ plugins {
 
 androidLibraryConfig(withCompose = false) {
     defaultConfig {
-        val key: String = gradleLocalProperties(rootDir).getProperty("youtube-data-api-key").toString()
+        val props = Properties().apply {
+            load(FileInputStream(File(rootProject.rootDir, "local.properties")))
+        }
+        val key = props.getProperty("youtube-data-api-key")
         buildConfigField("String", "YOUTUBE_DATA_API_KEY", key)
         buildConfigField("String", "YOUTUBE_DATA_API_BASE_URL", "\"https://youtube.googleapis.com/youtube/v3/\"")
         buildConfigField("String", "GRILLSHOW_UPLOADS_PLAYLIST_ID", "\"UUHqicoqlisG422NE9ZXIfJw\"")
