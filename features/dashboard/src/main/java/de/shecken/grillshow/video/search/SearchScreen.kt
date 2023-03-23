@@ -13,14 +13,14 @@ import de.shecken.grillshow.shared.compose.theming.AppTheme
 import org.koin.androidx.compose.getViewModel
 
 @Composable
-internal fun VideoScreen2(viewModel: SearchViewModel = getViewModel()) {
-    VideoScreen2(
+internal fun SearchScreen(viewModel: SearchViewModel = getViewModel()) {
+    SearchScreen(
         onScreenClicked = { viewModel.onBackButtonClick() }
     )
 }
 
 @Composable
-private fun VideoScreen2(onScreenClicked: () -> Unit) {
+private fun SearchScreen(onScreenClicked: () -> Unit) {
     AppTheme {
         Box(
             modifier = Modifier
@@ -41,7 +41,7 @@ private fun VideoScreen2(onScreenClicked: () -> Unit) {
 @Preview
 @Composable
 fun VideoScreen2Preview() {
-    VideoScreen2(
+    SearchScreen(
         onScreenClicked = { }
     )
 }
