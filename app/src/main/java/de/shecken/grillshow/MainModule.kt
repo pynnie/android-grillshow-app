@@ -1,6 +1,6 @@
 package de.shecken.grillshow
 
-import de.shecken.grillshow.video.VideoRouter
+import de.shecken.grillshow.video.DashboardRouter
 import de.shecken.grillshow.shop.ShopRouter
 import org.koin.dsl.module
 
@@ -10,5 +10,5 @@ internal val mainModule = module {
 
     factory<ShopRouter> { get<Router>() }
 
-    factory<VideoRouter> { get<Router>() }
+    factory<DashboardRouter> { get<Router>() }
 }

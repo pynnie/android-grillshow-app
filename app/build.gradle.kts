@@ -15,8 +15,8 @@ dependencies {
     baseDependencies()
     baseTestDependencies()
     implementation(project(":features:shop"))
+    implementation(project(":features:dashboard"))
 
-    implementation(project(":features:video"))
     implementation(project(":repository"))
     implementation(project(":networking"))
     implementation(project(":database"))

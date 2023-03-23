@@ -1,6 +1,6 @@
 package de.shecken.grillshow.video
 
-interface VideoRouter {
+interface DashboardRouter {
 
     fun navigateToDetails()
 
