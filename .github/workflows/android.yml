@@ -1,13 +1,16 @@
-name: Android CI
+name: Build & Test
 
 on:
   push:
+    branches:
+    - feature/**
+    - bugfix/**
+    - release/**
+    - develop
   workflow_dispatch:
-    
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
@@ -32,6 +35,9 @@ jobs:
             exit 1
         fi
         echo "Properties file successfully verified."
+          # Execute unit tests
+    - name: Unit Test
+      run: ./gradlew testDebugUnitTest
     - name: Build with Gradle
       run: ./gradlew assemble
 
