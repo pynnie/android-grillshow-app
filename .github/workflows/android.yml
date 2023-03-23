@@ -23,7 +23,7 @@ jobs:
       run: chmod +x gradlew
     - name: Read Secret and Write to Properties File
       run: |
-        echo "youtube-data-api-key=${{ secrets.YOUTUBE_DATA_API_KEY }}" > local.properties
+        echo "youtube-data-api-key=\"${{ secrets.YOUTUBE_DATA_API_KEY }}\"" > local.properties
         cat local.properties
     - name: Verify Properties File
       run: |
