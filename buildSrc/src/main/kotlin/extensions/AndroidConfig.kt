@@ -34,7 +34,6 @@ fun Project.androidAppConfig(additionalConfig: BaseAppModuleExtension.() -> Unit
         }
 
         compileOptions {
-            isCoreLibraryDesugaringEnabled = true
             sourceCompatibility = JavaVersion.VERSION_11
             targetCompatibility = JavaVersion.VERSION_11
         }
@@ -72,7 +71,6 @@ fun Project.androidLibraryConfig(withCompose: Boolean, additionalConfig: Library
         }
 
         compileOptions {
-            isCoreLibraryDesugaringEnabled = true
             sourceCompatibility = JavaVersion.VERSION_11
             targetCompatibility = JavaVersion.VERSION_11
         }

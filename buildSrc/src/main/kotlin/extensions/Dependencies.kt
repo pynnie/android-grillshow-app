@@ -16,8 +16,6 @@ fun DependencyHandlerScope.baseDependencies() {
     add("implementation", JakeWharton.timber)
     add("implementation", Koin.android)
     add("implementation", AndroidX.lifecycle.runtimeKtx)
-
-    add("coreLibraryDesugaring", AdditionalLibs.coreLibraryDesugaring)
 }
 
 fun DependencyHandlerScope.baseTestDependencies() {
