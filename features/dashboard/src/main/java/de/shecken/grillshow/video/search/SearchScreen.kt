@@ -3,8 +3,8 @@ package de.shecken.grillshow.video.search
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Modifier
@@ -29,8 +29,8 @@ private fun SearchScreen(onScreenClicked: () -> Unit) {
         ) {
             Text(
                 text = "Video Screen 2",
-                style = MaterialTheme.typography.h5,
-                color = MaterialTheme.colors.onBackground,
+                style = MaterialTheme.typography.headlineLarge,
+                color = MaterialTheme.colorScheme.onBackground,
                 modifier = Modifier
                     .align(Center)
             )
