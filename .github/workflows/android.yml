@@ -23,12 +23,12 @@ jobs:
       run: chmod +x gradlew
     - name: Read Secret and Write to Properties File
       run: |
-        echo "YOUTUBE_DATA_API_KEY=${{ secrets.YOUTUBE_DATA_API_KEY }}" > local.properties
+        echo "youtube-data-api-key=${{ secrets.YOUTUBE_DATA_API_KEY }}" > local.properties
         cat local.properties
     - name: Verify Properties File
       run: |
-        if ! grep -q 'YOUTUBE_DATA_API_KEY' local.properties ; then
-            echo "ERROR: 'YOUTUBE_DATA_API_KEY' not found in local.properties"
+        if ! grep -q 'youtube-data-api-key' local.properties ; then
+            echo "ERROR: 'youtube-data-api-key' not found in local.properties"
             exit 1
         fi
         echo "Properties file successfully verified."
