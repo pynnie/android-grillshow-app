@@ -8,7 +8,7 @@ on:
 jobs:
   build:
 
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v3
@@ -22,10 +22,16 @@ jobs:
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
     - name: Read Secret and Write to Properties File
-      env:
-        API_KEY: ${{ secrets.YOUTUBE_DATA_API_KEY }}
-      run:
-        echo YOUTUBE_DATA_API_KEY="$API_KEY" > ./local.properties
+      run: |
+        echo "YOUTUBE_DATA_API_KEY=${{ secrets.YOUTUBE_DATA_API_KEY }}" > local.properties
+        cat local.properties
+    - name: Verify Properties File
+      run: |
+        if ! grep -q 'YOUTUBE_DATA_API_KEY' local.properties ; then
+            echo "ERROR: 'YOUTUBE_DATA_API_KEY' not found in local.properties"
+            exit 1
+        fi
+        echo "Properties file successfully verified."
     - name: Build with Gradle
       run: ./gradlew assemble
 
