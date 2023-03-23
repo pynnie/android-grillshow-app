@@ -18,7 +18,7 @@ androidLibraryConfig(withCompose = false) {
         val props = Properties().apply {
             load(FileInputStream(File(rootProject.rootDir, "local.properties")))
         }
-        val key = props.getProperty("youtube-data-api-key")
+        val key = props.getProperty("youtube-data-api-key").toString()
         buildConfigField("String", "YOUTUBE_DATA_API_KEY", key)
         buildConfigField("String", "YOUTUBE_DATA_API_BASE_URL", "\"https://youtube.googleapis.com/youtube/v3/\"")
         buildConfigField("String", "GRILLSHOW_UPLOADS_PLAYLIST_ID", "\"UUHqicoqlisG422NE9ZXIfJw\"")
