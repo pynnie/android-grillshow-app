@@ -1,11 +1,7 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
-
 package de.shecken.grillshow.video.dashboard
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -13,7 +9,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import de.shecken.grillshow.repository.video.PlayList
-import de.shecken.grillshow.shared.ui.MainBottomBar
 import org.koin.androidx.compose.getViewModel
 
 @Composable
@@ -28,19 +23,11 @@ internal fun DashboardScreen(viewModel: DashboardViewModel = getViewModel()) {
 private fun DashboardScreen(
     onScreenClicked: () -> Unit, state: DashboardSceenState
 ) {
-
-    Scaffold(bottomBar = {
-        MainBottomBar(onDashboardClick = { /*TODO*/ },
-            onSearchClick = { /*TODO*/ },
-            onFavoritesClick = { /*TODO*/ })
-    }) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(it)
-        ) {
-            HandleScreenState(state = state)
-        }
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+    ) {
+        HandleScreenState(state = state)
     }
 }
 

@@ -3,11 +3,6 @@ rootProject.name = "Grillshow"
 plugins {
     // See https://jmfayard.github.io/refreshVersions
     id("de.fayard.refreshVersions") version "0.40.1"
-////                            # available:"0.40.2"
-////                            # available:"0.50.0"
-////                            # available:"0.50.1"
-////                            # available:"0.50.2"
-////                            # available:"0.51.0"
 }
 
 refreshVersions {
@@ -17,6 +12,7 @@ refreshVersions {
 include(":app")
 include(":features:search")
 include(":features:dashboard")
+include(":features:favorites")
 include(":networking")
 include(":repository")
 include(":database")

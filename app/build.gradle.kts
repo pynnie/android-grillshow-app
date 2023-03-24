@@ -1,4 +1,3 @@
-
 import extensions.androidAppConfig
 import extensions.baseDependencies
 import extensions.baseFeatureModuleDependencies
@@ -16,6 +15,7 @@ dependencies {
     baseTestDependencies()
     implementation(project(":features:search"))
     implementation(project(":features:dashboard"))
+    implementation(project(":features:favorites"))
 
     implementation(project(":repository"))
     implementation(project(":networking"))

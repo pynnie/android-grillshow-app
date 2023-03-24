@@ -1,4 +1,4 @@
-package de.shecken.grillshow.shared.ui
+package de.shecken.grillshow.shared.ui.navigation
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
@@ -13,9 +13,17 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import de.shecken.grillshow.shared.GrillshowTheme
 import de.shecken.grillshow.shared.R
+import org.koin.androidx.compose.getViewModel
 
 @Composable
-fun MainBottomBar(
+fun BottomBar(viewModel: BottomBarViewModel = getViewModel()) {
+    BottomBar(
+        onDashboardClick = viewModel::onDashboardClick,
+        onSearchClick = viewModel::onSearchClick,
+        onFavoritesClick = viewModel::onFavoritesClick)
+}
+@Composable
+private fun BottomBar(
     modifier: Modifier = Modifier,
     onDashboardClick: () -> Unit,
     onSearchClick: () -> Unit,
@@ -34,7 +42,7 @@ fun MainBottomBar(
                 selected = selectedItem == index,
                 onClick = {
                     selectedItem = index
-                    navigationOption.onOptionClick
+                    navigationOption.onOptionClick()
                 },
                 icon = {
                     Image(
@@ -76,6 +84,6 @@ sealed class NavigationOption(
 @Preview
 private fun BottomNavigationPreview() {
     GrillshowTheme() {
-        MainBottomBar(onDashboardClick = {}, onSearchClick = {}, onFavoritesClick = {})
+        BottomBar(onDashboardClick = {}, onSearchClick = {}, onFavoritesClick = {})
     }
 }
