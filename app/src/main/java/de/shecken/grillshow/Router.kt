@@ -1,17 +1,17 @@
 package de.shecken.grillshow
 
 import androidx.navigation.NavController
+import de.shecken.favorites.favoritesRoute
+import de.shecken.grillshow.shared.ui.navigation.BottomBarRouter
 import de.shecken.grillshow.video.DashboardRouter
 import de.shecken.grillshow.video.dashboardRoute
-import de.shecken.grillshow.shop.ShopRouter
-import de.shecken.grillshow.shop.shopRoute
-import de.shecken.grillshow.video.searchScreen
+import de.shecken.grillshow.shop.searchRoute
 
 /**
  * Main Router class for the project. Should implement all sub-module Router interfaces using the [navController] injected from the
  * [MainActivity].
  */
-internal class Router : ShopRouter, DashboardRouter {
+internal class Router : DashboardRouter, BottomBarRouter {
 
     lateinit var navController: NavController
 
@@ -20,9 +20,11 @@ internal class Router : ShopRouter, DashboardRouter {
      */
     fun start() = dashboardRoute
 
-    override fun navigateToDetails() = navController.navigate(searchScreen)
+    override fun openDashboard() = navController.navigate(dashboardRoute)
 
-    override fun finishDetails() = navController.navigate(shopRoute)
+    override fun openSearch() = navController.navigate(searchRoute)
 
-    override fun finishShopModule() = navController.navigate(dashboardRoute)
+    override fun openFavorites() = navController.navigate(favoritesRoute)
+
+    override fun openRecipeDetails() = navController.navigate(searchRoute)
 }
