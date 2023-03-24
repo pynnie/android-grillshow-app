@@ -16,8 +16,6 @@ fun DependencyHandlerScope.baseDependencies() {
     add("implementation", JakeWharton.timber)
     add("implementation", Koin.android)
     add("implementation", AndroidX.lifecycle.runtimeKtx)
-
-    add("coreLibraryDesugaring", AdditionalLibs.coreLibraryDesugaring)
 }
 
 fun DependencyHandlerScope.baseTestDependencies() {
@@ -45,7 +43,7 @@ fun DependencyHandlerScope.composeDependencies() {
     add("debugImplementation", AndroidX.Compose.Ui.tooling)
     add("implementation", AndroidX.Compose.Ui.toolingPreview)
     add("implementation", AndroidX.Compose.foundation)
-    add("implementation", AndroidX.Compose.material)
+    add("implementation", AndroidX.Compose.material3)
     add("implementation", AndroidX.Lifecycle.viewModelCompose)
     add("implementation", AndroidX.Activity.compose)
     add("implementation", AndroidX.ConstraintLayout.compose)
