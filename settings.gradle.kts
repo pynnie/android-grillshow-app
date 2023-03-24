@@ -15,7 +15,7 @@ refreshVersions {
 }
 
 include(":app")
-include(":features:shop")
+include(":features:search")
 include(":features:dashboard")
 include(":networking")
 include(":repository")

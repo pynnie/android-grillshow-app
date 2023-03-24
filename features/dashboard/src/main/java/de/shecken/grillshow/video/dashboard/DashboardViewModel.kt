@@ -29,5 +29,5 @@ internal class DashboardViewModel(
         }
     }
 
-    fun onScreenClicked() = dashboardRouter.navigateToDetails()
+    fun onScreenClicked() = dashboardRouter.openRecipeDetails()
 }

@@ -8,7 +8,7 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import de.shecken.grillshow.shared.GrillshowTheme
-import de.shecken.grillshow.shop.userGraph
+import de.shecken.grillshow.shop.searchGraph
 import de.shecken.grillshow.video.dashboardGraph
 import org.koin.android.ext.android.inject
 
@@ -34,7 +34,7 @@ internal class MainActivity : AppCompatActivity() {
 
                 NavHost(navController = navController, startDestination = router.start()) {
                     dashboardGraph()
-                    userGraph()
+                    searchGraph()
                 }
             }
         }

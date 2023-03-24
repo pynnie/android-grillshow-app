@@ -1,4 +1,4 @@
-package de.shecken.grillshow.video.search
+package de.shecken.grillshow.shop.ui
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box

@@ -14,7 +14,7 @@ androidAppConfig()
 dependencies {
     baseDependencies()
     baseTestDependencies()
-    implementation(project(":features:shop"))
+    implementation(project(":features:search"))
     implementation(project(":features:dashboard"))
 
     implementation(project(":repository"))
