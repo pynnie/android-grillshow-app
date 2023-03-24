@@ -7,6 +7,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
+import de.shecken.grillshow.shared.GrillshowTheme
 import de.shecken.grillshow.shop.userGraph
 import de.shecken.grillshow.video.dashboardGraph
 import org.koin.android.ext.android.inject
@@ -23,16 +24,18 @@ internal class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            val navController = rememberNavController()
-                .also { router.navController = it }
+            GrillshowTheme {
+                val navController = rememberNavController()
+                    .also { router.navController = it }
 
-            LaunchedEffect(key1 = Unit) {
-                keepSplashScreen = false // Adjust for your app initialization process
-            }
+                LaunchedEffect(key1 = Unit) {
+                    keepSplashScreen = false // Adjust for your app initialization process
+                }
 
-            NavHost(navController = navController, startDestination = router.start()) {
-                dashboardGraph()
-                userGraph()
+                NavHost(navController = navController, startDestination = router.start()) {
+                    dashboardGraph()
+                    userGraph()
+                }
             }
         }
     }
