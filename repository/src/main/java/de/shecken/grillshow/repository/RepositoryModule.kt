@@ -1,10 +1,10 @@
 package de.shecken.grillshow.repository
 
-import de.shecken.grillshow.repository.video.VideoRepository
-import de.shecken.grillshow.repository.video.VideoRepositoryImpl
+import de.shecken.grillshow.repository.recipe.RecipeRepository
+import de.shecken.grillshow.repository.recipe.RecipeRepositoryImpl
 import org.koin.dsl.module
 
 val repositoryModule = module {
 
-    single<VideoRepository> { VideoRepositoryImpl(get()) }
+    single<RecipeRepository> { RecipeRepositoryImpl(get(), get()) }
 }

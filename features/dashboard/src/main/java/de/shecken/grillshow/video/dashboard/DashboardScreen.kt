@@ -8,7 +8,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import de.shecken.grillshow.repository.video.PlayList
+import de.shecken.grillshow.repository.recipe.Recipe
 import org.koin.androidx.compose.getViewModel
 
 @Composable
@@ -35,7 +35,7 @@ private fun DashboardScreen(
 private fun HandleScreenState(state: DashboardSceenState) {
     when (state) {
         is DashboardSceenState.Loading -> LoadingIndicator()
-        is DashboardSceenState.Success -> PlayLists(playLists = state.playlistItems)
+        is DashboardSceenState.Success -> PlayLists(playLists = state.recipes)
         is DashboardSceenState.Failure -> Error()
     }
 }
@@ -63,7 +63,11 @@ fun LoadingIndicator() {
 }
 
 @Composable
-fun PlayLists(playLists: List<PlayList>) {
-    Text(text = "Dashboard")
+fun PlayLists(playLists: List<Recipe>) {
+    Column {
+        playLists.forEach { playlist ->
+            Text(text = playlist.title)
+        }
+    }
 }
 

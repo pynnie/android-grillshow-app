@@ -20,8 +20,10 @@ internal class DashboardViewModel(
         viewModelScope.launch {
             try {
                 interactor
-                    .getVideos()
-                    .collect { _dashboardSceenState.value = Success(it) }
+                    .getRecipes()
+                    .collect {
+                        _dashboardSceenState.value = Success(it)
+                    }
             } catch (t: Throwable) {
                 _dashboardSceenState.value = Failure
                 Timber.e(t)

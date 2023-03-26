@@ -22,7 +22,15 @@ val databaseModule = module {
 
     single { MasterKey(get()) }
 
-    single { EncryptedSharedPreferences.create(get(), SHARED_PREFERENCES_NAME, get<MasterKey>(), AES256_SIV, AES256_GCM) }
+    single {
+        EncryptedSharedPreferences.create(
+            get(),
+            SHARED_PREFERENCES_NAME,
+            get<MasterKey>(),
+            AES256_SIV,
+            AES256_GCM
+        )
+    }
 
     single { SupportFactory(getOrCreateRoomPassphrase(get())) }
 
@@ -33,7 +41,7 @@ val databaseModule = module {
             .build()
     }
 
-    factory { get<AppDatabase>().userDao() }
+    factory { get<AppDatabase>().recipeDao() }
 }
 
 private fun getOrCreateRoomPassphrase(sharedPreferences: SharedPreferences): ByteArray {
