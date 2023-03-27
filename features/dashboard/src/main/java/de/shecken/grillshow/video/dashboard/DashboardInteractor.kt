@@ -1,6 +1,6 @@
 package de.shecken.grillshow.video.dashboard
 
-import de.shecken.grillshow.repository.video.PlayList
+import de.shecken.grillshow.repository.recipe.Recipe
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 internal interface DashboardInteractor {
 
     /**
-     * @return A [Flow] emitting all changes of [PlayList]
+     * @return the 10 latest [Recipe]s as a [Flow]
      */
-    suspend fun getVideos(): Flow<List<PlayList>>
+    suspend fun getRecipes(): Flow<List<Recipe>>
 }

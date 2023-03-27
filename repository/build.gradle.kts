@@ -15,6 +15,4 @@ dependencies {
 
     implementation(project(":networking"))
     implementation(project(":database"))
-
-    implementation(Koin.android)
 }

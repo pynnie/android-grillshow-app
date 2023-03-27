@@ -41,7 +41,12 @@ val networkModule = module {
             .build()
     }
 
-    single { Json { ignoreUnknownKeys = true } }
+    single {
+        Json {
+            ignoreUnknownKeys = true
+            encodeDefaults = true
+        }
+    }
 
     single {
         val contentType = "application/json".toMediaType()

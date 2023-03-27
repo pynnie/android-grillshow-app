@@ -1,6 +1,6 @@
-package de.shecken.grillshow.repository.video
+package de.shecken.grillshow.repository.recipe
 
-data class PlaylistItem(
+data class Recipe(
     val title: String,
     val description: String,
     val thumbnailUrl: String
