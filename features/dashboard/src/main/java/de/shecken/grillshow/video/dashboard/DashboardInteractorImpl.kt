@@ -6,6 +6,5 @@ import kotlinx.coroutines.flow.Flow
 
 internal class DashboardInteractorImpl(private val recipeRepository: RecipeRepository) :
     DashboardInteractor {
-    override suspend fun getRecipes(): Flow<List<Recipe>> =
-        recipeRepository.recipes.also { recipeRepository.fetchRecipes() }
+    override suspend fun getRecipes(): Flow<List<Recipe>> = recipeRepository.recipes
 }

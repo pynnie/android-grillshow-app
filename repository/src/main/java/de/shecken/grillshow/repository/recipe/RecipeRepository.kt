@@ -9,5 +9,10 @@ interface RecipeRepository {
     /**
      * Fetch recipes from API
      */
-    suspend fun fetchRecipes(pageToken: String = "")
+    suspend fun fetchRecipes(pageToken: String = "", latestUploadDateString: String? = null)
+
+    /**
+     * Only fetch the latest recipes missing in the database
+     */
+    suspend fun fetchLatestRecipes()
 }

@@ -1,6 +1,8 @@
 package de.shecken.grillshow.video.dashboard
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -64,9 +66,9 @@ fun LoadingIndicator() {
 
 @Composable
 fun PlayLists(playLists: List<Recipe>) {
-    Column {
-        playLists.forEach { playlist ->
-            Text(text = playlist.title)
+    LazyColumn {
+        items(items = playLists) { recipe ->
+            Text(text = recipe.title)
         }
     }
 }

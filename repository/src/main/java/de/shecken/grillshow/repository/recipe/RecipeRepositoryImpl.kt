@@ -9,7 +9,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
-import timber.log.Timber
 import java.time.Instant
 
 class RecipeRepositoryImpl(
@@ -28,30 +27,26 @@ class RecipeRepositoryImpl(
         }
     }
 
-    override suspend fun fetchRecipes(pageToken: String) {
+    override suspend fun fetchRecipes(pageToken: String, latestUploadDateString: String?) {
         withContext(dispatcher) {
-            val latestUploadDateString = recipeDao.getLatestUploadDate()
             val response = api.requestLatestUploads(pageToken = pageToken)
             response.items.forEach { responseItem ->
-                if (isItemValid(responseItem, latestUploadDateString)) {
-                    recipeDao.insert(responseItem.toRecipeEntity())
+                if (isNew(latestUploadDateString, responseItem.contentDetails.videoPublishedAt)) {
+                    if (isRecipe(responseItem.snippet.title)) {
+                        recipeDao.insert(responseItem.toRecipeEntity())
+                    }
+                } else {
+                    return@withContext
                 }
             }
-
             response.nextPageToken?.let { token ->
-                fetchRecipes(pageToken = token)
+                fetchRecipes(pageToken = token, latestUploadDateString = latestUploadDateString)
             }
         }
     }
 
-    private fun isItemValid(
-        responseItem: PlaylistItem,
-        latestUploadDateString: String?
-    ) =
-        isRecipe(responseItem.snippet.title) && isNew(
-            latestUploadDateString,
-            responseItem.contentDetails.videoPublishedAt
-        )
+    override suspend fun fetchLatestRecipes() =
+        fetchRecipes(latestUploadDateString = recipeDao.getLatestUploadDate())
 
     private fun isRecipe(videoTitle: String) =
         videoTitle.contains(RECIPE_TITLE_REGEX, ignoreCase = true)
@@ -60,7 +55,6 @@ class RecipeRepositoryImpl(
         latestUploadDateString?.let {
             val latestUploadDate = Instant.parse(latestUploadDateString)
             val currentUploadDate = Instant.parse(itemUploadDateString)
-            Timber.w("IS NEW: ${currentUploadDate.isAfter(latestUploadDate)}")
             return currentUploadDate.isAfter(latestUploadDate)
         } ?: true
 
