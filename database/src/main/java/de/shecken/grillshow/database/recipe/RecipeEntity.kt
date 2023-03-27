@@ -3,6 +3,16 @@ package de.shecken.grillshow.database.recipe
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
+/**
+ * Entity class for recipes
+ *
+ * @param id the videoId from the youtube API
+ * @param title full title of the recipe video
+ * @param description full description of the recipe video
+ * @param thumbnailUrl url to retrieve the videos thumbnail image
+ * @param isFavorite flag to show if recipe was marked as favorite
+ * @param uploadedAt video upload date (UTC)
+ */
 @Entity
 data class RecipeEntity(
     @PrimaryKey
@@ -12,5 +22,5 @@ data class RecipeEntity(
     val videoId: String,
     val thumbnailUrl: String,
     val isFavorite: Boolean,
-    val uploadedAt: Long
+    val uploadedAt: String
 )

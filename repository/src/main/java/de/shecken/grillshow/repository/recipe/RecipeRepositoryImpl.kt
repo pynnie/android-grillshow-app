@@ -2,11 +2,15 @@ package de.shecken.grillshow.repository.recipe
 
 import de.shecken.grillshow.database.recipe.RecipeDao
 import de.shecken.grillshow.database.recipe.RecipeEntity
+import de.shecken.grillshow.networking.youtube.PlaylistItem
 import de.shecken.grillshow.networking.youtube.YoutubeDataApi
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.withContext
 import timber.log.Timber
+import java.time.Instant
 
 class RecipeRepositoryImpl(
     private val api: YoutubeDataApi,
@@ -24,21 +28,54 @@ class RecipeRepositoryImpl(
         }
     }
 
-    override suspend fun fetchRecipes() {
+    override suspend fun fetchRecipes(pageToken: String) {
         withContext(dispatcher) {
-            api.requestLatestUploads().items.map { responseItem ->
-                Timber.w(responseItem.snippet.title)
-                val databaseItem = RecipeEntity(
-                    id = responseItem.contentDetails.videoId,
-                    title = responseItem.snippet.title,
-                    description = responseItem.snippet.description,
-                    videoId = responseItem.contentDetails.videoId,
-                    thumbnailUrl = responseItem.snippet.thumbnails.default.url,
-                    isFavorite = false,
-                    uploadedAt = 0
-                )
-                recipeDao.insert(databaseItem)
+            val latestUploadDateString = recipeDao.getLatestUploadDate()
+            val response = api.requestLatestUploads(pageToken = pageToken)
+            response.items.forEach { responseItem ->
+                if (isItemValid(responseItem, latestUploadDateString)) {
+                    recipeDao.insert(responseItem.toRecipeEntity())
+                }
+            }
+
+            response.nextPageToken?.let { token ->
+                fetchRecipes(pageToken = token)
             }
         }
+    }
+
+    private fun isItemValid(
+        responseItem: PlaylistItem,
+        latestUploadDateString: String?
+    ) =
+        isRecipe(responseItem.snippet.title) && isNew(
+            latestUploadDateString,
+            responseItem.contentDetails.videoPublishedAt
+        )
+
+    private fun isRecipe(videoTitle: String) =
+        videoTitle.contains(RECIPE_TITLE_REGEX, ignoreCase = true)
+
+    private fun isNew(latestUploadDateString: String?, itemUploadDateString: String) =
+        latestUploadDateString?.let {
+            val latestUploadDate = Instant.parse(latestUploadDateString)
+            val currentUploadDate = Instant.parse(itemUploadDateString)
+            Timber.w("IS NEW: ${currentUploadDate.isAfter(latestUploadDate)}")
+            return currentUploadDate.isAfter(latestUploadDate)
+        } ?: true
+
+    private fun PlaylistItem.toRecipeEntity() =
+        RecipeEntity(
+            id = contentDetails.videoId,
+            title = snippet.title,
+            description = snippet.description,
+            videoId = contentDetails.videoId,
+            thumbnailUrl = snippet.thumbnails.default.url,
+            isFavorite = false,
+            uploadedAt = contentDetails.videoPublishedAt
+        )
+
+    companion object {
+        private const val RECIPE_TITLE_REGEX = "die grillshow"
     }
 }

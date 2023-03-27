@@ -4,8 +4,6 @@ import kotlinx.serialization.*
 
 @Serializable
 data class PlaylistItem(
-    val kind: String,
-    val etag: String,
     val id: String,
     val snippet: Snippet,
     val contentDetails: ContentDetails
@@ -18,23 +16,16 @@ data class Snippet(
     val title: String,
     val description: String,
     val thumbnails: Thumbnails,
-    val channelTitle: String,
 )
 
 @Serializable
 data class Thumbnails(
-    val default: Thumbnail,
-    val medium: Thumbnail,
-    val high: Thumbnail,
-    val standard: Thumbnail,
-    val maxres: Thumbnail
+    val default: Thumbnail
 )
 
 @Serializable
 data class Thumbnail(
-    val url: String,
-    val width: Int,
-    val height: Int
+    val url: String
 )
 
 @Serializable
@@ -45,8 +36,6 @@ data class ContentDetails(
 
 @Serializable
 data class PlaylistItemListResponse(
-    val kind: String,
-    val etag: String,
-    val nextPageToken: String,
+    val nextPageToken: String? = null,
     val items: List<PlaylistItem>
 )

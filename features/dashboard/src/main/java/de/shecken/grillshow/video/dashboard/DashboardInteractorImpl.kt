@@ -8,6 +8,4 @@ internal class DashboardInteractorImpl(private val recipeRepository: RecipeRepos
     DashboardInteractor {
     override suspend fun getRecipes(): Flow<List<Recipe>> =
         recipeRepository.recipes.also { recipeRepository.fetchRecipes() }
-
-
 }

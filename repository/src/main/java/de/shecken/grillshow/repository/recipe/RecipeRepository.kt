@@ -9,5 +9,5 @@ interface RecipeRepository {
     /**
      * Fetch recipes from API
      */
-    suspend fun fetchRecipes()
+    suspend fun fetchRecipes(pageToken: String = "")
 }

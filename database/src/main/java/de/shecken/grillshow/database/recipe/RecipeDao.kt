@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import de.shecken.grillshow.database.DatabaseConstants.COLUMN_UPLOADED_AT
 import de.shecken.grillshow.database.DatabaseConstants.TABLE_RECIPE_ENTITY
 import kotlinx.coroutines.flow.Flow
 
@@ -16,6 +17,9 @@ interface RecipeDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(userEntity: RecipeEntity)
 
-    @Query("DELETE FROM $TABLE_RECIPE_ENTITY ")
+    @Query("DELETE FROM $TABLE_RECIPE_ENTITY")
     suspend fun deleteAll()
+
+    @Query("SELECT $COLUMN_UPLOADED_AT FROM $TABLE_RECIPE_ENTITY ORDER BY $COLUMN_UPLOADED_AT DESC LIMIT 1")
+    suspend fun getLatestUploadDate(): String?
 }
