@@ -42,6 +42,7 @@ val databaseModule = module {
     }
 
     factory { get<AppDatabase>().recipeDao() }
+    factory { get<AppDatabase>().categoryDao() }
 }
 
 private fun getOrCreateRoomPassphrase(sharedPreferences: SharedPreferences): ByteArray {

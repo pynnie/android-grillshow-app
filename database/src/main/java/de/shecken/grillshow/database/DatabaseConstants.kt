@@ -10,6 +10,7 @@ internal object DatabaseConstants {
     const val SECURE_RANDOM_SIZE = 256
 
     const val TABLE_RECIPE_ENTITY = "RecipeEntity"
+    const val TABLE_CATEGORY_ENTITY = "CategoryEntity"
 
     const val COLUMN_UPLOADED_AT = "uploadedAt"
 }

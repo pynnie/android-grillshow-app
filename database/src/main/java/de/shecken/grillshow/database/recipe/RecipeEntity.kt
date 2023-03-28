@@ -19,7 +19,6 @@ data class RecipeEntity(
     val id: String,
     val title: String,
     val description: String,
-    val videoId: String,
     val thumbnailUrl: String,
     val isFavorite: Boolean,
     val uploadedAt: String
