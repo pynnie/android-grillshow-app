@@ -15,7 +15,6 @@ fun DependencyHandlerScope.baseDependencies() {
     add("implementation", KotlinX.Coroutines.android)
     add("implementation", JakeWharton.timber)
     add("implementation", Koin.android)
-    add("implementation", AndroidX.lifecycle.runtimeKtx)
 }
 
 fun DependencyHandlerScope.baseTestDependencies() {
