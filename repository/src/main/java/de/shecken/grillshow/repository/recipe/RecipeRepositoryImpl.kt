@@ -2,7 +2,7 @@ package de.shecken.grillshow.repository.recipe
 
 import de.shecken.grillshow.database.recipe.RecipeDao
 import de.shecken.grillshow.database.recipe.RecipeEntity
-import de.shecken.grillshow.networking.youtube.PlaylistItem
+import de.shecken.grillshow.networking.youtube.response.PlaylistItem
 import de.shecken.grillshow.networking.youtube.YoutubeDataApi
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -47,6 +47,11 @@ class RecipeRepositoryImpl(
 
     override suspend fun fetchLatestRecipes() =
         fetchRecipes(latestUploadDateString = recipeDao.getLatestUploadDate())
+
+    override suspend fun fetchCategories() = withContext(dispatcher) {
+        api.requestAllPlaylistsFromChannel()
+        return@withContext
+    }
 
     private fun isRecipe(videoTitle: String) =
         videoTitle.contains(RECIPE_TITLE_REGEX, ignoreCase = true)

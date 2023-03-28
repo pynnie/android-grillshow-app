@@ -1,4 +1,4 @@
-package de.shecken.grillshow.networking.youtube
+package de.shecken.grillshow.networking.youtube.response
 
 import kotlinx.serialization.*
 

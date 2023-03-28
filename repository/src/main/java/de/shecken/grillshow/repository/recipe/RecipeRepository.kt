@@ -15,4 +15,9 @@ interface RecipeRepository {
      * Only fetch the latest recipes missing in the database
      */
     suspend fun fetchLatestRecipes()
+
+    /**
+     * Fetches all playlists from API and maps them to categories
+     */
+    suspend fun fetchCategories()
 }
