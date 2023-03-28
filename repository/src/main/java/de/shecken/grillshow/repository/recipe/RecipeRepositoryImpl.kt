@@ -22,14 +22,8 @@ class RecipeRepositoryImpl(
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : RecipeRepository {
 
-    override val recipes: Flow<List<Recipe>> = recipeDao.getAll().map {
-        it.map { entity ->
-            Recipe(
-                title = entity.title,
-                description = entity.description,
-                thumbnailUrl = entity.thumbnailUrl
-            )
-        }
+    override val recipes: Flow<List<Recipe>> = recipeDao.getLatestRecipes().map { list ->
+        list.map { entity -> entity.toRecipe() }
     }
 
     override suspend fun fetchAllRecipes() =
@@ -122,6 +116,13 @@ class RecipeRepositoryImpl(
             title = snippet.title,
             description = snippet.description
         )
+
+    private fun RecipeEntity.toRecipe() = Recipe(
+        id = id,
+        title = title,
+        description = description,
+        thumbnailUrl = thumbnailUrl
+    )
 
     companion object {
         private const val RECIPE_TITLE_REGEX = "die grillshow"
