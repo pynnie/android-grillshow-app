@@ -1,9 +1,13 @@
 package de.shecken.grillshow.repository.recipe
 
+import de.shecken.grillshow.database.category.CategoryDao
+import de.shecken.grillshow.database.category.CategoryEntity
 import de.shecken.grillshow.database.recipe.RecipeDao
 import de.shecken.grillshow.database.recipe.RecipeEntity
-import de.shecken.grillshow.networking.youtube.PlaylistItem
+import de.shecken.grillshow.networking.youtube.Playlist
 import de.shecken.grillshow.networking.youtube.YoutubeDataApi
+import de.shecken.grillshow.networking.youtube.response.PlaylistItem
+import de.shecken.networking.BuildConfig
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -14,6 +18,7 @@ import java.time.Instant
 class RecipeRepositoryImpl(
     private val api: YoutubeDataApi,
     private val recipeDao: RecipeDao,
+    private val categoryDao: CategoryDao,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : RecipeRepository {
 
@@ -27,9 +32,32 @@ class RecipeRepositoryImpl(
         }
     }
 
-    override suspend fun fetchRecipes(pageToken: String, latestUploadDateString: String?) {
+    override suspend fun fetchAllRecipes() =
+        fetchRecipes(playlistId = BuildConfig.GRILLSHOW_UPLOADS_PLAYLIST_ID)
+
+    override suspend fun fetchLatestRecipes() =
+        fetchRecipes(
+            playlistId = BuildConfig.GRILLSHOW_UPLOADS_PLAYLIST_ID,
+            latestUploadDateString = recipeDao.getLatestUploadDate()
+        )
+
+    override suspend fun fetchCategories() = withContext(dispatcher) {
+        api.requestAllPlaylistsFromChannel().items.forEach { playListItem ->
+            categoryDao.insert(playListItem.toCategoryEntity())
+        }
+        mapCategoriesToRecipes()
+    }
+
+    private suspend fun fetchRecipes(
+        playlistId: String,
+        pageToken: String = "",
+        latestUploadDateString: String? = null
+    ) {
         withContext(dispatcher) {
-            val response = api.requestLatestUploads(pageToken = pageToken)
+            val response = api.requestPlaylistItems(
+                pageToken = pageToken,
+                playlistId = playlistId
+            )
             response.items.forEach { responseItem ->
                 if (isNew(latestUploadDateString, responseItem.contentDetails.videoPublishedAt)) {
                     if (isRecipe(responseItem.snippet.title)) {
@@ -40,13 +68,33 @@ class RecipeRepositoryImpl(
                 }
             }
             response.nextPageToken?.let { token ->
-                fetchRecipes(pageToken = token, latestUploadDateString = latestUploadDateString)
+                fetchRecipes(
+                    pageToken = token,
+                    latestUploadDateString = latestUploadDateString,
+                    playlistId = playlistId
+                )
             }
         }
     }
 
-    override suspend fun fetchLatestRecipes() =
-        fetchRecipes(latestUploadDateString = recipeDao.getLatestUploadDate())
+    private suspend fun mapCategoriesToRecipes() {
+        categoryDao.getAllCategories().forEach { category ->
+            updateRecipesForCategory(category)
+        }
+    }
+
+    private suspend fun updateRecipesForCategory(category: CategoryEntity, pageToken: String = "") {
+        val playlistResponse =
+            api.requestPlaylistItems(playlistId = category.id, pageToken = pageToken)
+        playlistResponse.items.forEach { item ->
+            recipeDao.getRecipeById(item.contentDetails.videoId)?.let { recipeToUpdate ->
+                recipeDao.insert(recipeToUpdate.copy(categoryId = category.id))
+            }
+        }
+        playlistResponse.nextPageToken?.let { token ->
+            updateRecipesForCategory(category = category, pageToken = token)
+        }
+    }
 
     private fun isRecipe(videoTitle: String) =
         videoTitle.contains(RECIPE_TITLE_REGEX, ignoreCase = true)
@@ -63,10 +111,16 @@ class RecipeRepositoryImpl(
             id = contentDetails.videoId,
             title = snippet.title,
             description = snippet.description,
-            videoId = contentDetails.videoId,
             thumbnailUrl = snippet.thumbnails.default.url,
             isFavorite = false,
             uploadedAt = contentDetails.videoPublishedAt
+        )
+
+    private fun Playlist.toCategoryEntity() =
+        CategoryEntity(
+            id = id,
+            title = snippet.title,
+            description = snippet.description
         )
 
     companion object {

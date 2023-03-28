@@ -37,11 +37,13 @@ val databaseModule = module {
     single {
         Room
             .databaseBuilder(get(), AppDatabase::class.java, DATABASE_NAME)
+            .fallbackToDestructiveMigration()
             .apply { if (!DEBUG) openHelperFactory(get<SupportFactory>()) }
             .build()
     }
 
     factory { get<AppDatabase>().recipeDao() }
+    factory { get<AppDatabase>().categoryDao() }
 }
 
 private fun getOrCreateRoomPassphrase(sharedPreferences: SharedPreferences): ByteArray {
