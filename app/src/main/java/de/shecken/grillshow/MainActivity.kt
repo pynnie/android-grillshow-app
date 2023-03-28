@@ -61,7 +61,8 @@ internal class MainActivity : AppCompatActivity() {
 
     private fun fetchData() {
         CoroutineScope(Dispatchers.IO).launch {
-            recipeRepo.fetchRecipes()
+            recipeRepo.fetchAllRecipes()
+            recipeRepo.fetchCategories()
         }
     }
 }

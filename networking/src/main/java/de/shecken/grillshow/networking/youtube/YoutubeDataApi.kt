@@ -10,9 +10,9 @@ interface YoutubeDataApi {
 
     @GET("playlistItems")
     @Headers("Content-Type: application/json")
-    suspend fun requestLatestUploads(
+    suspend fun requestPlaylistItems(
         @Query(PARAM_API_KEY) key: String = BuildConfig.YOUTUBE_DATA_API_KEY,
-        @Query(PARAM_PLAYLIST_ID) playlistId: String = BuildConfig.GRILLSHOW_UPLOADS_PLAYLIST_ID,
+        @Query(PARAM_PLAYLIST_ID) playlistId: String,
         @Query(PARAM_PART) part: String = "$PART_SNIPPET, $PART_CONTENT_DETAILS",
         @Query(PARAM_ORDER) order: String = DEFAULT_ORDER,
         @Query(PARAM_PAGE_TOKEN) pageToken: String = "",

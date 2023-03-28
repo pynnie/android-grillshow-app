@@ -7,9 +7,9 @@ interface RecipeRepository {
     val recipes: Flow<List<Recipe>>
 
     /**
-     * Fetch recipes from API
+     * Fetch all recipes from API
      */
-    suspend fun fetchRecipes(pageToken: String = "", latestUploadDateString: String? = null)
+    suspend fun fetchAllRecipes()
 
     /**
      * Only fetch the latest recipes missing in the database

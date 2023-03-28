@@ -12,6 +12,7 @@ import androidx.room.PrimaryKey
  * @param thumbnailUrl url to retrieve the videos thumbnail image
  * @param isFavorite flag to show if recipe was marked as favorite
  * @param uploadedAt video upload date (UTC)
+ * @param categoryId identifier of a category for the recipe (null if not present)
  */
 @Entity
 data class RecipeEntity(
@@ -21,5 +22,6 @@ data class RecipeEntity(
     val description: String,
     val thumbnailUrl: String,
     val isFavorite: Boolean,
-    val uploadedAt: String
+    val uploadedAt: String,
+    val categoryId: String? = null
 )
