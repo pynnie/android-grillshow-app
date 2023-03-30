@@ -11,16 +11,21 @@ import timber.log.Timber
 
 internal class DashboardViewModel(
     private val dashboardRouter: DashboardRouter,
-    private val interactor: DashboardInteractor) : ViewModel() {
+    private val interactor: DashboardInteractor
+) : ViewModel() {
 
     private val _dashboardSceenState = MutableStateFlow<DashboardSceenState>(Loading)
     val dashboardSceenState: StateFlow<DashboardSceenState> = _dashboardSceenState
 
     init {
+        loadRecipes()
+    }
+
+    private fun loadRecipes() {
         viewModelScope.launch {
             try {
                 interactor
-                    .getRecipes()
+                    .getCategoriesWithRecipes()
                     .collect {
                         _dashboardSceenState.value = Success(it)
                     }
@@ -30,6 +35,4 @@ internal class DashboardViewModel(
             }
         }
     }
-
-    fun onScreenClicked() = dashboardRouter.openRecipeDetails()
 }

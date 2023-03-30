@@ -4,6 +4,7 @@ package de.shecken.grillshow.video.dashboard
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
@@ -22,6 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import de.shecken.grillshow.dashboard.R
+import de.shecken.grillshow.repository.recipe.Category
 import de.shecken.grillshow.repository.recipe.Recipe
 import de.shecken.grillshow.shared.GrillshowTheme
 import org.koin.androidx.compose.getViewModel
@@ -52,10 +54,7 @@ private fun HandleScreenState(modifier: Modifier, state: DashboardSceenState) {
     ) {
         when (state) {
             is DashboardSceenState.Loading -> LoadingIndicator()
-            is DashboardSceenState.Success -> CategoryList(
-                title = stringResource(id = R.string.dashboard_latest_recipes),
-                state.recipes
-            )
+            is DashboardSceenState.Success -> CategoryList(state.categories)
             is DashboardSceenState.Failure -> Error()
         }
     }
@@ -90,7 +89,16 @@ private fun DashboardTopBar() {
 }
 
 @Composable
-private fun CategoryList(
+private fun CategoryList(categories: List<Category>) {
+    LazyColumn {
+        items(items = categories) { category ->
+            HorizontalRecipeList(title = category.title, recipes = category.recipes)
+        }
+    }
+}
+
+@Composable
+private fun HorizontalRecipeList(
     title: String,
     recipes: List<Recipe>
 ) {
