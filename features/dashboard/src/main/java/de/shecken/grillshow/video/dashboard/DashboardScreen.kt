@@ -2,9 +2,11 @@
 
 package de.shecken.grillshow.video.dashboard
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -43,13 +45,19 @@ private fun DashboardScreen(
 
 @Composable
 private fun HandleScreenState(modifier: Modifier, state: DashboardSceenState) {
-    when (state) {
-        is DashboardSceenState.Loading -> LoadingIndicator()
-        is DashboardSceenState.Success -> CategoryList(
-            title = stringResource(id = R.string.dashboard_latest_recipes),
-            state.recipes
-        )
-        is DashboardSceenState.Failure -> Error()
+    Box(
+        modifier = modifier
+            .fillMaxSize()
+            .padding(horizontal = 16.dp)
+    ) {
+        when (state) {
+            is DashboardSceenState.Loading -> LoadingIndicator()
+            is DashboardSceenState.Success -> CategoryList(
+                title = stringResource(id = R.string.dashboard_latest_recipes),
+                state.recipes
+            )
+            is DashboardSceenState.Failure -> Error()
+        }
     }
 }
 
@@ -86,9 +94,10 @@ private fun CategoryList(
     title: String,
     recipes: List<Recipe>
 ) {
-    Column(modifier = Modifier.padding(top = 80.dp)) {
+    Column(modifier = Modifier.padding(top = 16.dp)) {
         Text(text = title, style = MaterialTheme.typography.titleMedium)
-        LazyRow{
+        Spacer(modifier = Modifier.height(8.dp))
+        LazyRow {
             items(items = recipes) { recipe ->
                 RecipeItem(recipe)
             }
@@ -98,7 +107,11 @@ private fun CategoryList(
 
 @Composable
 private fun RecipeItem(recipe: Recipe) {
-    Column (modifier = Modifier.padding(horizontal = 8.dp).width(120.dp)){
+    Column(
+        modifier = Modifier
+            .padding(horizontal = 8.dp)
+            .width(120.dp)
+    ) {
         Box(modifier = Modifier.clip(RoundedCornerShape(8.dp))) {
             AsyncImage(
                 modifier = Modifier
@@ -107,10 +120,11 @@ private fun RecipeItem(recipe: Recipe) {
                 model = recipe.thumbnailUrl,
                 contentDescription = null
             )
-
-            Icon(
-                modifier = Modifier.align(Alignment.TopEnd),
-                painter = painterResource(id = R.drawable.ic_favorite), contentDescription = ""
+            FavIcon(
+                modifier = Modifier
+                    .align(Alignment.TopEnd)
+                    .padding(8.dp),
+                isChecked = true
             )
         }
 
@@ -118,8 +132,21 @@ private fun RecipeItem(recipe: Recipe) {
             text = recipe.title,
             style = MaterialTheme.typography.titleSmall,
             maxLines = 2,
-            overflow = TextOverflow.Ellipsis)
+            overflow = TextOverflow.Ellipsis
+        )
     }
+}
+
+@Composable
+private fun FavIcon(modifier: Modifier = Modifier, isChecked: Boolean) {
+    Icon(
+        modifier = modifier.background(
+            color = if (isChecked) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.onPrimaryContainer,
+            shape = CircleShape
+        ),
+        painter = painterResource(id = R.drawable.ic_favorite), contentDescription = "",
+        tint = if (isChecked) MaterialTheme.colorScheme.inverseSurface else MaterialTheme.colorScheme.inverseOnSurface
+    )
 }
 
 @Composable
@@ -137,6 +164,17 @@ private fun RecipeItemPreview() {
         RecipeItem(
             Recipe("123", "Testrezept", "", "https://i.ytimg.com/vi/SrjxCuB9tDc/default.jpg")
         )
+    }
+}
+
+@Composable
+@Preview
+private fun FavIconPreview() {
+    GrillshowTheme {
+        Row {
+            FavIcon(isChecked = true)
+            FavIcon(isChecked = false)
+        }
     }
 }
 

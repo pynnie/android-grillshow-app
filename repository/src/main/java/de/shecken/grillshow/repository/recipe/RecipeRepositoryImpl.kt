@@ -106,7 +106,8 @@ class RecipeRepositoryImpl(
             id = contentDetails.videoId,
             title = snippet.title,
             description = snippet.description,
-            thumbnailUrl = snippet.thumbnails.default.url,
+            thumbnailUrl = snippet.thumbnails.high?.url ?: snippet.thumbnails.medium?.url
+            ?: snippet.thumbnails.standard?.url ?: snippet.thumbnails.default?.url ?: "",
             isFavorite = false,
             uploadedAt = contentDetails.videoPublishedAt
         )
