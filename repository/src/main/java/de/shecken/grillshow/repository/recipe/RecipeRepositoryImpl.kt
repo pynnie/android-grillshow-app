@@ -7,10 +7,13 @@ import de.shecken.grillshow.database.recipe.RecipeEntity
 import de.shecken.grillshow.networking.youtube.Playlist
 import de.shecken.grillshow.networking.youtube.YoutubeDataApi
 import de.shecken.grillshow.networking.youtube.response.PlaylistItem
+import de.shecken.grillshow.repository.R
+import de.shecken.grillshow.shared.provider.StringProvider
 import de.shecken.networking.BuildConfig
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import java.time.Instant
@@ -19,11 +22,29 @@ class RecipeRepositoryImpl(
     private val api: YoutubeDataApi,
     private val recipeDao: RecipeDao,
     private val categoryDao: CategoryDao,
+    private val stringProvider: StringProvider,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : RecipeRepository {
 
-    override val recipes: Flow<List<Recipe>> = recipeDao.getLatestRecipes().map { list ->
+    private val latestRecipes: Flow<List<Recipe>> = recipeDao.getLatestRecipes().map { list ->
         list.map { entity -> entity.toRecipe() }
+    }
+
+    private val channelCategories = categoryDao.loadCategoriesAndRecipes().map { theMap ->
+        theMap.map { entry ->
+            entry.key.toCategory(entry.value.map { entity -> entity.toRecipe() })
+        }
+    }
+
+    override val categories = combine(latestRecipes, channelCategories) { latest, cats ->
+        val latestCategory = Category(
+            id = "",
+            title = stringProvider.provideString(R.string.dashboard_latest_recipes),
+            description = "",
+            recipes = latest
+        )
+        return@combine cats.toMutableList<Category>()
+            .also<MutableList<Category>> { list -> list[0] = latestCategory }
     }
 
     override suspend fun fetchAllRecipes() =
@@ -118,6 +139,13 @@ class RecipeRepositoryImpl(
             title = snippet.title,
             description = snippet.description
         )
+
+    private fun CategoryEntity.toCategory(recipes: List<Recipe>) = Category(
+        id = id,
+        title = title,
+        description = description,
+        recipes = recipes
+    )
 
     private fun RecipeEntity.toRecipe() = Recipe(
         id = id,

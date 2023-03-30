@@ -4,7 +4,10 @@ import kotlinx.coroutines.flow.Flow
 
 interface RecipeRepository {
 
-    val recipes: Flow<List<Recipe>>
+    /**
+     * List of all categories with 10 latest recipes
+     */
+    val categories: Flow<List<Category>>
 
     /**
      * Fetch all recipes from API
