@@ -22,14 +22,8 @@ class RecipeRepositoryImpl(
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : RecipeRepository {
 
-    override val recipes: Flow<List<Recipe>> = recipeDao.getAll().map {
-        it.map { entity ->
-            Recipe(
-                title = entity.title,
-                description = entity.description,
-                thumbnailUrl = entity.thumbnailUrl
-            )
-        }
+    override val recipes: Flow<List<Recipe>> = recipeDao.getLatestRecipes().map { list ->
+        list.map { entity -> entity.toRecipe() }
     }
 
     override suspend fun fetchAllRecipes() =
@@ -97,7 +91,8 @@ class RecipeRepositoryImpl(
     }
 
     private fun isRecipe(videoTitle: String) =
-        videoTitle.contains(RECIPE_TITLE_REGEX, ignoreCase = true)
+        videoTitle.contains(RECIPE_TITLE_REGEX, ignoreCase = true) &&
+                !videoTitle.contains(RECIPE_SHORTS_REGEX, ignoreCase = true)
 
     private fun isNew(latestUploadDateString: String?, itemUploadDateString: String) =
         latestUploadDateString?.let {
@@ -111,7 +106,8 @@ class RecipeRepositoryImpl(
             id = contentDetails.videoId,
             title = snippet.title,
             description = snippet.description,
-            thumbnailUrl = snippet.thumbnails.default.url,
+            thumbnailUrl = snippet.thumbnails.high?.url ?: snippet.thumbnails.medium?.url
+            ?: snippet.thumbnails.standard?.url ?: snippet.thumbnails.default?.url ?: "",
             isFavorite = false,
             uploadedAt = contentDetails.videoPublishedAt
         )
@@ -123,7 +119,15 @@ class RecipeRepositoryImpl(
             description = snippet.description
         )
 
+    private fun RecipeEntity.toRecipe() = Recipe(
+        id = id,
+        title = title,
+        description = description,
+        thumbnailUrl = thumbnailUrl
+    )
+
     companion object {
         private const val RECIPE_TITLE_REGEX = "die grillshow"
+        private const val RECIPE_SHORTS_REGEX = "die grillshow shorts"
     }
 }

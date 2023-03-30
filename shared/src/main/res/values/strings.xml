@@ -3,4 +3,8 @@
     <string name="navigation_dashboard">HÜÜAAAHH</string>
     <string name="navigation_favorites">Lieblingslunser</string>
     <string name="navigation_search">Suche</string>
+    <string name="dashboard_title">Dashboard</string>
+    <string name="dashboard_latest_recipes">Neuste Lunser</string>
+    <string name="search_title">Suche</string>
+    <string name="favorites_title">Lieblingslunser</string>
 </resources>

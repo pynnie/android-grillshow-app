@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import de.shecken.grillshow.database.DatabaseConstants.DEFAULT_LIST_SIZE
 import de.shecken.grillshow.database.DatabaseConstants.COLUMN_ID
 import de.shecken.grillshow.database.DatabaseConstants.COLUMN_UPLOADED_AT
 import de.shecken.grillshow.database.DatabaseConstants.TABLE_RECIPE_ENTITY
@@ -25,5 +26,8 @@ interface RecipeDao {
     suspend fun getLatestUploadDate(): String?
 
     @Query("SELECT * FROM $TABLE_RECIPE_ENTITY WHERE $COLUMN_ID = :recipeId LIMIT 1")
-    suspend fun getRecipeById(recipeId: String): RecipeEntity?
+    fun getRecipeById(recipeId: String): RecipeEntity?
+
+    @Query("SELECT * FROM $TABLE_RECIPE_ENTITY ORDER BY $COLUMN_UPLOADED_AT DESC LIMIT $DEFAULT_LIST_SIZE")
+    fun getLatestRecipes(): Flow<List<RecipeEntity>>
 }

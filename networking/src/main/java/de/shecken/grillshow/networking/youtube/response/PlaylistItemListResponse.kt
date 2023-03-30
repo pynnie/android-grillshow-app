@@ -20,7 +20,10 @@ data class Snippet(
 
 @Serializable
 data class Thumbnails(
-    val default: Thumbnail
+    val default: Thumbnail? = null,
+    val standard: Thumbnail? = null,
+    val medium: Thumbnail? = null,
+    val high: Thumbnail? = null
 )
 
 @Serializable
