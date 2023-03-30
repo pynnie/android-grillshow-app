@@ -8,6 +8,7 @@ import Kotlin
 import KotlinX
 import Testing
 import org.gradle.kotlin.dsl.DependencyHandlerScope
+import org.gradle.kotlin.dsl.implementation
 import org.gradle.kotlin.dsl.project
 
 fun DependencyHandlerScope.baseDependencies() {
@@ -48,4 +49,5 @@ fun DependencyHandlerScope.composeDependencies() {
     add("implementation", AndroidX.ConstraintLayout.compose)
     add("implementation", AndroidX.Navigation.compose)
     add("implementation", AdditionalLibs.koinCompose)
+    add("implementation", COIL.compose)
 }

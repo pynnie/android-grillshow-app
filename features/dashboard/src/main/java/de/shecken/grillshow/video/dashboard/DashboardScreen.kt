@@ -1,43 +1,54 @@
+@file:OptIn(ExperimentalMaterial3Api::class)
+
 package de.shecken.grillshow.video.dashboard
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Text
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
+import de.shecken.grillshow.dashboard.R
 import de.shecken.grillshow.repository.recipe.Recipe
+import de.shecken.grillshow.shared.GrillshowTheme
 import org.koin.androidx.compose.getViewModel
 
 @Composable
 internal fun DashboardScreen(viewModel: DashboardViewModel = getViewModel()) {
     val state by viewModel.dashboardSceenState.collectAsState()
     DashboardScreen(
-        onScreenClicked = { viewModel.onScreenClicked() }, state = state
+        state = state
     )
 }
 
 @Composable
 private fun DashboardScreen(
-    onScreenClicked: () -> Unit, state: DashboardSceenState
+    state: DashboardSceenState
 ) {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-    ) {
-        HandleScreenState(state = state)
+    Scaffold(topBar = { DashboardTopBar() }) { padding ->
+        HandleScreenState(modifier = Modifier.padding(padding), state = state)
     }
 }
 
 @Composable
-private fun HandleScreenState(state: DashboardSceenState) {
+private fun HandleScreenState(modifier: Modifier, state: DashboardSceenState) {
     when (state) {
         is DashboardSceenState.Loading -> LoadingIndicator()
-        is DashboardSceenState.Success -> PlayLists(playLists = state.recipes)
+        is DashboardSceenState.Success -> CategoryList(
+            title = stringResource(id = R.string.dashboard_latest_recipes),
+            state.recipes
+        )
         is DashboardSceenState.Failure -> Error()
     }
 }
@@ -65,11 +76,67 @@ fun LoadingIndicator() {
 }
 
 @Composable
-fun PlayLists(playLists: List<Recipe>) {
-    LazyColumn {
-        items(items = playLists) { recipe ->
-            Text(text = recipe.title)
+private fun DashboardTopBar() {
+    TopAppBar(
+        title = { Text(text = stringResource(id = R.string.dashboard_title)) })
+}
+
+@Composable
+private fun CategoryList(
+    title: String,
+    recipes: List<Recipe>
+) {
+    Column(modifier = Modifier.padding(top = 80.dp)) {
+        Text(text = title, style = MaterialTheme.typography.titleMedium)
+        LazyRow{
+            items(items = recipes) { recipe ->
+                RecipeItem(recipe)
+            }
         }
+    }
+}
+
+@Composable
+private fun RecipeItem(recipe: Recipe) {
+    Column (modifier = Modifier.padding(horizontal = 8.dp).width(120.dp)){
+        Box(modifier = Modifier.clip(RoundedCornerShape(8.dp))) {
+            AsyncImage(
+                modifier = Modifier
+                    .height(90.dp)
+                    .align(Alignment.Center),
+                model = recipe.thumbnailUrl,
+                contentDescription = null
+            )
+
+            Icon(
+                modifier = Modifier.align(Alignment.TopEnd),
+                painter = painterResource(id = R.drawable.ic_favorite), contentDescription = ""
+            )
+        }
+
+        Text(
+            text = recipe.title,
+            style = MaterialTheme.typography.titleSmall,
+            maxLines = 2,
+            overflow = TextOverflow.Ellipsis)
+    }
+}
+
+@Composable
+@Preview
+private fun TopBarPreview() {
+    GrillshowTheme {
+        DashboardTopBar()
+    }
+}
+
+@Composable
+@Preview
+private fun RecipeItemPreview() {
+    GrillshowTheme {
+        RecipeItem(
+            Recipe("123", "Testrezept", "", "https://i.ytimg.com/vi/SrjxCuB9tDc/default.jpg")
+        )
     }
 }
 
