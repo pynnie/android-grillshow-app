@@ -3,6 +3,7 @@
 package de.shecken.grillshow.video.dashboard
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
@@ -23,14 +24,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import de.shecken.grillshow.dashboard.R
-import de.shecken.grillshow.repository.recipe.Category
-import de.shecken.grillshow.repository.recipe.Recipe
+import de.shecken.grillshow.repository.recipe.model.Category
+import de.shecken.grillshow.repository.recipe.model.Recipe
 import de.shecken.grillshow.shared.GrillshowTheme
 import org.koin.androidx.compose.getViewModel
 
 @Composable
 internal fun DashboardScreen(viewModel: DashboardViewModel = getViewModel()) {
-    val state by viewModel.dashboardSceenState.collectAsState()
+    val state by viewModel.dashboardScreenState.collectAsState()
     DashboardScreen(
         state = state
     )
@@ -54,7 +55,7 @@ private fun HandleScreenState(modifier: Modifier, state: DashboardSceenState) {
     ) {
         when (state) {
             is DashboardSceenState.Loading -> LoadingIndicator()
-            is DashboardSceenState.Success -> CategoryList(state.categories)
+            is DashboardSceenState.Success -> CategoryList(state.categories, state.onFavIconClick)
             is DashboardSceenState.Failure -> Error()
         }
     }
@@ -89,10 +90,14 @@ private fun DashboardTopBar() {
 }
 
 @Composable
-private fun CategoryList(categories: List<Category>) {
+private fun CategoryList(categories: List<Category>, onFavIconClick: (Recipe) -> Unit) {
     LazyColumn {
         items(items = categories) { category ->
-            HorizontalRecipeList(title = category.title, recipes = category.recipes)
+            HorizontalRecipeList(
+                title = category.title,
+                recipes = category.recipes,
+                onFavIconClick = onFavIconClick
+            )
         }
     }
 }
@@ -100,21 +105,22 @@ private fun CategoryList(categories: List<Category>) {
 @Composable
 private fun HorizontalRecipeList(
     title: String,
-    recipes: List<Recipe>
+    recipes: List<Recipe>,
+    onFavIconClick: (Recipe) -> Unit
 ) {
     Column(modifier = Modifier.padding(top = 16.dp)) {
         Text(text = title, style = MaterialTheme.typography.titleMedium)
         Spacer(modifier = Modifier.height(8.dp))
         LazyRow {
             items(items = recipes) { recipe ->
-                RecipeItem(recipe)
+                RecipeItem(recipe = recipe, onFavIconClick = onFavIconClick)
             }
         }
     }
 }
 
 @Composable
-private fun RecipeItem(recipe: Recipe) {
+private fun RecipeItem(recipe: Recipe, onFavIconClick: (Recipe) -> Unit) {
     Column(
         modifier = Modifier
             .padding(horizontal = 8.dp)
@@ -131,8 +137,9 @@ private fun RecipeItem(recipe: Recipe) {
             FavIcon(
                 modifier = Modifier
                     .align(Alignment.TopEnd)
-                    .padding(8.dp),
-                isChecked = true
+                    .padding(8.dp)
+                    .clickable { onFavIconClick(recipe) },
+                isChecked = recipe.isFavorite
             )
         }
 
@@ -170,7 +177,13 @@ private fun TopBarPreview() {
 private fun RecipeItemPreview() {
     GrillshowTheme {
         RecipeItem(
-            Recipe("123", "Testrezept", "", "https://i.ytimg.com/vi/SrjxCuB9tDc/default.jpg")
+            Recipe(
+                id = "123",
+                title = "Testrezept",
+                description = "",
+                thumbnailUrl = "https://i.ytimg.com/vi/SrjxCuB9tDc/default.jpg",
+                isFavorite = false
+            ), onFavIconClick = {}
         )
     }
 }
