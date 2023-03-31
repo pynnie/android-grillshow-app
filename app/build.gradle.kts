@@ -22,7 +22,6 @@ dependencies {
     implementation(project(":networking"))
     implementation(project(":database"))
     implementation(AndroidX.appCompat)
-    implementation(Google.Android.material)
     implementation(AndroidX.Core.splashscreen)
 
     baseFeatureModuleDependencies(withCompose = true)
