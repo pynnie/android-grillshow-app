@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalMaterial3Api::class)
 
-package de.shecken.grillshow.video.dashboard
+package de.shecken.grillshow.dashboard.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable

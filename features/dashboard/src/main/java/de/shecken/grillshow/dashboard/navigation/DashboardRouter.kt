@@ -1,4 +1,4 @@
-package de.shecken.grillshow.video
+package de.shecken.grillshow.dashboard.navigation
 
 interface DashboardRouter {
 

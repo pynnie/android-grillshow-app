@@ -3,8 +3,8 @@ package de.shecken.grillshow
 import androidx.navigation.NavController
 import de.shecken.favorites.favoritesRoute
 import de.shecken.grillshow.shared.ui.navigation.BottomBarRouter
-import de.shecken.grillshow.video.DashboardRouter
-import de.shecken.grillshow.video.dashboardRoute
+import de.shecken.grillshow.dashboard.navigation.DashboardRouter
+import de.shecken.grillshow.dashboard.navigation.dashboardRoute
 import de.shecken.grillshow.shop.searchRoute
 
 /**
