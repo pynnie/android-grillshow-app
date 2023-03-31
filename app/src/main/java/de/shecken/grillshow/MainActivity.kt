@@ -12,6 +12,7 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import de.shecken.favorites.favoritesGraph
+import de.shecken.grillshow.repository.preferences.PreferencesRepository
 import de.shecken.grillshow.repository.recipe.RecipeRepository
 import de.shecken.grillshow.shared.GrillshowTheme
 import de.shecken.grillshow.shared.ui.navigation.BottomBar
@@ -27,6 +28,7 @@ internal class MainActivity : AppCompatActivity() {
 
     private val router: Router by inject()
     private val recipeRepo: RecipeRepository by inject()
+    private val prefsRepo: PreferencesRepository by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         var keepSplashScreen = true
@@ -61,8 +63,15 @@ internal class MainActivity : AppCompatActivity() {
 
     private fun fetchData() {
         CoroutineScope(Dispatchers.IO).launch {
-            recipeRepo.fetchAllRecipes()
-            recipeRepo.fetchCategories()
+            prefsRepo.appPreferencesFlow.collect { prefs ->
+                if (prefs.isInitComplete) {
+                    recipeRepo.fetchLatestRecipes()
+                } else {
+                    recipeRepo.fetchAllRecipes()
+                    recipeRepo.fetchCategories()
+                }
+            }
+
         }
     }
 }
