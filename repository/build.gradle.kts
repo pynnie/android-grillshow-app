@@ -16,4 +16,5 @@ dependencies {
     implementation(project(":networking"))
     implementation(project(":database"))
     implementation(project(":shared"))
+    implementation(AndroidX.dataStore.preferences)
 }
