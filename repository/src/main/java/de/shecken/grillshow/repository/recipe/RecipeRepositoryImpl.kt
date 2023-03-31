@@ -5,6 +5,7 @@ import de.shecken.grillshow.database.category.CategoryEntity
 import de.shecken.grillshow.database.recipe.RecipeDao
 import de.shecken.grillshow.networking.youtube.YoutubeDataApi
 import de.shecken.grillshow.repository.*
+import de.shecken.grillshow.repository.preferences.PreferencesRepository
 import de.shecken.grillshow.repository.recipe.model.Category
 import de.shecken.grillshow.repository.recipe.model.Recipe
 import de.shecken.grillshow.shared.provider.StringProvider
@@ -21,6 +22,7 @@ class RecipeRepositoryImpl(
     private val api: YoutubeDataApi,
     private val recipeDao: RecipeDao,
     private val categoryDao: CategoryDao,
+    private val preferencesRepository: PreferencesRepository,
     private val stringProvider: StringProvider,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : RecipeRepository {
@@ -45,8 +47,10 @@ class RecipeRepositoryImpl(
         return@combine cats.toMutableList().also { list -> list[0] = latestCategory }
     }
 
-    override suspend fun fetchAllRecipes() =
+    override suspend fun fetchAllRecipes() = withContext(dispatcher) {
         fetchRecipes(playlistId = BuildConfig.GRILLSHOW_UPLOADS_PLAYLIST_ID)
+        preferencesRepository.updateInitCompleted(true)
+    }
 
     override suspend fun fetchLatestRecipes() =
         fetchRecipes(
@@ -137,3 +141,4 @@ class RecipeRepositoryImpl(
         private const val RECIPE_SHORTS_REGEX = "die grillshow shorts"
     }
 }
+
