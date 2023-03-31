@@ -1,4 +1,4 @@
-package de.shecken.grillshow.repository.recipe
+package de.shecken.grillshow.repository.recipe.model
 
 data class Category(
     val id: String,

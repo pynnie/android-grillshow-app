@@ -2,6 +2,7 @@ package de.shecken.grillshow.video.dashboard
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import de.shecken.grillshow.repository.recipe.model.Recipe
 import de.shecken.grillshow.video.DashboardRouter
 import de.shecken.grillshow.video.dashboard.DashboardSceenState.*
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,8 +15,8 @@ internal class DashboardViewModel(
     private val interactor: DashboardInteractor
 ) : ViewModel() {
 
-    private val _dashboardSceenState = MutableStateFlow<DashboardSceenState>(Loading)
-    val dashboardSceenState: StateFlow<DashboardSceenState> = _dashboardSceenState
+    private val _dashboardScreenState = MutableStateFlow<DashboardSceenState>(Loading)
+    val dashboardScreenState: StateFlow<DashboardSceenState> = _dashboardScreenState
 
     init {
         loadRecipes()
@@ -26,13 +27,18 @@ internal class DashboardViewModel(
             try {
                 interactor
                     .getCategoriesWithRecipes()
-                    .collect {
-                        _dashboardSceenState.value = Success(it)
+                    .collect { categoryList ->
+                        _dashboardScreenState.value =
+                            Success(categories = categoryList, onFavIconClick = ::onFavIconClick)
                     }
             } catch (t: Throwable) {
-                _dashboardSceenState.value = Failure
+                _dashboardScreenState.value = Failure
                 Timber.e(t)
             }
         }
+    }
+
+    fun onFavIconClick(recipe: Recipe) = viewModelScope.launch {
+        interactor.updateRecipe(recipe.copy(isFavorite = !recipe.isFavorite))
     }
 }

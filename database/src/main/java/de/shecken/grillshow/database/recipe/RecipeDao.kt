@@ -1,9 +1,6 @@
 package de.shecken.grillshow.database.recipe
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 import de.shecken.grillshow.database.DatabaseConstants.DEFAULT_LIST_SIZE
 import de.shecken.grillshow.database.DatabaseConstants.COLUMN_ID
 import de.shecken.grillshow.database.DatabaseConstants.COLUMN_UPLOADED_AT
@@ -18,6 +15,9 @@ interface RecipeDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(userEntity: RecipeEntity)
+
+    @Update(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun update(recipeEntity: RecipeEntity)
 
     @Query("DELETE FROM $TABLE_RECIPE_ENTITY")
     suspend fun deleteAll()

@@ -3,11 +3,10 @@ package de.shecken.grillshow.repository.recipe
 import de.shecken.grillshow.database.category.CategoryDao
 import de.shecken.grillshow.database.category.CategoryEntity
 import de.shecken.grillshow.database.recipe.RecipeDao
-import de.shecken.grillshow.database.recipe.RecipeEntity
-import de.shecken.grillshow.networking.youtube.Playlist
 import de.shecken.grillshow.networking.youtube.YoutubeDataApi
-import de.shecken.grillshow.networking.youtube.response.PlaylistItem
-import de.shecken.grillshow.repository.R
+import de.shecken.grillshow.repository.*
+import de.shecken.grillshow.repository.recipe.model.Category
+import de.shecken.grillshow.repository.recipe.model.Recipe
 import de.shecken.grillshow.shared.provider.StringProvider
 import de.shecken.networking.BuildConfig
 import kotlinx.coroutines.CoroutineDispatcher
@@ -43,8 +42,7 @@ class RecipeRepositoryImpl(
             description = "",
             recipes = latest
         )
-        return@combine cats.toMutableList<Category>()
-            .also<MutableList<Category>> { list -> list[0] = latestCategory }
+        return@combine cats.toMutableList().also { list -> list[0] = latestCategory }
     }
 
     override suspend fun fetchAllRecipes() =
@@ -61,6 +59,18 @@ class RecipeRepositoryImpl(
             categoryDao.insert(playListItem.toCategoryEntity())
         }
         mapCategoriesToRecipes()
+    }
+
+    override suspend fun updateRecipe(recipeToUpdate: Recipe) = withContext(dispatcher) {
+        recipeDao.getRecipeById(recipeToUpdate.id)?.let { currentEntity ->
+            recipeDao.update(
+                recipeToUpdate.toEntity(
+                    uploadedAt = currentEntity.uploadedAt,
+                    categoryId = currentEntity.categoryId
+                )
+            )
+        }
+        return@withContext
     }
 
     private suspend fun fetchRecipes(
@@ -121,38 +131,6 @@ class RecipeRepositoryImpl(
             val currentUploadDate = Instant.parse(itemUploadDateString)
             return currentUploadDate.isAfter(latestUploadDate)
         } ?: true
-
-    private fun PlaylistItem.toRecipeEntity() =
-        RecipeEntity(
-            id = contentDetails.videoId,
-            title = snippet.title,
-            description = snippet.description,
-            thumbnailUrl = snippet.thumbnails.high?.url ?: snippet.thumbnails.medium?.url
-            ?: snippet.thumbnails.standard?.url ?: snippet.thumbnails.default?.url ?: "",
-            isFavorite = false,
-            uploadedAt = contentDetails.videoPublishedAt
-        )
-
-    private fun Playlist.toCategoryEntity() =
-        CategoryEntity(
-            id = id,
-            title = snippet.title,
-            description = snippet.description
-        )
-
-    private fun CategoryEntity.toCategory(recipes: List<Recipe>) = Category(
-        id = id,
-        title = title,
-        description = description,
-        recipes = recipes
-    )
-
-    private fun RecipeEntity.toRecipe() = Recipe(
-        id = id,
-        title = title,
-        description = description,
-        thumbnailUrl = thumbnailUrl
-    )
 
     companion object {
         private const val RECIPE_TITLE_REGEX = "die grillshow"
