@@ -2,7 +2,7 @@
 This is a fan project for the YouTube channel "Die Grillshow"
 
 ## Tech stack and Libraries used
-* Minimum SDK level: 24
+* Minimum SDK level: 26
 * Kotlin, 100% Jetpack Compose, [Coroutines](https://developer.android.com/kotlin/coroutines) and Flow for asynchronous programming
 * Jetpack libraries
     * [Jetpack Compose](https://developer.android.com/jetpack/compose): Android’s modern toolkit for building native UI
