@@ -30,7 +30,11 @@ internal class DashboardViewModel(
                     .getCategoriesWithRecipes()
                     .collect { categoryList ->
                         _dashboardScreenState.value =
-                            Success(categories = categoryList, onFavIconClick = ::onFavIconClick)
+                            Success(
+                                categories = categoryList,
+                                onFavIconClick = ::onFavIconClick,
+                                onRecipeClick = ::onRecipeClick
+                            )
                     }
             } catch (t: Throwable) {
                 _dashboardScreenState.value = Failure
@@ -42,4 +46,6 @@ internal class DashboardViewModel(
     fun onFavIconClick(recipe: Recipe) = viewModelScope.launch {
         interactor.updateRecipe(recipe.copy(isFavorite = !recipe.isFavorite))
     }
+
+    fun onRecipeClick(recipe: Recipe) = dashboardRouter.openRecipeDetails(recipe.id)
 }

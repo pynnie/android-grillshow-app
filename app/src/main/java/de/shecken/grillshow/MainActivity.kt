@@ -18,6 +18,7 @@ import de.shecken.grillshow.shared.GrillshowTheme
 import de.shecken.grillshow.shared.ui.navigation.BottomBar
 import de.shecken.grillshow.shop.searchGraph
 import de.shecken.grillshow.dashboard.navigation.dashboardGraph
+import de.shecken.grillshow.details.navigation.detailsGraph
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -55,6 +56,7 @@ internal class MainActivity : AppCompatActivity() {
                         dashboardGraph()
                         searchGraph()
                         favoritesGraph()
+                        detailsGraph()
                     }
                 }
             }

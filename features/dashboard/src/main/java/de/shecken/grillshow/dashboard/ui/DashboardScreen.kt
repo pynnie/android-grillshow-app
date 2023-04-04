@@ -27,6 +27,7 @@ import de.shecken.grillshow.dashboard.R
 import de.shecken.grillshow.repository.recipe.model.Category
 import de.shecken.grillshow.repository.recipe.model.Recipe
 import de.shecken.grillshow.shared.GrillshowTheme
+import de.shecken.grillshow.shared.ui.FullScreenLoadingIndicator
 import org.koin.androidx.compose.getViewModel
 
 @Composable
@@ -54,15 +55,19 @@ private fun HandleScreenState(modifier: Modifier, state: DashboardSceenState) {
             .padding(horizontal = 16.dp)
     ) {
         when (state) {
-            is DashboardSceenState.Loading -> LoadingIndicator()
-            is DashboardSceenState.Success -> CategoryList(state.categories, state.onFavIconClick)
+            is DashboardSceenState.Loading -> FullScreenLoadingIndicator()
+            is DashboardSceenState.Success -> CategoryList(
+                categories = state.categories,
+                onFavIconClick = state.onFavIconClick,
+                onRecipeClick = state.onRecipeClick
+            )
             is DashboardSceenState.Failure -> Error()
         }
     }
 }
 
 @Composable
-fun Error() {
+private fun Error() {
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
@@ -73,30 +78,22 @@ fun Error() {
 }
 
 @Composable
-fun LoadingIndicator() {
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        CircularProgressIndicator()
-    }
-}
-
-@Composable
 private fun DashboardTopBar() {
     TopAppBar(
         title = { Text(text = stringResource(id = R.string.dashboard_title)) })
 }
 
 @Composable
-private fun CategoryList(categories: List<Category>, onFavIconClick: (Recipe) -> Unit) {
+private fun CategoryList(
+    categories: List<Category>, onFavIconClick: (Recipe) -> Unit, onRecipeClick: (Recipe) -> Unit
+) {
     LazyColumn {
         items(items = categories) { category ->
             HorizontalRecipeList(
                 title = category.title,
                 recipes = category.recipes,
-                onFavIconClick = onFavIconClick
+                onFavIconClick = onFavIconClick,
+                onRecipeClick = onRecipeClick
             )
         }
     }
@@ -106,27 +103,38 @@ private fun CategoryList(categories: List<Category>, onFavIconClick: (Recipe) ->
 private fun HorizontalRecipeList(
     title: String,
     recipes: List<Recipe>,
-    onFavIconClick: (Recipe) -> Unit
+    onFavIconClick: (Recipe) -> Unit,
+    onRecipeClick: (Recipe) -> Unit,
 ) {
     Column(modifier = Modifier.padding(top = 16.dp)) {
         Text(text = title, style = MaterialTheme.typography.titleMedium)
         Spacer(modifier = Modifier.height(8.dp))
         LazyRow {
             items(items = recipes) { recipe ->
-                RecipeItem(recipe = recipe, onFavIconClick = onFavIconClick)
+                RecipeItem(
+                    recipe = recipe,
+                    onFavIconClick = onFavIconClick,
+                    onRecipeClick = onRecipeClick
+                )
             }
         }
     }
 }
 
 @Composable
-private fun RecipeItem(recipe: Recipe, onFavIconClick: (Recipe) -> Unit) {
+private fun RecipeItem(
+    recipe: Recipe,
+    onFavIconClick: (Recipe) -> Unit,
+    onRecipeClick: (Recipe) -> Unit
+) {
     Column(
         modifier = Modifier
             .padding(horizontal = 8.dp)
             .width(120.dp)
     ) {
-        Box(modifier = Modifier.clip(RoundedCornerShape(8.dp))) {
+        Box(modifier = Modifier
+            .clip(RoundedCornerShape(8.dp))
+            .clickable { onRecipeClick(recipe) }) {
             AsyncImage(
                 modifier = Modifier
                     .height(90.dp)
@@ -183,7 +191,7 @@ private fun RecipeItemPreview() {
                 description = "",
                 thumbnailUrl = "https://i.ytimg.com/vi/SrjxCuB9tDc/default.jpg",
                 isFavorite = false
-            ), onFavIconClick = {}
+            ), onFavIconClick = {}, onRecipeClick = {}
         )
     }
 }
