@@ -13,7 +13,8 @@ class DetailsRepositoryImpl(private val recipeDao: RecipeDao) : DetailsRepositor
                 RecipeDetails(
                     id = recipeEntity.id,
                     title = recipeEntity.title,
-                    ingredientlist = extractIngredients(recipeEntity.description)
+                    ingredientlist = extractIngredients(recipeEntity.description),
+                    isFavorite = recipeEntity.isFavorite
                 )
             }
         }

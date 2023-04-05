@@ -45,6 +45,7 @@ fun DependencyHandlerScope.composeDependencies() {
     add("implementation", AndroidX.Compose.foundation)
     add("implementation", AndroidX.Compose.material3)
     add("implementation", AndroidX.Lifecycle.viewModelCompose)
+    add("implementation", AndroidX.Lifecycle.runtime.compose)
     add("implementation", AndroidX.Activity.compose)
     add("implementation", AndroidX.ConstraintLayout.compose)
     add("implementation", AndroidX.Navigation.compose)

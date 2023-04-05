@@ -12,7 +12,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -22,6 +21,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import de.shecken.grillshow.dashboard.R
 import de.shecken.grillshow.repository.recipe.model.Category
@@ -32,7 +32,7 @@ import org.koin.androidx.compose.getViewModel
 
 @Composable
 internal fun DashboardScreen(viewModel: DashboardViewModel = getViewModel()) {
-    val state by viewModel.dashboardScreenState.collectAsState()
+    val state by viewModel.dashboardScreenState.collectAsStateWithLifecycle()
     DashboardScreen(
         state = state
     )
@@ -109,7 +109,7 @@ private fun HorizontalRecipeList(
     Column(modifier = Modifier.padding(top = 16.dp)) {
         Text(text = title, style = MaterialTheme.typography.titleMedium)
         Spacer(modifier = Modifier.height(8.dp))
-        LazyRow {
+        LazyRow(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
             items(items = recipes) { recipe ->
                 RecipeItem(
                     recipe = recipe,
@@ -142,12 +142,11 @@ private fun RecipeItem(
                 model = recipe.thumbnailUrl,
                 contentDescription = null
             )
-            FavIcon(
+            FavIconButton(
                 modifier = Modifier
-                    .align(Alignment.TopEnd)
-                    .padding(8.dp)
-                    .clickable { onFavIconClick(recipe) },
-                isChecked = recipe.isFavorite
+                    .align(Alignment.TopEnd),
+                recipe = recipe,
+                onRecipeClick = onFavIconClick
             )
         }
 
@@ -161,15 +160,24 @@ private fun RecipeItem(
 }
 
 @Composable
-private fun FavIcon(modifier: Modifier = Modifier, isChecked: Boolean) {
-    Icon(
-        modifier = modifier.background(
-            color = if (isChecked) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.onPrimaryContainer,
-            shape = CircleShape
-        ),
-        painter = painterResource(id = R.drawable.ic_favorite), contentDescription = "",
-        tint = if (isChecked) MaterialTheme.colorScheme.inverseSurface else MaterialTheme.colorScheme.inverseOnSurface
-    )
+fun FavIconButton(
+    modifier: Modifier = Modifier,
+    recipe: Recipe,
+    onRecipeClick: (Recipe) -> Unit
+) {
+    IconToggleButton(
+        modifier = modifier,
+        checked = recipe.isFavorite,
+        onCheckedChange = { onRecipeClick(recipe) }) {
+        Icon(
+            modifier = Modifier.background(
+                color = if (recipe.isFavorite) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.inverseSurface,
+                shape = CircleShape
+            ),
+            painter = painterResource(id = R.drawable.ic_favorite), contentDescription = "",
+            tint = if (recipe.isFavorite) MaterialTheme.colorScheme.inverseSurface else MaterialTheme.colorScheme.inverseOnSurface
+        )
+    }
 }
 
 @Composable
@@ -180,30 +188,16 @@ private fun TopBarPreview() {
     }
 }
 
-@Composable
-@Preview
-private fun RecipeItemPreview() {
-    GrillshowTheme {
-        RecipeItem(
-            Recipe(
-                id = "123",
-                title = "Testrezept",
-                description = "",
-                thumbnailUrl = "https://i.ytimg.com/vi/SrjxCuB9tDc/default.jpg",
-                isFavorite = false
-            ), onFavIconClick = {}, onRecipeClick = {}
-        )
-    }
-}
+
+private val recipeFake = Recipe("1", "Test1", "", "", true)
 
 @Composable
 @Preview
 private fun FavIconPreview() {
     GrillshowTheme {
         Row {
-            FavIcon(isChecked = true)
-            FavIcon(isChecked = false)
+            FavIconButton(recipe = recipeFake, onRecipeClick = { })
+            FavIconButton(recipe = recipeFake.copy(isFavorite = false), onRecipeClick = { })
         }
     }
 }
-

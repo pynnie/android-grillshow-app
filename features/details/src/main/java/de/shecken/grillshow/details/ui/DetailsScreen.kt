@@ -4,31 +4,34 @@ package de.shecken.grillshow.details.ui
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import de.shecken.grillshow.details.R
 import de.shecken.grillshow.repository.recipe.model.RecipeDetails
+import de.shecken.grillshow.shared.GrillshowTheme
 import de.shecken.grillshow.shared.ui.FullScreenLoadingIndicator
 import org.koin.androidx.compose.getViewModel
 
 @Composable
 internal fun DetailsScreen(viewModel: DetailsViewModel = getViewModel()) {
 
-    val state: DetailsScreenState by viewModel.detailsScreenState.collectAsState()
+    val state: DetailsScreenState by viewModel.detailsScreenState.collectAsStateWithLifecycle()
 
-    DetailsScreen(state = state)
+    DetailsScreen(state = state, onBackButtonClick = viewModel::onBackButtonClick)
 }
 
 @Composable
-private fun DetailsScreen(state: DetailsScreenState) {
-    Scaffold(topBar = { DetailsTopBar() }) { padding ->
+private fun DetailsScreen(state: DetailsScreenState, onBackButtonClick: () -> Unit) {
+    Scaffold(topBar = { DetailsTopBar(onBackButtonClick) }) { padding ->
         HandleScreenState(modifier = Modifier.padding(padding), state = state)
     }
 }
@@ -49,9 +52,33 @@ private fun HandleScreenState(modifier: Modifier, state: DetailsScreenState) {
 }
 
 @Composable
-private fun DetailsTopBar() {
+private fun DetailsTopBar(onBackButtonClick: () -> Unit) {
     TopAppBar(
-        title = { Text(text = stringResource(id = R.string.details_title)) })
+        title = { Text(text = stringResource(id = R.string.details_title)) },
+        navigationIcon = {
+            IconButton(onClick = { onBackButtonClick() }) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_back_arrow),
+                    contentDescription = ""
+                )
+            }
+        },
+        actions = {
+            IconButton(onClick = { onBackButtonClick() }) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_favorite),
+                    contentDescription = ""
+                )
+            }
+
+            IconButton(onClick = { onBackButtonClick() }) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_share),
+                    contentDescription = ""
+                )
+            }
+        }
+    )
 }
 
 @Composable
@@ -68,17 +95,70 @@ private fun Error() {
 @Composable
 private fun HandleSuccessState(recipeDetails: RecipeDetails) {
     Column(modifier = Modifier.fillMaxSize()) {
+        // recipe title
         Text(text = recipeDetails.title, style = MaterialTheme.typography.titleMedium)
 
+        Spacer(modifier = Modifier.height(40.dp))
+
+        // subtitle for list
         Text(
             text = stringResource(id = R.string.details_list_title),
             style = MaterialTheme.typography.titleSmall
         )
+        IngredientList(recipeDetails.ingredientlist)
 
+    }
+}
+
+@Composable
+private fun IngredientList(ingredients: List<String>) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 16.dp),
+        elevation = CardDefaults.elevatedCardElevation()
+    ) {
         LazyColumn {
-            items(recipeDetails.ingredientlist) { ingredient ->
-                ListItem(headlineText = { Text(text = ingredient) })
+            itemsIndexed(ingredients) { index, ingredient ->
+                IngredientItem(item = ingredient)
+                if (index < ingredients.lastIndex) {
+                    Divider(
+                        modifier = Modifier.padding(horizontal = 8.dp),
+                        color = MaterialTheme.colorScheme.onPrimaryContainer
+                    )
+                }
             }
+        }
+    }
+}
+
+@Composable
+private fun IngredientItem(item: String) {
+    Text(
+        modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+        text = item,
+        style = MaterialTheme.typography.bodyMedium
+    )
+}
+
+@Composable
+@Preview
+private fun IngredientItemPreview() {
+    GrillshowTheme {
+        IngredientList(
+            ingredients = listOf(
+                "1 große Salami", "Öl", "Salz", "Dose Kidneybohnen"
+            )
+        )
+    }
+}
+
+@Composable
+@Preview
+private fun TopBarPreview() {
+    GrillshowTheme {
+        DetailsTopBar {
+
         }
     }
 }
