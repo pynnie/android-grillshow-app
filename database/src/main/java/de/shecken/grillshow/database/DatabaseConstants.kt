@@ -14,6 +14,7 @@ internal object DatabaseConstants {
 
     const val COLUMN_UPLOADED_AT = "uploadedAt"
     const val COLUMN_ID = "id"
+    const val COLUMN_IS_FAVORITE = "isFavorite"
 
     const val DEFAULT_LIST_SIZE = 10
 }
