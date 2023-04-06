@@ -65,6 +65,10 @@ class RecipeRepositoryImpl(
         mapCategoriesToRecipes()
     }
 
+    override suspend fun getRecipeForId(id: String) = withContext(dispatcher) {
+        recipeDao.getRecipeById(id)?.toRecipe()
+    }
+
     override suspend fun updateRecipe(recipeToUpdate: Recipe) = withContext(dispatcher) {
         recipeDao.getRecipeById(recipeToUpdate.id)?.let { currentEntity ->
             recipeDao.update(

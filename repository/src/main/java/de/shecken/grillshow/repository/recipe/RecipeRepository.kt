@@ -32,4 +32,11 @@ interface RecipeRepository {
      * @param recipeToUpdate the [Recipe] instance to be updated
      */
     suspend fun updateRecipe(recipeToUpdate: Recipe)
+
+    /**
+     * Get specified recipe from database
+     *
+     * @param id of the recipe
+     */
+    suspend fun getRecipeForId(id: String): Recipe?
 }
