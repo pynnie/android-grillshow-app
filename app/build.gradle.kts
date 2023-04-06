@@ -23,6 +23,7 @@ dependencies {
     implementation(project(":database"))
     implementation(AndroidX.appCompat)
     implementation(AndroidX.Core.splashscreen)
+    implementation(Google.Android.material)
 
     baseFeatureModuleDependencies(withCompose = true)
 
