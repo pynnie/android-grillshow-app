@@ -14,4 +14,6 @@ dependencies {
     baseDependencies()
     baseFeatureModuleDependencies(withCompose = true)
     baseTestDependencies()
+
+    implementation(AdditionalLibs.youtubePlayer)
 }
