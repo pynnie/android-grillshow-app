@@ -1,4 +1,4 @@
-package de.shecken.grillshow.video.dashboard
+package de.shecken.grillshow.dashboard.interactor
 
 import de.shecken.grillshow.repository.recipe.model.Category
 import de.shecken.grillshow.repository.recipe.RecipeRepository

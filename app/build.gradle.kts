@@ -16,13 +16,14 @@ dependencies {
     implementation(project(":features:search"))
     implementation(project(":features:dashboard"))
     implementation(project(":features:favorites"))
+    implementation(project(":features:details"))
 
     implementation(project(":repository"))
     implementation(project(":networking"))
     implementation(project(":database"))
     implementation(AndroidX.appCompat)
-    implementation(Google.Android.material)
     implementation(AndroidX.Core.splashscreen)
+    implementation(Google.Android.material)
 
     baseFeatureModuleDependencies(withCompose = true)
 

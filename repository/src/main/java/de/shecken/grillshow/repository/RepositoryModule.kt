@@ -4,6 +4,8 @@ import androidx.datastore.core.handlers.ReplaceFileCorruptionHandler
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.preferencesDataStoreFile
+import de.shecken.grillshow.repository.details.DetailsRepository
+import de.shecken.grillshow.repository.details.DetailsRepositoryImpl
 import de.shecken.grillshow.repository.preferences.PreferencesRepository
 import de.shecken.grillshow.repository.preferences.PreferencesRepositoryImpl
 import de.shecken.grillshow.repository.recipe.RecipeRepository
@@ -27,6 +29,9 @@ val repositoryModule = module {
             stringProvider = get()
         )
     }
+
+    single<DetailsRepository> { DetailsRepositoryImpl(get()) }
+
     single<PreferencesRepository> { PreferencesRepositoryImpl(get()) }
 
     single {

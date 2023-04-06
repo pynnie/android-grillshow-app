@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalMaterial3Api::class)
 
-package de.shecken.grillshow.video.dashboard
+package de.shecken.grillshow.dashboard.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -12,7 +12,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -22,16 +21,18 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import de.shecken.grillshow.dashboard.R
 import de.shecken.grillshow.repository.recipe.model.Category
 import de.shecken.grillshow.repository.recipe.model.Recipe
 import de.shecken.grillshow.shared.GrillshowTheme
+import de.shecken.grillshow.shared.ui.FullScreenLoadingIndicator
 import org.koin.androidx.compose.getViewModel
 
 @Composable
 internal fun DashboardScreen(viewModel: DashboardViewModel = getViewModel()) {
-    val state by viewModel.dashboardScreenState.collectAsState()
+    val state by viewModel.dashboardScreenState.collectAsStateWithLifecycle()
     DashboardScreen(
         state = state
     )
@@ -54,15 +55,19 @@ private fun HandleScreenState(modifier: Modifier, state: DashboardSceenState) {
             .padding(horizontal = 16.dp)
     ) {
         when (state) {
-            is DashboardSceenState.Loading -> LoadingIndicator()
-            is DashboardSceenState.Success -> CategoryList(state.categories, state.onFavIconClick)
+            is DashboardSceenState.Loading -> FullScreenLoadingIndicator()
+            is DashboardSceenState.Success -> CategoryList(
+                categories = state.categories,
+                onFavIconClick = state.onFavIconClick,
+                onRecipeClick = state.onRecipeClick
+            )
             is DashboardSceenState.Failure -> Error()
         }
     }
 }
 
 @Composable
-fun Error() {
+private fun Error() {
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
@@ -73,30 +78,22 @@ fun Error() {
 }
 
 @Composable
-fun LoadingIndicator() {
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        CircularProgressIndicator()
-    }
-}
-
-@Composable
 private fun DashboardTopBar() {
     TopAppBar(
         title = { Text(text = stringResource(id = R.string.dashboard_title)) })
 }
 
 @Composable
-private fun CategoryList(categories: List<Category>, onFavIconClick: (Recipe) -> Unit) {
+private fun CategoryList(
+    categories: List<Category>, onFavIconClick: (Recipe) -> Unit, onRecipeClick: (Recipe) -> Unit
+) {
     LazyColumn {
         items(items = categories) { category ->
             HorizontalRecipeList(
                 title = category.title,
                 recipes = category.recipes,
-                onFavIconClick = onFavIconClick
+                onFavIconClick = onFavIconClick,
+                onRecipeClick = onRecipeClick
             )
         }
     }
@@ -106,27 +103,38 @@ private fun CategoryList(categories: List<Category>, onFavIconClick: (Recipe) ->
 private fun HorizontalRecipeList(
     title: String,
     recipes: List<Recipe>,
-    onFavIconClick: (Recipe) -> Unit
+    onFavIconClick: (Recipe) -> Unit,
+    onRecipeClick: (Recipe) -> Unit,
 ) {
     Column(modifier = Modifier.padding(top = 16.dp)) {
         Text(text = title, style = MaterialTheme.typography.titleMedium)
         Spacer(modifier = Modifier.height(8.dp))
-        LazyRow {
+        LazyRow(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
             items(items = recipes) { recipe ->
-                RecipeItem(recipe = recipe, onFavIconClick = onFavIconClick)
+                RecipeItem(
+                    recipe = recipe,
+                    onFavIconClick = onFavIconClick,
+                    onRecipeClick = onRecipeClick
+                )
             }
         }
     }
 }
 
 @Composable
-private fun RecipeItem(recipe: Recipe, onFavIconClick: (Recipe) -> Unit) {
+private fun RecipeItem(
+    recipe: Recipe,
+    onFavIconClick: (Recipe) -> Unit,
+    onRecipeClick: (Recipe) -> Unit
+) {
     Column(
         modifier = Modifier
             .padding(horizontal = 8.dp)
             .width(120.dp)
     ) {
-        Box(modifier = Modifier.clip(RoundedCornerShape(8.dp))) {
+        Box(modifier = Modifier
+            .clip(RoundedCornerShape(8.dp))
+            .clickable { onRecipeClick(recipe) }) {
             AsyncImage(
                 modifier = Modifier
                     .height(90.dp)
@@ -134,12 +142,11 @@ private fun RecipeItem(recipe: Recipe, onFavIconClick: (Recipe) -> Unit) {
                 model = recipe.thumbnailUrl,
                 contentDescription = null
             )
-            FavIcon(
+            FavIconButton(
                 modifier = Modifier
-                    .align(Alignment.TopEnd)
-                    .padding(8.dp)
-                    .clickable { onFavIconClick(recipe) },
-                isChecked = recipe.isFavorite
+                    .align(Alignment.TopEnd),
+                recipe = recipe,
+                onRecipeClick = onFavIconClick
             )
         }
 
@@ -153,15 +160,24 @@ private fun RecipeItem(recipe: Recipe, onFavIconClick: (Recipe) -> Unit) {
 }
 
 @Composable
-private fun FavIcon(modifier: Modifier = Modifier, isChecked: Boolean) {
-    Icon(
-        modifier = modifier.background(
-            color = if (isChecked) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.onPrimaryContainer,
-            shape = CircleShape
-        ),
-        painter = painterResource(id = R.drawable.ic_favorite), contentDescription = "",
-        tint = if (isChecked) MaterialTheme.colorScheme.inverseSurface else MaterialTheme.colorScheme.inverseOnSurface
-    )
+fun FavIconButton(
+    modifier: Modifier = Modifier,
+    recipe: Recipe,
+    onRecipeClick: (Recipe) -> Unit
+) {
+    IconToggleButton(
+        modifier = modifier,
+        checked = recipe.isFavorite,
+        onCheckedChange = { onRecipeClick(recipe) }) {
+        Icon(
+            modifier = Modifier.background(
+                color = if (recipe.isFavorite) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.inverseSurface,
+                shape = CircleShape
+            ),
+            painter = painterResource(id = R.drawable.ic_favorite), contentDescription = "",
+            tint = if (recipe.isFavorite) MaterialTheme.colorScheme.inverseSurface else MaterialTheme.colorScheme.inverseOnSurface
+        )
+    }
 }
 
 @Composable
@@ -172,30 +188,16 @@ private fun TopBarPreview() {
     }
 }
 
-@Composable
-@Preview
-private fun RecipeItemPreview() {
-    GrillshowTheme {
-        RecipeItem(
-            Recipe(
-                id = "123",
-                title = "Testrezept",
-                description = "",
-                thumbnailUrl = "https://i.ytimg.com/vi/SrjxCuB9tDc/default.jpg",
-                isFavorite = false
-            ), onFavIconClick = {}
-        )
-    }
-}
+
+private val recipeFake = Recipe("1", "Test1", "", "", true)
 
 @Composable
 @Preview
 private fun FavIconPreview() {
     GrillshowTheme {
         Row {
-            FavIcon(isChecked = true)
-            FavIcon(isChecked = false)
+            FavIconButton(recipe = recipeFake, onRecipeClick = { })
+            FavIconButton(recipe = recipeFake.copy(isFavorite = false), onRecipeClick = { })
         }
     }
 }
-

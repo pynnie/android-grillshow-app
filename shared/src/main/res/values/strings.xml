@@ -7,4 +7,6 @@
     <string name="dashboard_latest_recipes">Neuste Lunser</string>
     <string name="search_title">Suche</string>
     <string name="favorites_title">Lieblingslunser</string>
+    <string name="details_title">Lunserdetails</string>
+    <string name="details_list_title">Das braucht ihr:</string>
 </resources>
