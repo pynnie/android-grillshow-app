@@ -15,9 +15,10 @@ internal interface DashboardInteractor {
     suspend fun getCategoriesWithRecipes(): Flow<List<Category>>
 
     /**
-     * Update a specific [Recipe] in repository
+     * Update the favorite flag of a specified recipe
      *
-     * @param recipe the recipe to update
+     * @param id of the recipe to update
+     * @param isFavorite flag for the new favorite status
      */
-    suspend fun updateRecipe(recipe: Recipe)
+    suspend fun updateFavoriteProperty(id: String, isFavorite: Boolean)
 }

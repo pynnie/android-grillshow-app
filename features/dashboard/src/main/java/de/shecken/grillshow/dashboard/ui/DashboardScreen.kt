@@ -2,13 +2,11 @@
 
 package de.shecken.grillshow.dashboard.ui
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -16,7 +14,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -27,6 +24,7 @@ import de.shecken.grillshow.dashboard.R
 import de.shecken.grillshow.repository.recipe.model.Category
 import de.shecken.grillshow.repository.recipe.model.Recipe
 import de.shecken.grillshow.shared.GrillshowTheme
+import de.shecken.grillshow.shared.ui.FavIconButton
 import de.shecken.grillshow.shared.ui.FullScreenLoadingIndicator
 import org.koin.androidx.compose.getViewModel
 
@@ -85,7 +83,9 @@ private fun DashboardTopBar() {
 
 @Composable
 private fun CategoryList(
-    categories: List<Category>, onFavIconClick: (Recipe) -> Unit, onRecipeClick: (Recipe) -> Unit
+    categories: List<Category>,
+    onFavIconClick: (String, Boolean) -> Unit,
+    onRecipeClick: (Recipe) -> Unit
 ) {
     LazyColumn {
         items(items = categories) { category ->
@@ -103,7 +103,7 @@ private fun CategoryList(
 private fun HorizontalRecipeList(
     title: String,
     recipes: List<Recipe>,
-    onFavIconClick: (Recipe) -> Unit,
+    onFavIconClick: (String, Boolean) -> Unit,
     onRecipeClick: (Recipe) -> Unit,
 ) {
     Column(modifier = Modifier.padding(top = 16.dp)) {
@@ -124,7 +124,7 @@ private fun HorizontalRecipeList(
 @Composable
 private fun RecipeItem(
     recipe: Recipe,
-    onFavIconClick: (Recipe) -> Unit,
+    onFavIconClick: (String, Boolean) -> Unit,
     onRecipeClick: (Recipe) -> Unit
 ) {
     Column(
@@ -145,8 +145,9 @@ private fun RecipeItem(
             FavIconButton(
                 modifier = Modifier
                     .align(Alignment.TopEnd),
-                recipe = recipe,
-                onRecipeClick = onFavIconClick
+                recipeId = recipe.id,
+                isFavorite = recipe.isFavorite,
+                onClick = onFavIconClick
             )
         }
 
@@ -160,44 +161,9 @@ private fun RecipeItem(
 }
 
 @Composable
-fun FavIconButton(
-    modifier: Modifier = Modifier,
-    recipe: Recipe,
-    onRecipeClick: (Recipe) -> Unit
-) {
-    IconToggleButton(
-        modifier = modifier,
-        checked = recipe.isFavorite,
-        onCheckedChange = { onRecipeClick(recipe) }) {
-        Icon(
-            modifier = Modifier.background(
-                color = if (recipe.isFavorite) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.inverseSurface,
-                shape = CircleShape
-            ),
-            painter = painterResource(id = R.drawable.ic_favorite), contentDescription = "",
-            tint = if (recipe.isFavorite) MaterialTheme.colorScheme.inverseSurface else MaterialTheme.colorScheme.inverseOnSurface
-        )
-    }
-}
-
-@Composable
 @Preview
 private fun TopBarPreview() {
     GrillshowTheme {
         DashboardTopBar()
-    }
-}
-
-
-private val recipeFake = Recipe("1", "Test1", "", "", true)
-
-@Composable
-@Preview
-private fun FavIconPreview() {
-    GrillshowTheme {
-        Row {
-            FavIconButton(recipe = recipeFake, onRecipeClick = { })
-            FavIconButton(recipe = recipeFake.copy(isFavorite = false), onRecipeClick = { })
-        }
     }
 }

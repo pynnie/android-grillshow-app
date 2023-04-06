@@ -43,8 +43,8 @@ internal class DashboardViewModel(
         }
     }
 
-    fun onFavIconClick(recipe: Recipe) = viewModelScope.launch {
-        interactor.updateRecipe(recipe.copy(isFavorite = !recipe.isFavorite))
+    fun onFavIconClick(id: String, isFavorite: Boolean) = viewModelScope.launch {
+        interactor.updateFavoriteProperty(id = id, isFavorite = isFavorite)
     }
 
     fun onRecipeClick(recipe: Recipe) = dashboardRouter.openRecipeDetails(recipe.id)

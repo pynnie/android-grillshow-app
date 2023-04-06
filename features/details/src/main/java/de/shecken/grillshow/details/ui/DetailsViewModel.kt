@@ -26,12 +26,19 @@ internal class DetailsViewModel(
 
     fun onBackButtonClick() = detailsRouter.goBack()
 
+    fun onFavIconClick(id: String, isFavorite: Boolean) = viewModelScope.launch {
+        interactor.updateFavoriteProperty(id = id, isFavorite = isFavorite)
+    }
+
     private fun loadRecipeDetails() {
         viewModelScope.launch {
             interactor.getRecipeDetails(id).collect { result ->
                 _detailsScreenState.update {
                     result?.let { details ->
-                        DetailsScreenState.Success(details)
+                        DetailsScreenState.Success(
+                            recipeDetails = details,
+                            onFavIconClick = ::onFavIconClick
+                        )
                     } ?: DetailsScreenState.Failure
                 }
             }

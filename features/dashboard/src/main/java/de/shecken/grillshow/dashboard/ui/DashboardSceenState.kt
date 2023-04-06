@@ -9,7 +9,7 @@ internal sealed class DashboardSceenState {
 
     data class Success(
         val categories: List<Category>,
-        val onFavIconClick: (Recipe) -> Unit,
+        val onFavIconClick: (String, Boolean) -> Unit,
         val onRecipeClick: (Recipe) -> Unit
     ) : DashboardSceenState()
 

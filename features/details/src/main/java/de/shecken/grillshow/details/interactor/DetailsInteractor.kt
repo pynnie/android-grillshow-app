@@ -12,4 +12,12 @@ interface DetailsInteractor {
      * @return [Flow] of the requested recipe
      */
     fun getRecipeDetails(id: String): Flow<RecipeDetails?>
+
+    /**
+     * Update the favorite flag of a specified recipe
+     *
+     * @param id of the recipe to update
+     * @param isFavorite flag for the new favorite status
+     */
+    suspend fun updateFavoriteProperty(id: String, isFavorite: Boolean)
 }

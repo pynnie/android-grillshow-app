@@ -24,6 +24,7 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTube
 import de.shecken.grillshow.details.R
 import de.shecken.grillshow.repository.recipe.model.RecipeDetails
 import de.shecken.grillshow.shared.GrillshowTheme
+import de.shecken.grillshow.shared.ui.FavIconButton
 import de.shecken.grillshow.shared.ui.FullScreenLoadingIndicator
 import org.koin.androidx.compose.getViewModel
 
@@ -37,7 +38,13 @@ internal fun DetailsScreen(viewModel: DetailsViewModel = getViewModel()) {
 
 @Composable
 private fun DetailsScreen(state: DetailsScreenState, onBackButtonClick: () -> Unit) {
-    Scaffold(topBar = { DetailsTopBar(onBackButtonClick) }) { padding ->
+    Scaffold(
+        topBar = {
+            DetailsTopBar(
+                state = state,
+                onBackButtonClick = onBackButtonClick
+            )
+        }) { padding ->
         HandleScreenState(modifier = Modifier.padding(padding), state = state)
     }
 }
@@ -58,7 +65,7 @@ private fun HandleScreenState(modifier: Modifier, state: DetailsScreenState) {
 }
 
 @Composable
-private fun DetailsTopBar(onBackButtonClick: () -> Unit) {
+private fun DetailsTopBar(state: DetailsScreenState, onBackButtonClick: () -> Unit) {
     TopAppBar(
         title = { Text(text = stringResource(id = R.string.details_title)) },
         navigationIcon = {
@@ -70,18 +77,19 @@ private fun DetailsTopBar(onBackButtonClick: () -> Unit) {
             }
         },
         actions = {
-            IconButton(onClick = { onBackButtonClick() }) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_favorite),
-                    contentDescription = ""
+            if (state is DetailsScreenState.Success) {
+                FavIconButton(
+                    recipeId = state.recipeDetails.id,
+                    isFavorite = state.recipeDetails.isFavorite,
+                    onClick = state.onFavIconClick
                 )
-            }
 
-            IconButton(onClick = { onBackButtonClick() }) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_share),
-                    contentDescription = ""
-                )
+                IconButton(onClick = { onBackButtonClick() }) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_share),
+                        contentDescription = ""
+                    )
+                }
             }
         }
     )
@@ -175,15 +183,13 @@ private fun IngredientItem(item: String) {
     )
 }
 
+private val previewIngredients = listOf("1 große Salami", "Öl", "Salz", "Dose Kidneybohnen")
+
 @Composable
 @Preview
 private fun IngredientItemPreview() {
     GrillshowTheme {
-        IngredientList(
-            ingredients = listOf(
-                "1 große Salami", "Öl", "Salz", "Dose Kidneybohnen"
-            )
-        )
+        IngredientList(ingredients = previewIngredients)
     }
 }
 
@@ -191,8 +197,15 @@ private fun IngredientItemPreview() {
 @Preview
 private fun TopBarPreview() {
     GrillshowTheme {
-        DetailsTopBar {
-
-        }
+        DetailsTopBar(
+            DetailsScreenState.Success(
+                RecipeDetails(
+                    "id",
+                    "Test Title",
+                    previewIngredients,
+                    false
+                ), { da, d2f -> }
+            )
+        ) {}
     }
 }

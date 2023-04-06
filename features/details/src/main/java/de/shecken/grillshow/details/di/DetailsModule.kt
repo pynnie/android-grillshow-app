@@ -7,7 +7,18 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 val detailsModule = module {
-    viewModel { DetailsViewModel(get(), get(), get()) }
+    viewModel {
+        DetailsViewModel(
+            interactor = get(),
+            savedStateHandle = get(),
+            detailsRouter = get()
+        )
+    }
 
-    single<DetailsInteractor> { DetailsInteractorImpl(get()) }
+    single<DetailsInteractor> {
+        DetailsInteractorImpl(
+            detailsRepository = get(),
+            recipeRepository = get()
+        )
+    }
 }
