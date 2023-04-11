@@ -14,6 +14,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -125,17 +126,19 @@ private fun RecipeItem(
     onFavIconClick: (String, Boolean) -> Unit,
     onRecipeClick: (Recipe) -> Unit
 ) {
+    val itemWidth = with(LocalDensity.current) { 640.toDp() }
+    val itemHeight = with(LocalDensity.current) { 480.toDp() }
     Column(
         modifier = Modifier
             .padding(horizontal = 8.dp)
-            .width(120.dp)
+            .width(itemWidth)
     ) {
         Box(modifier = Modifier
             .clip(RoundedCornerShape(8.dp))
             .clickable { onRecipeClick(recipe) }) {
             AsyncImage(
                 modifier = Modifier
-                    .height(90.dp)
+                    .height(itemHeight)
                     .align(Alignment.Center),
                 model = recipe.thumbnailUrl,
                 contentDescription = null
