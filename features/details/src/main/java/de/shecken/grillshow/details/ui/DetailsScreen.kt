@@ -33,16 +33,25 @@ internal fun DetailsScreen(viewModel: DetailsViewModel = getViewModel()) {
 
     val state: DetailsScreenState by viewModel.detailsScreenState.collectAsStateWithLifecycle()
 
-    DetailsScreen(state = state, onBackButtonClick = viewModel::onBackButtonClick)
+    DetailsScreen(
+        state = state,
+        onBackButtonClick = viewModel::onBackButtonClick,
+        onShareIconClick = viewModel::onShareIconClick
+    )
 }
 
 @Composable
-private fun DetailsScreen(state: DetailsScreenState, onBackButtonClick: () -> Unit) {
+private fun DetailsScreen(
+    state: DetailsScreenState,
+    onBackButtonClick: () -> Unit,
+    onShareIconClick: (String) -> Unit
+) {
     Scaffold(
         topBar = {
             DetailsTopBar(
                 state = state,
-                onBackButtonClick = onBackButtonClick
+                onBackButtonClick = onBackButtonClick,
+                onShareIconClick = onShareIconClick
             )
         }) { padding ->
         HandleScreenState(modifier = Modifier.padding(padding), state = state)
@@ -65,7 +74,11 @@ private fun HandleScreenState(modifier: Modifier, state: DetailsScreenState) {
 }
 
 @Composable
-private fun DetailsTopBar(state: DetailsScreenState, onBackButtonClick: () -> Unit) {
+private fun DetailsTopBar(
+    state: DetailsScreenState,
+    onBackButtonClick: () -> Unit,
+    onShareIconClick: (String) -> Unit
+) {
     TopAppBar(
         title = { Text(text = stringResource(id = R.string.details_title)) },
         navigationIcon = {
@@ -84,7 +97,7 @@ private fun DetailsTopBar(state: DetailsScreenState, onBackButtonClick: () -> Un
                     onClick = state.onFavIconClick
                 )
 
-                IconButton(onClick = { onBackButtonClick() }) {
+                IconButton(onClick = { onShareIconClick(state.recipeDetails.id) }) {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_share),
                         contentDescription = ""
@@ -207,7 +220,6 @@ private fun TopBarPreview() {
                     previewIngredients,
                     false
                 ), { da, d2f -> }
-            )
-        ) {}
+            ), {}) {}
     }
 }

@@ -1,5 +1,7 @@
 package de.shecken.grillshow
 
+import android.content.Context
+import android.content.Intent
 import androidx.navigation.NavController
 import de.shecken.favorites.navigation.FavoritesRouter
 import de.shecken.favorites.navigation.favoritesRoute
@@ -15,7 +17,8 @@ import de.shecken.grillshow.shop.navigation.searchRoute
  * Main Router class for the project. Should implement all sub-module Router interfaces using the [navController] injected from the
  * [MainActivity].
  */
-internal class Router : DashboardRouter, BottomBarRouter, DetailsRouter, FavoritesRouter,
+internal class Router(private val context: Context) : DashboardRouter, BottomBarRouter,
+    DetailsRouter, FavoritesRouter,
     SearchRouter {
 
     lateinit var navController: NavController
@@ -36,5 +39,20 @@ internal class Router : DashboardRouter, BottomBarRouter, DetailsRouter, Favorit
 
     override fun goBack() {
         navController.navigateUp()
+    }
+
+    override fun shareRecipe(recipeId: String) {
+        val sendIntent: Intent = Intent().apply {
+            action = Intent.ACTION_SEND
+            putExtra(Intent.EXTRA_TEXT, context.getString(R.string.details_share_message, recipeId))
+            type = INTENT_TYPE
+        }
+        val shareIntent = Intent.createChooser(sendIntent, null)
+            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        context.startActivity(shareIntent)
+    }
+
+    companion object {
+        private const val INTENT_TYPE = "text/plain"
     }
 }
