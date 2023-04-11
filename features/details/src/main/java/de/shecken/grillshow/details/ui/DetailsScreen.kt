@@ -111,6 +111,8 @@ private fun HandleSuccessState(recipeDetails: RecipeDetails) {
     Column(modifier = Modifier.fillMaxSize()) {
         YoutubeVideo(videoId = recipeDetails.id, modifier = Modifier.fillMaxWidth())
 
+        Spacer(modifier = Modifier.height(8.dp))
+
         // recipe title
         Text(text = recipeDetails.title, style = MaterialTheme.typography.titleMedium)
 

@@ -8,13 +8,15 @@ import de.shecken.grillshow.dashboard.navigation.DashboardRouter
 import de.shecken.grillshow.dashboard.navigation.dashboardRoute
 import de.shecken.grillshow.details.navigation.DetailsRouter
 import de.shecken.grillshow.details.navigation.detailsScreen
-import de.shecken.grillshow.shop.searchRoute
+import de.shecken.grillshow.shop.navigation.SearchRouter
+import de.shecken.grillshow.shop.navigation.searchRoute
 
 /**
  * Main Router class for the project. Should implement all sub-module Router interfaces using the [navController] injected from the
  * [MainActivity].
  */
-internal class Router : DashboardRouter, BottomBarRouter, DetailsRouter, FavoritesRouter {
+internal class Router : DashboardRouter, BottomBarRouter, DetailsRouter, FavoritesRouter,
+    SearchRouter {
 
     lateinit var navController: NavController
 
@@ -30,9 +32,6 @@ internal class Router : DashboardRouter, BottomBarRouter, DetailsRouter, Favorit
     override fun openFavorites() = navController.navigate(favoritesRoute)
 
     override fun openRecipeDetails(recipeId: String) =
-        navController.navigate("$detailsScreen/$recipeId")
-
-    override fun goToRecipeDetails(recipeId: String) =
         navController.navigate("$detailsScreen/$recipeId")
 
     override fun goBack() {
