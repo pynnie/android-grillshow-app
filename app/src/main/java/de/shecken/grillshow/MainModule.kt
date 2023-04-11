@@ -9,7 +9,7 @@ import org.koin.dsl.module
 
 internal val mainModule = module {
 
-    single { Router() }
+    single { Router(get()) }
     factory<DashboardRouter> { get<Router>() }
     factory<BottomBarRouter> { get<Router>() }
     factory<DetailsRouter> { get<Router>() }

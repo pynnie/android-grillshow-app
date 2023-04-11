@@ -30,6 +30,8 @@ internal class DetailsViewModel(
         interactor.updateFavoriteProperty(id = id, isFavorite = isFavorite)
     }
 
+    fun onShareIconClick(id: String) = detailsRouter.shareRecipe(id)
+
     private fun loadRecipeDetails() {
         viewModelScope.launch {
             interactor.getRecipeDetails(id).collect { result ->

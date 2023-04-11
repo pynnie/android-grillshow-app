@@ -9,6 +9,7 @@
     <string name="favorites_title">Lieblingslunser</string>
     <string name="details_title">Lunserdetails</string>
     <string name="details_list_title">Das braucht ihr:</string>
+    <string name="details_share_message">🔥🔥 Baller dir dieses Grillrezept rein: https://www.youtube.com/watch?v=%1$s</string>
     <string name="search_empty_message">keine Lunser gefunden</string>
     <string name="search_field_prompt">Such was, Keule!</string>
 </resources>
