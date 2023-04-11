@@ -1,5 +1,6 @@
 package de.shecken.grillshow
 
+import de.shecken.favorites.navigation.FavoritesRouter
 import de.shecken.grillshow.shared.ui.navigation.BottomBarRouter
 import de.shecken.grillshow.dashboard.navigation.DashboardRouter
 import de.shecken.grillshow.details.navigation.DetailsRouter
@@ -11,4 +12,5 @@ internal val mainModule = module {
     factory<DashboardRouter> { get<Router>() }
     factory<BottomBarRouter> { get<Router>() }
     factory<DetailsRouter> { get<Router>() }
+    factory<FavoritesRouter> { get<Router>() }
 }

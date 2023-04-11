@@ -39,4 +39,9 @@ interface RecipeRepository {
      * @param id of the recipe
      */
     suspend fun getRecipeForId(id: String): Recipe?
+
+    /**
+     * Get all recipes that are marked as favorites
+     */
+    suspend fun getAllFavorites(): Flow<List<Recipe>>
 }

@@ -81,6 +81,11 @@ class RecipeRepositoryImpl(
         return@withContext
     }
 
+    override suspend fun getAllFavorites(): Flow<List<Recipe>> = withContext(dispatcher) {
+        return@withContext recipeDao.getAllFavorites()
+            .map { list -> list.map { entity -> entity.toRecipe() } }
+    }
+
     private suspend fun fetchRecipes(
         playlistId: String,
         pageToken: String = "",

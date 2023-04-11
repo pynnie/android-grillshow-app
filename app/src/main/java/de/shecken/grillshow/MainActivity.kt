@@ -11,7 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
-import de.shecken.favorites.favoritesGraph
+import de.shecken.favorites.navigation.favoritesGraph
 import de.shecken.grillshow.repository.preferences.PreferencesRepository
 import de.shecken.grillshow.repository.recipe.RecipeRepository
 import de.shecken.grillshow.shared.GrillshowTheme
