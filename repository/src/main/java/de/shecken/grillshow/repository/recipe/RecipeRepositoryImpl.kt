@@ -136,7 +136,8 @@ class RecipeRepositoryImpl(
 
     private fun isRecipe(videoTitle: String) =
         videoTitle.contains(RECIPE_TITLE_REGEX, ignoreCase = true) &&
-                !videoTitle.contains(RECIPE_SHORTS_REGEX, ignoreCase = true)
+                !videoTitle.contains(RECIPE_SHORTS_REGEX, ignoreCase = true) &&
+                !videoTitle.contains(RECIPE_SPECIAL_REGEX, ignoreCase = true)
 
     private fun isNew(latestUploadDateString: String?, itemUploadDateString: String) =
         latestUploadDateString?.let {
@@ -148,6 +149,7 @@ class RecipeRepositoryImpl(
     companion object {
         private const val RECIPE_TITLE_REGEX = "die grillshow"
         private const val RECIPE_SHORTS_REGEX = "die grillshow shorts"
+        private const val RECIPE_SPECIAL_REGEX = "die grillshow special"
     }
 }
 
