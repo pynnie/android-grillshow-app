@@ -1,4 +1,4 @@
-package de.shecken.grillshow.shop
+package de.shecken.grillshow.shop.navigation
 
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable

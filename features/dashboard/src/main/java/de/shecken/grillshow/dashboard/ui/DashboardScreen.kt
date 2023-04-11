@@ -31,9 +31,7 @@ import org.koin.androidx.compose.getViewModel
 @Composable
 internal fun DashboardScreen(viewModel: DashboardViewModel = getViewModel()) {
     val state by viewModel.dashboardScreenState.collectAsStateWithLifecycle()
-    DashboardScreen(
-        state = state
-    )
+    DashboardScreen(state = state)
 }
 
 @Composable

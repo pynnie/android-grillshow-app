@@ -22,7 +22,7 @@ class FavoritesViewModel(
         loadFavorites()
     }
 
-    fun onItemClick(recipeId: String) = favoritesRouter.goToRecipeDetails(recipeId)
+    fun onItemClick(recipeId: String) = favoritesRouter.openRecipeDetails(recipeId)
 
     private fun loadFavorites() {
         viewModelScope.launch {

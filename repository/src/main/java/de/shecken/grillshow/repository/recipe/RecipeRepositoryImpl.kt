@@ -86,6 +86,12 @@ class RecipeRepositoryImpl(
             .map { list -> list.map { entity -> entity.toRecipe() } }
     }
 
+    override suspend fun searchRecipes(query: String): Flow<List<Recipe>> =
+        withContext(dispatcher) {
+            return@withContext recipeDao.searchRecipes(query)
+                .map { list -> list.map { entity -> entity.toRecipe() } }
+        }
+
     private suspend fun fetchRecipes(
         playlistId: String,
         pageToken: String = "",
@@ -136,7 +142,8 @@ class RecipeRepositoryImpl(
 
     private fun isRecipe(videoTitle: String) =
         videoTitle.contains(RECIPE_TITLE_REGEX, ignoreCase = true) &&
-                !videoTitle.contains(RECIPE_SHORTS_REGEX, ignoreCase = true)
+                !videoTitle.contains(RECIPE_SHORTS_REGEX, ignoreCase = true) &&
+                !videoTitle.contains(RECIPE_SPECIAL_REGEX, ignoreCase = true)
 
     private fun isNew(latestUploadDateString: String?, itemUploadDateString: String) =
         latestUploadDateString?.let {
@@ -148,6 +155,7 @@ class RecipeRepositoryImpl(
     companion object {
         private const val RECIPE_TITLE_REGEX = "die grillshow"
         private const val RECIPE_SHORTS_REGEX = "die grillshow shorts"
+        private const val RECIPE_SPECIAL_REGEX = "die grillshow special"
     }
 }
 
