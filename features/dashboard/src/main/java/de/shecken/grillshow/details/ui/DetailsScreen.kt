@@ -21,7 +21,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
-import de.shecken.grillshow.details.R
+import de.shecken.grillshow.dashboard.R
 import de.shecken.grillshow.repository.recipe.model.RecipeDetails
 import de.shecken.grillshow.shared.GrillshowTheme
 import de.shecken.grillshow.shared.ui.FavIconButton
