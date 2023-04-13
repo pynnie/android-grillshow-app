@@ -1,11 +1,11 @@
 package de.shecken.grillshow.dashboard.ui
 
 import app.cash.turbine.test
-import de.shecken.grillshow.dashboard.fakeCategory1
-import de.shecken.grillshow.dashboard.fakeRecipe1
 import de.shecken.grillshow.dashboard.interactor.DashboardInteractor
 import de.shecken.grillshow.DashboardRouter
-import de.shecken.grillshow.repository.recipe.model.Category
+import de.shecken.grillshow.dashboard.fakeCategoryVo1
+import de.shecken.grillshow.dashboard.fakeRecipeListItemVo1
+import de.shecken.grillshow.dashboard.vo.CategoryVo
 import de.shecken.grillshow.sharedtest.coroutineTest
 import de.shecken.grillshow.sharedtest.test
 import io.mockk.*
@@ -27,7 +27,7 @@ internal class DashboardViewModelTest {
     private val dashboardInteractorMock = mockk<DashboardInteractor>(relaxed = true)
     private val dashboardRouterMock = mockk<DashboardRouter>(relaxed = true)
 
-    private val categories = MutableStateFlow(emptyList<Category>())
+    private val categories = MutableStateFlow(emptyList<CategoryVo>())
 
     @BeforeEach
     fun setUp() {
@@ -50,7 +50,7 @@ internal class DashboardViewModelTest {
     @Test
     fun onRecipeClick() {
         // given
-        val fakeRecipe = fakeRecipe1
+        val fakeRecipe = fakeRecipeListItemVo1
         // when
         underTest.onRecipeClick(fakeRecipe)
         // then
@@ -76,7 +76,7 @@ internal class DashboardViewModelTest {
     @Test
     fun `filled category list should result in success state`() = coroutineTest {
         // given
-        val fakeCategories = listOf(fakeCategory1)
+        val fakeCategories = listOf(fakeCategoryVo1)
         // when
         categories.value = fakeCategories
         // then

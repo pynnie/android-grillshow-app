@@ -1,5 +1,7 @@
 package de.shecken.grillshow.dashboard
 
+import de.shecken.grillshow.dashboard.vo.CategoryVo
+import de.shecken.grillshow.dashboard.vo.RecipeListItemVo
 import de.shecken.grillshow.repository.recipe.model.Category
 import de.shecken.grillshow.repository.recipe.model.Recipe
 
@@ -25,4 +27,24 @@ val fakeCategory1 = Category(
     title = "FakeTitle1",
     description = "description1",
     recipes = listOf(fakeRecipe1, fakeRecipe2)
+)
+
+val fakeRecipeListItemVo1 = RecipeListItemVo(
+    id = "1",
+    title = "FakeTitle1",
+    imageUrl = "imageUrl1",
+    isFavorite = false
+)
+
+val fakeRecipeListItemVo2 = RecipeListItemVo(
+    id = "2",
+    title = "FakeTitle2",
+    imageUrl = "imageUrl2",
+    isFavorite = true
+)
+
+val fakeCategoryVo1 = CategoryVo(
+    id = "1",
+    title = "FakeTitle1",
+    recipes = listOf(fakeRecipeListItemVo1, fakeRecipeListItemVo2)
 )
