@@ -1,6 +1,6 @@
 package de.shecken.grillshow.details.interactor
 
-import de.shecken.grillshow.repository.recipe.model.RecipeDetails
+import de.shecken.grillshow.details.vo.RecipeDetailsVo
 import kotlinx.coroutines.flow.Flow
 
 interface DetailsInteractor {
@@ -11,7 +11,7 @@ interface DetailsInteractor {
      * @param id of the recipe
      * @return [Flow] of the requested recipe
      */
-    fun getRecipeDetails(id: String): Flow<RecipeDetails?>
+    fun getRecipeDetails(id: String): Flow<RecipeDetailsVo?>
 
     /**
      * Update the favorite flag of a specified recipe

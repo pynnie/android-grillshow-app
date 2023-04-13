@@ -2,7 +2,6 @@ package de.shecken.grillshow.repository.recipe
 
 import de.shecken.grillshow.repository.recipe.model.Category
 import de.shecken.grillshow.repository.recipe.model.Recipe
-import de.shecken.grillshow.repository.recipe.model.RecipeDetails
 import kotlinx.coroutines.flow.Flow
 
 interface RecipeRepository {
@@ -42,6 +41,14 @@ interface RecipeRepository {
     suspend fun getRecipeForId(id: String): Recipe?
 
     /**
+     * Get specified recipe from database
+     *
+     * @param id of the recipe
+     * @return [Flow] of the requested recipe
+     */
+    fun getRecipeForIdAsFlow(id: String): Flow<Recipe?>
+
+    /**
      * Get all recipes that are marked as favorites
      */
     suspend fun getAllFavorites(): Flow<List<Recipe>>
@@ -52,12 +59,4 @@ interface RecipeRepository {
      * @param query the search query
      */
     suspend fun searchRecipes(query: String): Flow<List<Recipe>>
-
-    /**
-     * Get details for specific recipe
-     *
-     * @param id of the recipe
-     * @return [Flow] of the requested recipe
-     */
-    fun recipeDetailsById(id: String): Flow<RecipeDetails?>
 }

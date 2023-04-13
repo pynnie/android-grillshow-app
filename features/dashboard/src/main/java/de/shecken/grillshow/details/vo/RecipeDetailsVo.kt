@@ -1,6 +1,6 @@
-package de.shecken.grillshow.repository.recipe.model
+package de.shecken.grillshow.details.vo
 
-data class RecipeDetails(
+data class RecipeDetailsVo(
     val id: String,
     val title: String,
     val ingredientlist: List<String>,

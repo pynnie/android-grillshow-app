@@ -2,10 +2,10 @@ package de.shecken.grillshow.dashboard.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import de.shecken.grillshow.repository.recipe.model.Recipe
 import de.shecken.grillshow.DashboardRouter
 import de.shecken.grillshow.dashboard.interactor.DashboardInteractor
 import de.shecken.grillshow.dashboard.ui.DashboardSceenState.*
+import de.shecken.grillshow.dashboard.vo.RecipeListItemVo
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
@@ -37,5 +37,5 @@ internal class DashboardViewModel(
         interactor.updateFavoriteProperty(id = id, isFavorite = isFavorite)
     }
 
-    fun onRecipeClick(recipe: Recipe) = dashboardRouter.openRecipeDetails(recipe.id)
+    fun onRecipeClick(recipe: RecipeListItemVo) = dashboardRouter.openRecipeDetails(recipe.id)
 }

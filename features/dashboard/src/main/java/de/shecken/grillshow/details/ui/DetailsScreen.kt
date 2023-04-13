@@ -22,7 +22,7 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
 import de.shecken.grillshow.dashboard.R
-import de.shecken.grillshow.repository.recipe.model.RecipeDetails
+import de.shecken.grillshow.details.vo.RecipeDetailsVo
 import de.shecken.grillshow.shared.GrillshowTheme
 import de.shecken.grillshow.shared.ui.FavIconButton
 import de.shecken.grillshow.shared.ui.FullScreenLoadingIndicator
@@ -120,7 +120,7 @@ private fun Error() {
 }
 
 @Composable
-private fun HandleSuccessState(recipeDetails: RecipeDetails) {
+private fun HandleSuccessState(recipeDetails: RecipeDetailsVo) {
     Column(modifier = Modifier.fillMaxSize()) {
         YoutubeVideo(videoId = recipeDetails.id, modifier = Modifier.fillMaxWidth())
 
@@ -214,7 +214,7 @@ private fun TopBarPreview() {
     GrillshowTheme {
         DetailsTopBar(
             DetailsScreenState.Success(
-                RecipeDetails(
+                RecipeDetailsVo(
                     "id",
                     "Test Title",
                     previewIngredients,
