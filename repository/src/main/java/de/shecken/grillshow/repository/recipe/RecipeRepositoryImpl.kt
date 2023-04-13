@@ -84,16 +84,13 @@ class RecipeRepositoryImpl(
         return@withContext
     }
 
-    override suspend fun getAllFavorites(): Flow<List<Recipe>> = withContext(dispatcher) {
-        return@withContext recipeDao.getAllFavorites()
-            .map { list -> list.map { entity -> entity.toRecipe() } }
-    }
+    override fun getAllFavorites(): Flow<List<Recipe>> = recipeDao.getAllFavorites()
+        .map { list -> list.map { entity -> entity.toRecipe() } }
 
-    override suspend fun searchRecipes(query: String): Flow<List<Recipe>> =
-        withContext(dispatcher) {
-            return@withContext recipeDao.searchRecipes(query)
-                .map { list -> list.map { entity -> entity.toRecipe() } }
-        }
+    override fun searchRecipes(query: String): Flow<List<Recipe>> =
+        recipeDao.searchRecipes(query)
+            .map { list -> list.map { entity -> entity.toRecipe() } }
+
 
     private suspend fun fetchRecipes(
         playlistId: String,

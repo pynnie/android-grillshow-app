@@ -2,53 +2,46 @@ package de.shecken.grillshow.shop.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import de.shecken.grillshow.repository.recipe.model.Recipe
 import de.shecken.grillshow.shop.navigation.SearchRouter
 import de.shecken.grillshow.shop.interactor.SearchInteractor
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
+import de.shecken.grillshow.shop.vo.SearchResultVo
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.*
 
+@OptIn(ExperimentalCoroutinesApi::class)
 internal class SearchViewModel(
     private val interactor: SearchInteractor, private val router: SearchRouter
 ) : ViewModel() {
 
-    private val _searchScreenState = MutableStateFlow<SearchScreenState>(SearchScreenState.Empty)
-    val searchScreenState: StateFlow<SearchScreenState> = _searchScreenState
+    private val _searchQuery = MutableStateFlow("")
+    private val _searchScreenState = _searchQuery.flatMapLatest { query ->
+        updateSearchResults(query)
+    }
 
+    val searchScreenState: StateFlow<SearchScreenState> =
+        _searchScreenState.stateIn(viewModelScope, SharingStarted.Eagerly, SearchScreenState.Empty)
 
     fun onQueryChange(query: String) {
-        _searchScreenState.update { SearchScreenState.Loading }
-        viewModelScope.launch {
-            interactor.searchForRecipes(query).collect { recipeList ->
-                handleSearchResult(recipeList)
-            }
-        }
+        _searchQuery.value = query
     }
 
-    private fun handleSearchResult(recipeList: List<Recipe>) {
-        if (recipeList.isEmpty()) {
-            _searchScreenState.update { SearchScreenState.Empty }
+    private fun updateSearchResults(query: String) =
+        if (query.isNotEmpty()) {
+            interactor.searchForRecipes(query).map { resultList ->
+                handleSearchResult(resultList)
+            }
         } else {
-            _searchScreenState.update {
-                SearchScreenState.Success(
-                    recipes = recipeList,
-                    onFavIconClick = ::onFavIconClick,
-                    onRecipeClick = ::onRecipeClick
-                )
-            }
+            flowOf(SearchScreenState.Empty)
         }
+
+    private fun handleSearchResult(recipeList: List<SearchResultVo>) = if (recipeList.isEmpty()) {
+        SearchScreenState.Empty
+    } else {
+        SearchScreenState.Success(
+            recipes = recipeList, onRecipeClick = ::onRecipeClick
+        )
     }
 
-    private fun onRecipeClick(recipe: Recipe) = router.openRecipeDetails(recipeId = recipe.id)
-
-
-    private fun onFavIconClick(recipeId: String, isFavorite: Boolean) {
-        viewModelScope.launch {
-            interactor.updateFavoriteProperty(recipeId = recipeId, isFavorite = isFavorite)
-        }
-    }
-
-
+    private fun onRecipeClick(recipeId: String) =
+        router.openRecipeDetails(recipeId = recipeId)
 }

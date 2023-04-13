@@ -1,6 +1,6 @@
 package de.shecken.grillshow.shop.interactor
 
-import de.shecken.grillshow.repository.recipe.model.Recipe
+import de.shecken.grillshow.shop.vo.SearchResultVo
 import kotlinx.coroutines.flow.Flow
 
 interface SearchInteractor {
@@ -10,13 +10,5 @@ interface SearchInteractor {
      *
      * @param query the search query
      */
-    suspend fun searchForRecipes(query: String): Flow<List<Recipe>>
-
-    /**
-     * Update the favorite property of a recipe
-     *
-     * @param recipeId the id of the recipe
-     * @param isFavorite the new favorite property
-     */
-    suspend fun updateFavoriteProperty(recipeId: String, isFavorite: Boolean)
+    fun searchForRecipes(query: String): Flow<List<SearchResultVo>>
 }

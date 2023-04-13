@@ -51,12 +51,12 @@ interface RecipeRepository {
     /**
      * Get all recipes that are marked as favorites
      */
-    suspend fun getAllFavorites(): Flow<List<Recipe>>
+    fun getAllFavorites(): Flow<List<Recipe>>
 
     /**
      * Search for recipes
      *
      * @param query the search query
      */
-    suspend fun searchRecipes(query: String): Flow<List<Recipe>>
+    fun searchRecipes(query: String): Flow<List<Recipe>>
 }
