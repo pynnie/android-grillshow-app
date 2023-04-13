@@ -8,6 +8,7 @@ import de.shecken.grillshow.repository.*
 import de.shecken.grillshow.repository.preferences.PreferencesRepository
 import de.shecken.grillshow.repository.recipe.model.Category
 import de.shecken.grillshow.repository.recipe.model.Recipe
+import de.shecken.grillshow.repository.recipe.model.RecipeDetails
 import de.shecken.grillshow.shared.provider.StringProvider
 import de.shecken.networking.BuildConfig
 import kotlinx.coroutines.CoroutineDispatcher
@@ -92,6 +93,22 @@ class RecipeRepositoryImpl(
                 .map { list -> list.map { entity -> entity.toRecipe() } }
         }
 
+    override fun recipeDetailsById(id: String): Flow<RecipeDetails?> =
+        recipeDao.getRecipeFlowById(id).map { result ->
+            result?.let { recipeEntity ->
+                RecipeDetails(
+                    id = recipeEntity.id,
+                    title = recipeEntity.title,
+                    ingredientlist = extractIngredients(recipeEntity.description),
+                    isFavorite = recipeEntity.isFavorite
+                )
+            }
+        }
+
+    private fun extractIngredients(text: String) =
+        text.lines().filter { it.startsWith(INGREDIENT_PREFIX, ignoreCase = true) }
+            .map { ingredient -> ingredient.replace(INGREDIENT_PREFIX, "").trim() }
+
     private suspend fun fetchRecipes(
         playlistId: String,
         pageToken: String = "",
@@ -156,6 +173,7 @@ class RecipeRepositoryImpl(
         private const val RECIPE_TITLE_REGEX = "die grillshow"
         private const val RECIPE_SHORTS_REGEX = "die grillshow shorts"
         private const val RECIPE_SPECIAL_REGEX = "die grillshow special"
+        private const val INGREDIENT_PREFIX = "-"
     }
 }
 

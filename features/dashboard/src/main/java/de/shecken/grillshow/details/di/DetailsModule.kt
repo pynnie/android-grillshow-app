@@ -1,4 +1,4 @@
-package de.shecken.grillshow.details
+package de.shecken.grillshow.details.di
 
 import de.shecken.grillshow.details.interactor.DetailsInteractor
 import de.shecken.grillshow.details.interactor.DetailsInteractorImpl
@@ -16,9 +16,6 @@ val detailsModule = module {
     }
 
     single<DetailsInteractor> {
-        DetailsInteractorImpl(
-            detailsRepository = get(),
-            recipeRepository = get()
-        )
+        DetailsInteractorImpl(recipeRepository = get())
     }
 }
