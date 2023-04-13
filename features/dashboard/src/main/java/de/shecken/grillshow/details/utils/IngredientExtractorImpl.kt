@@ -7,7 +7,7 @@ class IngredientExtractorImpl : IngredientExtractor {
         text.lines()
             .filter { it.startsWith(INGREDIENT_PREFIX, ignoreCase = true) }
             .map { ingredient ->
-                ingredient.replace(INGREDIENT_PREFIX, "").trim()
+                ingredient.replaceFirst(INGREDIENT_PREFIX, "").trim()
             }
 
     companion object {
