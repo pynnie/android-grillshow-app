@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 internal class DashboardInteractorImpl(private val recipeRepository: RecipeRepository) :
     DashboardInteractor {
 
-    override suspend fun getCategoriesWithRecipes(): Flow<List<Category>> =
+    override fun getCategoriesWithRecipes(): Flow<List<Category>> =
         recipeRepository.categories
 
     override suspend fun updateFavoriteProperty(id: String, isFavorite: Boolean) {

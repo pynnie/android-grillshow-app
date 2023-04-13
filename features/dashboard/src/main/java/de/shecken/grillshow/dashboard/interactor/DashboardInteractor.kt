@@ -12,7 +12,7 @@ internal interface DashboardInteractor {
     /**
      * @return flow of all [Category]s with the 10 latest [Recipe]s as a [Flow]
      */
-    suspend fun getCategoriesWithRecipes(): Flow<List<Category>>
+    fun getCategoriesWithRecipes(): Flow<List<Category>>
 
     /**
      * Update the favorite flag of a specified recipe
