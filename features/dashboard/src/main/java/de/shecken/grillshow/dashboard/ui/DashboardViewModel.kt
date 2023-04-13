@@ -3,7 +3,7 @@ package de.shecken.grillshow.dashboard.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import de.shecken.grillshow.repository.recipe.model.Recipe
-import de.shecken.grillshow.dashboard.navigation.DashboardRouter
+import de.shecken.grillshow.DashboardRouter
 import de.shecken.grillshow.dashboard.interactor.DashboardInteractor
 import de.shecken.grillshow.dashboard.ui.DashboardSceenState.*
 import kotlinx.coroutines.flow.*

@@ -4,7 +4,7 @@ import app.cash.turbine.test
 import de.shecken.grillshow.dashboard.fakeCategory1
 import de.shecken.grillshow.dashboard.fakeRecipe1
 import de.shecken.grillshow.dashboard.interactor.DashboardInteractor
-import de.shecken.grillshow.dashboard.navigation.DashboardRouter
+import de.shecken.grillshow.DashboardRouter
 import de.shecken.grillshow.repository.recipe.model.Category
 import de.shecken.grillshow.sharedtest.coroutineTest
 import de.shecken.grillshow.sharedtest.test

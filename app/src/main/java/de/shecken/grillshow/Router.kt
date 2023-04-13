@@ -6,10 +6,6 @@ import androidx.navigation.NavController
 import de.shecken.favorites.navigation.FavoritesRouter
 import de.shecken.favorites.navigation.favoritesRoute
 import de.shecken.grillshow.shared.ui.navigation.BottomBarRouter
-import de.shecken.grillshow.dashboard.navigation.DashboardRouter
-import de.shecken.grillshow.dashboard.navigation.dashboardRoute
-import de.shecken.grillshow.details.navigation.DetailsRouter
-import de.shecken.grillshow.details.navigation.detailsScreen
 import de.shecken.grillshow.shop.navigation.SearchRouter
 import de.shecken.grillshow.shop.navigation.searchRoute
 
@@ -18,7 +14,7 @@ import de.shecken.grillshow.shop.navigation.searchRoute
  * [MainActivity].
  */
 internal class Router(private val context: Context) : DashboardRouter, BottomBarRouter,
-    DetailsRouter, FavoritesRouter,
+    FavoritesRouter,
     SearchRouter {
 
     lateinit var navController: NavController
