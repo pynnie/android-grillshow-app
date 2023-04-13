@@ -4,40 +4,32 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import de.shecken.favorites.interactor.FavoritesInteractor
 import de.shecken.favorites.navigation.FavoritesRouter
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.*
 
 class FavoritesViewModel(
     private val favoritesRouter: FavoritesRouter,
     private val interactor: FavoritesInteractor
 ) : ViewModel() {
 
-    private val _favoritesScreenState =
-        MutableStateFlow<FavoritesScreenState>(FavoritesScreenState.Loading)
-    val favoritesScreenState: StateFlow<FavoritesScreenState> = _favoritesScreenState
+    private val _favoritesScreenState = loadFavorites()
+    val favoritesScreenState: StateFlow<FavoritesScreenState> = _favoritesScreenState.stateIn(
+        viewModelScope,
+        SharingStarted.Eagerly,
+        FavoritesScreenState.Loading
+    )
 
-    init {
-        loadFavorites()
-    }
 
     fun onItemClick(recipeId: String) = favoritesRouter.openRecipeDetails(recipeId)
 
-    private fun loadFavorites() {
-        viewModelScope.launch {
-            interactor.getFavoriteRecipes().collect { favList ->
-                _favoritesScreenState.update {
-                    if (favList.isEmpty()) {
-                        FavoritesScreenState.Empty
-                    } else {
-                        FavoritesScreenState.Success(
-                            favoriteList = favList,
-                            onItemClick = ::onItemClick
-                        )
-                    }
-                }
+    private fun loadFavorites() =
+        interactor.getFavoriteRecipes().map { favList ->
+            if (favList.isEmpty()) {
+                FavoritesScreenState.Empty
+            } else {
+                FavoritesScreenState.Success(
+                    favoriteList = favList,
+                    onItemClick = ::onItemClick
+                )
             }
         }
-    }
 }

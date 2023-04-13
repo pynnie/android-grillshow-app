@@ -8,7 +8,6 @@ import Kotlin
 import KotlinX
 import Testing
 import org.gradle.kotlin.dsl.DependencyHandlerScope
-import org.gradle.kotlin.dsl.implementation
 import org.gradle.kotlin.dsl.project
 
 fun DependencyHandlerScope.baseDependencies() {
@@ -26,6 +25,7 @@ fun DependencyHandlerScope.baseTestDependencies() {
     add("testImplementation", Testing.mockK)
     add("testImplementation", Testing.kotest.assertions.core)
     add("testImplementation", KotlinX.coroutines.test)
+    add("testImplementation", AdditionalLibs.turbine)
 }
 
 fun DependencyHandlerScope.baseFeatureModuleDependencies(withCompose: Boolean = true) {

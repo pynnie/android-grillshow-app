@@ -22,8 +22,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import de.shecken.grillshow.dashboard.R
-import de.shecken.grillshow.repository.recipe.model.Category
-import de.shecken.grillshow.repository.recipe.model.Recipe
+import de.shecken.grillshow.dashboard.vo.CategoryVo
+import de.shecken.grillshow.dashboard.vo.RecipeListItemVo
 import de.shecken.grillshow.shared.GrillshowTheme
 import de.shecken.grillshow.shared.ui.FavIconButton
 import de.shecken.grillshow.shared.ui.FullScreenLoadingIndicator
@@ -82,9 +82,9 @@ private fun DashboardTopBar() {
 
 @Composable
 private fun CategoryList(
-    categories: List<Category>,
+    categories: List<CategoryVo>,
     onFavIconClick: (String, Boolean) -> Unit,
-    onRecipeClick: (Recipe) -> Unit
+    onRecipeClick: (RecipeListItemVo) -> Unit
 ) {
     LazyColumn {
         items(items = categories) { category ->
@@ -101,9 +101,9 @@ private fun CategoryList(
 @Composable
 private fun HorizontalRecipeList(
     title: String,
-    recipes: List<Recipe>,
+    recipes: List<RecipeListItemVo>,
     onFavIconClick: (String, Boolean) -> Unit,
-    onRecipeClick: (Recipe) -> Unit,
+    onRecipeClick: (RecipeListItemVo) -> Unit,
 ) {
     Column(modifier = Modifier.padding(top = 16.dp)) {
         Text(text = title, style = MaterialTheme.typography.titleMedium)
@@ -122,9 +122,9 @@ private fun HorizontalRecipeList(
 
 @Composable
 private fun RecipeItem(
-    recipe: Recipe,
+    recipe: RecipeListItemVo,
     onFavIconClick: (String, Boolean) -> Unit,
-    onRecipeClick: (Recipe) -> Unit
+    onRecipeClick: (RecipeListItemVo) -> Unit
 ) {
     val itemWidth = with(LocalDensity.current) { 640.toDp() }
     val itemHeight = with(LocalDensity.current) { 480.toDp() }
@@ -140,7 +140,7 @@ private fun RecipeItem(
                 modifier = Modifier
                     .height(itemHeight)
                     .align(Alignment.Center),
-                model = recipe.thumbnailUrl,
+                model = recipe.imageUrl,
                 contentDescription = null
             )
             FavIconButton(

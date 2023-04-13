@@ -1,7 +1,6 @@
 package de.shecken.grillshow.dashboard.interactor
 
-import de.shecken.grillshow.repository.recipe.model.Category
-import de.shecken.grillshow.repository.recipe.model.Recipe
+import de.shecken.grillshow.dashboard.vo.CategoryVo
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -10,9 +9,9 @@ import kotlinx.coroutines.flow.Flow
 internal interface DashboardInteractor {
 
     /**
-     * @return flow of all [Category]s with the 10 latest [Recipe]s as a [Flow]
+     * @return flow of all [CategoryVo]s with the 10 latest [RecipeListItemVo]s as a [Flow]
      */
-    suspend fun getCategoriesWithRecipes(): Flow<List<Category>>
+    fun getCategoriesWithRecipes(): Flow<List<CategoryVo>>
 
     /**
      * Update the favorite flag of a specified recipe

@@ -1,6 +1,6 @@
 package de.shecken.favorites.interactor
 
-import de.shecken.grillshow.repository.recipe.model.Recipe
+import de.shecken.favorites.vo.FavoriteVo
 import kotlinx.coroutines.flow.Flow
 
 interface FavoritesInteractor {
@@ -8,5 +8,5 @@ interface FavoritesInteractor {
     /**
      * Get all recipes marked as favorite from repository
      */
-    suspend fun getFavoriteRecipes(): Flow<List<Recipe>>
+    fun getFavoriteRecipes(): Flow<List<FavoriteVo>>
 }

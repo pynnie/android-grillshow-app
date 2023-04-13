@@ -16,7 +16,6 @@ dependencies {
     implementation(project(":features:search"))
     implementation(project(":features:dashboard"))
     implementation(project(":features:favorites"))
-    implementation(project(":features:details"))
 
     implementation(project(":repository"))
     implementation(project(":networking"))
