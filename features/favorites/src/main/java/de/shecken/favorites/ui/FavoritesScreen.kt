@@ -13,7 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import de.shecken.favorites.R
+import de.shecken.grillshow.favorites.R
 import de.shecken.grillshow.shared.ui.FullScreenLoadingIndicator
 import de.shecken.grillshow.shared.ui.ListDivider
 import de.shecken.grillshow.shared.ui.RecipeListItem
