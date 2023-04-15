@@ -9,6 +9,7 @@ import de.shecken.grillshow.shared.di.sharedModule
 import de.shecken.grillshow.shop.di.searchModule
 import de.shecken.grillshow.dashboard.di.dashboardModule
 import de.shecken.grillshow.details.di.detailsModule
+import de.shecken.grillshow.info.di.infoModule
 import kotlinx.serialization.ExperimentalSerializationApi
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
@@ -37,7 +38,8 @@ internal class App : Application() {
                     repositoryModule,
                     mainModule,
                     sharedModule,
-                    detailsModule
+                    detailsModule,
+                    infoModule
                 )
             )
         }
