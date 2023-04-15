@@ -17,9 +17,6 @@ import de.shecken.grillshow.repository.recipe.RecipeRepository
 import de.shecken.grillshow.shared.GrillshowTheme
 import de.shecken.grillshow.shared.ui.navigation.BottomBar
 import de.shecken.grillshow.shop.navigation.searchGraph
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -35,7 +32,6 @@ internal class MainActivity : AppCompatActivity() {
         splashScreen.setKeepOnScreenCondition { keepSplashScreen }
 
         super.onCreate(savedInstanceState)
-        fetchData()
 
         setContent {
             GrillshowTheme {
@@ -43,7 +39,15 @@ internal class MainActivity : AppCompatActivity() {
                     .also { router.navController = it }
 
                 LaunchedEffect(key1 = Unit) {
-                    keepSplashScreen = false // Adjust for your app initialization process
+                    prefsRepo.appPreferencesFlow.collect { prefs ->
+                        if (prefs.isInitComplete) {
+                            recipeRepo.fetchLatestRecipes()
+                        } else {
+                            recipeRepo.fetchAllRecipes()
+                            recipeRepo.fetchCategories()
+                        }
+                        keepSplashScreen = false // Adjust for your app initialization process
+                    }
                 }
                 Scaffold(bottomBar = { BottomBar() }) {
                     NavHost(
@@ -57,20 +61,6 @@ internal class MainActivity : AppCompatActivity() {
                     }
                 }
             }
-        }
-    }
-
-    private fun fetchData() {
-        CoroutineScope(Dispatchers.IO).launch {
-            prefsRepo.appPreferencesFlow.collect { prefs ->
-                if (prefs.isInitComplete) {
-                    recipeRepo.fetchLatestRecipes()
-                } else {
-                    recipeRepo.fetchAllRecipes()
-                    recipeRepo.fetchCategories()
-                }
-            }
-
         }
     }
 }
