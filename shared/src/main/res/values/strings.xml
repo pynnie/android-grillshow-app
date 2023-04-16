@@ -15,4 +15,8 @@
     <string name="search_field_prompt">Such was, Keule!</string>
     <string name="info_title">App Info</string>
     <string name="info_version">Version: %1$s</string>
+    <string name="info_dev">Entwickler</string>
+    <string name="info_dev_subtitle">Sebastian Hecken</string>
+    <string name="info_contact">Kontakt</string>
+    <string name="info_contact_subtitle">bigpynnie@googlemail.de</string>
 </resources>
