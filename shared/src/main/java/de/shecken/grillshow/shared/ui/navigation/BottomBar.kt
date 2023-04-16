@@ -20,19 +20,24 @@ fun BottomBar(viewModel: BottomBarViewModel = getViewModel()) {
     BottomBar(
         onDashboardClick = viewModel::onDashboardClick,
         onSearchClick = viewModel::onSearchClick,
-        onFavoritesClick = viewModel::onFavoritesClick)
+        onFavoritesClick = viewModel::onFavoritesClick,
+        onInfoClick = viewModel::onInfoClick
+    )
 }
+
 @Composable
 private fun BottomBar(
     modifier: Modifier = Modifier,
     onDashboardClick: () -> Unit,
     onSearchClick: () -> Unit,
-    onFavoritesClick: () -> Unit
+    onFavoritesClick: () -> Unit,
+    onInfoClick: () -> Unit
 ) {
     val navigationOptions = listOf(
         NavigationOption.Dashboard(onOptionClick = onDashboardClick),
         NavigationOption.Search(onOptionClick = onSearchClick),
-        NavigationOption.Favorites(onOptionClick = onFavoritesClick)
+        NavigationOption.Favorites(onOptionClick = onFavoritesClick),
+        NavigationOption.Info(onOptionClick = onInfoClick)
     )
     var selectedItem by remember { mutableStateOf(0) }
 
@@ -78,12 +83,22 @@ sealed class NavigationOption(
         iconRes = R.drawable.ic_favorite,
         onOptionClick = onOptionClick
     )
+
+    class Info(onOptionClick: () -> Unit) : NavigationOption(
+        labelTextRes = R.string.navigation_info,
+        iconRes = R.drawable.ic_more,
+        onOptionClick = onOptionClick
+    )
 }
 
 @Composable
 @Preview
 private fun BottomNavigationPreview() {
     GrillshowTheme() {
-        BottomBar(onDashboardClick = {}, onSearchClick = {}, onFavoritesClick = {})
+        BottomBar(
+            onDashboardClick = {},
+            onSearchClick = {},
+            onFavoritesClick = {},
+            onInfoClick = {})
     }
 }

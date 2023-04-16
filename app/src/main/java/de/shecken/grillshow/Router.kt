@@ -5,6 +5,8 @@ import android.content.Intent
 import androidx.navigation.NavController
 import de.shecken.favorites.navigation.FavoritesRouter
 import de.shecken.favorites.navigation.favoritesRoute
+import de.shecken.grillshow.info.navigation.InfoRouter
+import de.shecken.grillshow.info.navigation.infoRoute
 import de.shecken.grillshow.shared.ui.navigation.BottomBarRouter
 import de.shecken.grillshow.shop.navigation.SearchRouter
 import de.shecken.grillshow.shop.navigation.searchRoute
@@ -14,8 +16,7 @@ import de.shecken.grillshow.shop.navigation.searchRoute
  * [MainActivity].
  */
 internal class Router(private val context: Context) : DashboardRouter, BottomBarRouter,
-    FavoritesRouter,
-    SearchRouter {
+    FavoritesRouter, SearchRouter, InfoRouter {
 
     lateinit var navController: NavController
 
@@ -29,6 +30,8 @@ internal class Router(private val context: Context) : DashboardRouter, BottomBar
     override fun openSearch() = navController.navigate(searchRoute)
 
     override fun openFavorites() = navController.navigate(favoritesRoute)
+
+    override fun openInfo() = navController.navigate(infoRoute)
 
     override fun openRecipeDetails(recipeId: String) =
         navController.navigate("$detailsScreen/$recipeId")
@@ -46,6 +49,10 @@ internal class Router(private val context: Context) : DashboardRouter, BottomBar
         val shareIntent = Intent.createChooser(sendIntent, null)
             .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         context.startActivity(shareIntent)
+    }
+
+    override fun openURL(url: String) {
+        TODO("Not yet implemented")
     }
 
     companion object {

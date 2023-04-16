@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="navigation_dashboard">HÜÜAAAHH</string>
-    <string name="navigation_favorites">Lieblingslunser</string>
+    <string name="navigation_favorites">Favoriten</string>
     <string name="navigation_search">Suche</string>
+    <string name="navigation_info">Mehr</string>
     <string name="dashboard_title">HÜÜAAAHH</string>
     <string name="dashboard_latest_recipes">Neuste Lunser</string>
     <string name="search_title">Suche</string>
@@ -12,4 +13,6 @@
     <string name="details_share_message">🔥🔥 Baller dir dieses Grillrezept rein: https://www.youtube.com/watch?v=%1$s</string>
     <string name="search_empty_message">keine Lunser gefunden</string>
     <string name="search_field_prompt">Such was, Keule!</string>
+    <string name="info_title">App Info</string>
+    <string name="info_version">Version: %1$s</string>
 </resources>

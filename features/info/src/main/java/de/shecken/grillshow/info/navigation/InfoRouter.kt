@@ -1,4 +1,4 @@
-package de.shecken.grillshow.info
+package de.shecken.grillshow.info.navigation
 
 interface InfoRouter {
 
