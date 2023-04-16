@@ -16,4 +16,9 @@ interface BottomBarRouter {
      * Navigate to favorites route
      */
     fun openFavorites()
+
+    /**
+     * Navigate to info route
+     */
+    fun openInfo()
 }

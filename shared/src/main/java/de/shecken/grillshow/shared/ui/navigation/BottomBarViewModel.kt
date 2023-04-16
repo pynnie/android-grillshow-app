@@ -9,4 +9,6 @@ class BottomBarViewModel(private val router: BottomBarRouter) : ViewModel() {
     fun onSearchClick() = router.openSearch()
 
     fun onFavoritesClick() = router.openFavorites()
+
+    fun onInfoClick() = router.openInfo()
 }
