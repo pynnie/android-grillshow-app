@@ -2,6 +2,7 @@ package de.shecken.grillshow
 
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import androidx.navigation.NavController
 import de.shecken.favorites.navigation.FavoritesRouter
 import de.shecken.favorites.navigation.favoritesRoute
@@ -52,7 +53,9 @@ internal class Router(private val context: Context) : DashboardRouter, BottomBar
     }
 
     override fun openURL(url: String) {
-        TODO("Not yet implemented")
+        val intent =
+            Intent(Intent.ACTION_VIEW, Uri.parse(url)).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        context.startActivity(intent)
     }
 
     companion object {
