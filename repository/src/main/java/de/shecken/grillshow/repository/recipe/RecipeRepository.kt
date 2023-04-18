@@ -59,4 +59,14 @@ interface RecipeRepository {
      * @param query the search query
      */
     fun searchRecipes(query: String): Flow<List<Recipe>>
+
+    /**
+     * Clear all recipes from the database
+     */
+    suspend fun clearRecipes()
+
+    /**
+     * Clear all categories from the database
+     */
+    suspend fun clearCategories()
 }

@@ -41,4 +41,7 @@ interface RecipeDao {
 
     @Query("SELECT * FROM $TABLE_RECIPE_ENTITY WHERE $COLUMN_TITLE LIKE '%' || :query || '%'")
     fun searchRecipes(query: String): Flow<List<RecipeEntity>>
+
+    @Query("DELETE FROM $TABLE_RECIPE_ENTITY")
+    fun clearAll()
 }

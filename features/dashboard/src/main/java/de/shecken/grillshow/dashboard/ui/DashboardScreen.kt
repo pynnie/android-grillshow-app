@@ -2,6 +2,7 @@
 
 package de.shecken.grillshow.dashboard.ui
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -25,6 +26,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -79,20 +81,51 @@ private fun HandleScreenState(modifier: Modifier, state: DashboardSceenState) {
                 onFavIconClick = state.onFavIconClick,
                 onRecipeClick = state.onRecipeClick
             )
-            is DashboardSceenState.Failure -> Error()
+            is DashboardSceenState.Failure -> Failure(state.onReloadClick)
             is DashboardSceenState.SearchScreenState -> SearchScreen(state = state)
         }
     }
 }
 
 @Composable
-private fun Error() {
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text("Error!")
+private fun Failure(onReloadClick: () -> Unit) {
+    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        ErrorMessage(onReloadClick = onReloadClick)
+    }
+}
+
+@Composable
+private fun ErrorMessage(onReloadClick: () -> Unit) {
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Text(
+            text = stringResource(id = R.string.dashboard_error_title),
+            style = MaterialTheme.typography.titleLarge
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Image(
+            modifier = Modifier.size(200.dp),
+            painter = painterResource(id = R.drawable.ninja),
+            contentDescription = ""
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        Text(
+            text = stringResource(id = R.string.dashboard_error_message),
+            style = MaterialTheme.typography.bodyLarge,
+            textAlign = TextAlign.Center
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Button(
+            onClick = onReloadClick,
+            shape = RoundedCornerShape(50),
+            contentPadding = PaddingValues(16.dp)
+        ) {
+            Text(text = stringResource(id = R.string.dashboard_error_button))
+        }
     }
 }
 
@@ -289,6 +322,6 @@ private fun RecipeItem(
 @Preview
 private fun TopBarPreview() {
     GrillshowTheme {
-        //  DashboardTopBar()
+        ErrorMessage(onReloadClick = {})
     }
 }

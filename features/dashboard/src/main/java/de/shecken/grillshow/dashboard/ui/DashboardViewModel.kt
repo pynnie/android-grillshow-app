@@ -24,18 +24,24 @@ internal class DashboardViewModel(
     }
 
     private var isSearchActive = MutableStateFlow(false)
+    private val isInitialized = interactor.isAppInitialized
+    private var isLoading = MutableStateFlow(false)
 
     private val _screenState = combine(
         _dashboardScreenState,
         _searchScreenState,
-        isSearchActive
-    ) { dashboardState, searchState, isSearchMode ->
-        if (isSearchMode) {
-            searchState
-        } else {
-            dashboardState
+        isSearchActive,
+        isInitialized,
+        isLoading
+    ) { dashboardState, searchState, isSearchMode, isAppInitialized, loading ->
+        when {
+            loading -> Loading
+            !isAppInitialized -> Failure(::onReloadClick)
+            isSearchMode -> searchState
+            else -> dashboardState
         }
     }
+
     val screenState: StateFlow<DashboardSceenState> =
         _screenState.stateIn(viewModelScope, SharingStarted.Eagerly, Loading)
 
@@ -47,6 +53,15 @@ internal class DashboardViewModel(
         isSearchActive.update { isActive }
     }
 
+    fun onReloadClick() {
+        isLoading.update { true }
+        viewModelScope.launch {
+            interactor.reloadRecipes()
+            isLoading.update { false }
+        }
+    }
+
+
     private fun updateSearchResults(query: String) =
         if (query.isNotEmpty()) {
             interactor.searchForRecipes(query).map { resultList ->
@@ -56,13 +71,12 @@ internal class DashboardViewModel(
             flowOf(SearchScreenState.Empty(query))
         }
 
-
     private fun getScreenState(): Flow<DashboardSceenState> =
         interactor
             .getCategoriesWithRecipes()
             .map { categoryList ->
                 if (categoryList.isEmpty()) {
-                    Failure
+                    Failure(::onReloadClick)
                 } else {
                     Success(
                         categories = categoryList,

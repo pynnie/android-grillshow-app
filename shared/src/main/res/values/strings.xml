@@ -6,6 +6,9 @@
     <string name="navigation_info">Mehr</string>
     <string name="dashboard_title">HÜÜAAAHH</string>
     <string name="dashboard_latest_recipes">Neuste Lunser</string>
+    <string name="dashboard_error_title">Keine Videos gefunden</string>
+    <string name="dashboard_error_message">Was ist das? Keine Videos gefunden?\nDahinter steckt bestimmt wieder der Ninja!\nCheck deine Internetverbindung und versuch es noch mal.</string>
+    <string name="dashboard_error_button">Videos laden</string>
     <string name="search_title">Suche</string>
     <string name="favorites_title">Lieblingslunser</string>
     <string name="details_title">Lunserdetails</string>

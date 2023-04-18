@@ -91,6 +91,13 @@ class RecipeRepositoryImpl(
         recipeDao.searchRecipes(query)
             .map { list -> list.map { entity -> entity.toRecipe() } }
 
+    override suspend fun clearCategories() = withContext(dispatcher) {
+        categoryDao.clearAll()
+    }
+
+    override suspend fun clearRecipes() = withContext(dispatcher) {
+        recipeDao.clearAll()
+    }
 
     private suspend fun fetchRecipes(
         playlistId: String,

@@ -22,4 +22,7 @@ interface CategoryDao {
 
     @Query("SELECT * FROM $TABLE_CATEGORY_ENTITY JOIN $TABLE_RECIPE_ENTITY ON CategoryEntity.id = RecipeEntity.categoryId")
     fun loadCategoriesAndRecipes(): Flow<Map<CategoryEntity, List<RecipeEntity>>>
+
+    @Query("DELETE FROM $TABLE_CATEGORY_ENTITY")
+    fun clearAll()
 }

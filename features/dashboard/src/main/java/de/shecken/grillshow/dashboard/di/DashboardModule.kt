@@ -10,5 +10,10 @@ val dashboardModule = module {
 
     viewModel { DashboardViewModel(get(), get()) }
 
-    factory<DashboardInteractor> { DashboardInteractorImpl(get()) }
+    factory<DashboardInteractor> {
+        DashboardInteractorImpl(
+            recipeRepository = get(),
+            prefsRepository = get()
+        )
+    }
 }
