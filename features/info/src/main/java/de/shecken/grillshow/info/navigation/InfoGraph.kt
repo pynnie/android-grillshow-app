@@ -8,9 +8,11 @@ import de.shecken.grillshow.info.ui.InfoScreen
 const val infoRoute = "info_route"
 
 const val infoScreen = "info_screen"
+const val licensesScreen = "licenses_screen"
 
 fun NavGraphBuilder.infoGraph() {
     navigation(startDestination = infoScreen, route = infoRoute) {
         composable(infoScreen) { InfoScreen() }
+        composable(licensesScreen) { /* TODO add license screen */ }
     }
 }

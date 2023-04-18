@@ -3,11 +3,13 @@ package de.shecken.grillshow
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import androidx.annotation.StringRes
 import androidx.navigation.NavController
 import de.shecken.favorites.navigation.FavoritesRouter
 import de.shecken.favorites.navigation.favoritesRoute
 import de.shecken.grillshow.info.navigation.InfoRouter
 import de.shecken.grillshow.info.navigation.infoRoute
+import de.shecken.grillshow.info.navigation.licensesScreen
 import de.shecken.grillshow.shared.ui.navigation.BottomBarRouter
 import de.shecken.grillshow.shop.navigation.SearchRouter
 import de.shecken.grillshow.shop.navigation.searchRoute
@@ -52,17 +54,23 @@ internal class Router(private val context: Context) : DashboardRouter, BottomBar
         context.startActivity(shareIntent)
     }
 
-    override fun openURL(url: String) {
-        val intent =
-            Intent(Intent.ACTION_VIEW, Uri.parse(url)).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        context.startActivity(intent)
-    }
+    override fun openLicenses() = navController.navigate(licensesScreen)
+
+    override fun openURL(url: String) = openExternalUrl(url)
+
+    override fun openURL(@StringRes urlRes: Int) = openURL(context.getString(urlRes))
 
     override fun openEmail() {
         val intent = Intent(Intent.ACTION_SENDTO).apply {
-            data = Uri.parse("mailto:${context.getString(R.string.info_contact_mail)}")
+            data = Uri.parse("mailto:${context.getString(R.string.info_contact_mail_address)}")
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         }
+        context.startActivity(intent)
+    }
+
+    private fun openExternalUrl(url: String) {
+        val intent =
+            Intent(Intent.ACTION_VIEW, Uri.parse(url)).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         context.startActivity(intent)
     }
 
