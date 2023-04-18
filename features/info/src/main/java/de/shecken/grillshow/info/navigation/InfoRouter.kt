@@ -11,4 +11,6 @@ interface InfoRouter {
     fun openEmail()
 
     fun openLicenses()
+
+    fun goBack()
 }
