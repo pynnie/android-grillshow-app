@@ -3,6 +3,7 @@
 package de.shecken.grillshow.info.ui
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -26,20 +27,16 @@ import org.koin.androidx.compose.getViewModel
 fun InfoScreen(viewModel: InfoViewModel = getViewModel()) {
 
     val version by viewModel.versionName.collectAsStateWithLifecycle()
-    val socialMediaList by viewModel.socialMediaLinks.collectAsStateWithLifecycle()
-    val devInfoList by viewModel.devInfo.collectAsStateWithLifecycle()
-    InfoScreen(version = version,
-        socialMediaList = socialMediaList,
+    InfoScreen(
+        version = version,
         onSocialMediaItemClick = viewModel::onSocialMediaLinkClicked,
-        devInfoList = devInfoList,
-        onContactClick = {})
+        onContactClick = viewModel::onContactClick
+    )
 }
 
 @Composable
 private fun InfoScreen(
     version: String,
-    socialMediaList: List<SocialMediaItemVo>,
-    devInfoList: List<InfoItemVo>,
     onContactClick: () -> Unit,
     onSocialMediaItemClick: (String) -> Unit
 ) {
@@ -52,9 +49,7 @@ private fun InfoScreen(
         ) {
             InfoScreenContent(
                 version = version,
-                socialMediaList = socialMediaList,
                 onSocialMediaItemClick = onSocialMediaItemClick,
-                devInfoList = devInfoList,
                 onContactClick = onContactClick
             )
         }
@@ -70,8 +65,6 @@ private fun InfoTopBar() {
 @Composable
 private fun InfoScreenContent(
     version: String,
-    socialMediaList: List<SocialMediaItemVo>,
-    devInfoList: List<InfoItemVo>,
     onContactClick: () -> Unit,
     onSocialMediaItemClick: (String) -> Unit
 ) {
@@ -82,11 +75,11 @@ private fun InfoScreenContent(
 
         DevInfoBlock(
             modifier = Modifier.padding(vertical = 8.dp),
-            devInfoList = devInfoList, onContactClick = onContactClick
+            onContactClick = onContactClick
         )
 
         SocialMediaList(
-            socialMediaList = socialMediaList, onSocialMediaItemClick = onSocialMediaItemClick
+            onSocialMediaItemClick = onSocialMediaItemClick
         )
     }
 }
@@ -113,14 +106,13 @@ private fun InfoHeader(modifier: Modifier = Modifier, version: String) {
 @Composable
 private fun SocialMediaList(
     modifier: Modifier = Modifier,
-    socialMediaList: List<SocialMediaItemVo>,
     onSocialMediaItemClick: (String) -> Unit
 ) {
     Card(modifier = modifier.padding(vertical = 8.dp)) {
         Row(
             modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly
         ) {
-            socialMediaList.forEach { socialMediaItem ->
+            socialMediaLinks.forEach { socialMediaItem ->
                 SocialMediaItem(
                     socialMediaItem = socialMediaItem,
                     onSocialMediaItemClick = onSocialMediaItemClick
@@ -132,7 +124,7 @@ private fun SocialMediaList(
 
 @Composable
 private fun DevInfoBlock(
-    modifier: Modifier = Modifier, devInfoList: List<InfoItemVo>, onContactClick: () -> Unit
+    modifier: Modifier = Modifier, onContactClick: () -> Unit
 ) {
     Card(
         modifier = modifier
@@ -140,9 +132,8 @@ private fun DevInfoBlock(
             .fillMaxWidth()
     ) {
         Column(modifier = Modifier.padding(8.dp)) {
-            devInfoList.forEach { devInfo ->
-                DevInfoItem(devInfo = devInfo)
-            }
+            DevInfoItem(devInfo = devInfo)
+            DevInfoItem(modifier = Modifier.clickable { onContactClick() }, devInfo = contactInfo)
         }
     }
 }

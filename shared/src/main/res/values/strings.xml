@@ -18,5 +18,5 @@
     <string name="info_dev">Entwickler</string>
     <string name="info_dev_subtitle">Sebastian Hecken</string>
     <string name="info_contact">Kontakt</string>
-    <string name="info_contact_subtitle">bigpynnie@googlemail.de</string>
+    <string name="info_contact_mail">bigpynnie@googlemail.de</string>
 </resources>

@@ -13,19 +13,9 @@ class InfoViewModel(interactor: InfoInteractor, private val router: InfoRouter) 
     val versionName =
         _versionName.stateIn(scope = viewModelScope, started = SharingStarted.Eagerly, "")
 
-    private val _socialMediaLinks = interactor.socialMediaLinks
-    val socialMediaLinks =
-        _socialMediaLinks.stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.Eagerly,
-            emptyList()
-        )
-
-    private val _devInfo = interactor.devInfo
-    val devInfo =
-        _devInfo.stateIn(scope = viewModelScope, started = SharingStarted.Eagerly, emptyList())
-
     fun onSocialMediaLinkClicked(url: String) {
         router.openURL(url)
     }
+
+    fun onContactClick() = router.openEmail()
 }

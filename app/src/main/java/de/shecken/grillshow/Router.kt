@@ -58,6 +58,14 @@ internal class Router(private val context: Context) : DashboardRouter, BottomBar
         context.startActivity(intent)
     }
 
+    override fun openEmail() {
+        val intent = Intent(Intent.ACTION_SENDTO).apply {
+            data = Uri.parse("mailto:${context.getString(R.string.info_contact_mail)}")
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        }
+        context.startActivity(intent)
+    }
+
     companion object {
         private const val INTENT_TYPE = "text/plain"
     }
