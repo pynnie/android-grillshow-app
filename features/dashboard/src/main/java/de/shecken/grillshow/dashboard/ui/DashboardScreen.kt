@@ -1,4 +1,4 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
+@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 
 package de.shecken.grillshow.dashboard.ui
 
@@ -8,14 +8,23 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextRange
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -31,15 +40,27 @@ import org.koin.androidx.compose.getViewModel
 
 @Composable
 internal fun DashboardScreen(viewModel: DashboardViewModel = getViewModel()) {
-    val state by viewModel.dashboardScreenState.collectAsStateWithLifecycle()
-    DashboardScreen(state = state)
+    val state by viewModel.screenState.collectAsStateWithLifecycle()
+    DashboardScreen(
+        state = state,
+        onSearchQueryChanged = viewModel::onQueryChange,
+        onToggleSearchMode = viewModel::toggleSearchMode
+    )
 }
 
 @Composable
 private fun DashboardScreen(
-    state: DashboardSceenState
+    state: DashboardSceenState,
+    onSearchQueryChanged: (String) -> Unit,
+    onToggleSearchMode: (Boolean) -> Unit
 ) {
-    Scaffold(topBar = { DashboardTopBar() }) { padding ->
+    Scaffold(topBar = {
+        DashboardTopBar(
+            state = state,
+            onSearchQueryChanged = onSearchQueryChanged,
+            onToggleSearchMode = onToggleSearchMode
+        )
+    }) { padding ->
         HandleScreenState(modifier = Modifier.padding(padding), state = state)
     }
 }
@@ -59,6 +80,7 @@ private fun HandleScreenState(modifier: Modifier, state: DashboardSceenState) {
                 onRecipeClick = state.onRecipeClick
             )
             is DashboardSceenState.Failure -> Error()
+            is DashboardSceenState.SearchScreenState -> SearchScreen(state = state)
         }
     }
 }
@@ -75,16 +97,118 @@ private fun Error() {
 }
 
 @Composable
-private fun DashboardTopBar() {
+private fun DashboardTopBar(
+    state: DashboardSceenState,
+    onSearchQueryChanged: (String) -> Unit,
+    onToggleSearchMode: (Boolean) -> Unit
+) {
+    if (state is DashboardSceenState.SearchScreenState) {
+        SearchTopBar(
+            modifier = Modifier.padding(top = 8.dp),
+            state = state,
+            onSearchQueryChanged = onSearchQueryChanged,
+            onToggleSearchMode = onToggleSearchMode
+        )
+    } else {
+        DefaultTopBar(onToggleSearchMode = onToggleSearchMode)
+    }
+}
+
+@Composable
+private fun SearchTopBar(
+    modifier: Modifier = Modifier,
+    state: DashboardSceenState.SearchScreenState,
+    onSearchQueryChanged: (String) -> Unit,
+    onToggleSearchMode: (Boolean) -> Unit
+) {
+    val focusRequester = remember { FocusRequester() }
     TopAppBar(
-        title = { Text(text = stringResource(id = R.string.dashboard_title)) })
+        modifier = modifier.focusRequester(focusRequester),
+        title = {},
+        actions = {
+            var searchQuery by remember { mutableStateOf(state.query) }
+            Spacer(modifier = Modifier.width(16.dp))
+            SearchField(
+                modifier = Modifier.weight(1f),
+                searchQuery = searchQuery,
+                onSearchQueryChanged = { query ->
+                    onSearchQueryChanged(query)
+                    searchQuery = query
+                })
+            IconButton(onClick = { onToggleSearchMode(false) }) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_clear),
+                    contentDescription = ""
+                )
+            }
+        }
+    )
+    LaunchedEffect(Unit) {
+        focusRequester.requestFocus()
+    }
+}
+
+@Composable
+private fun DefaultTopBar(onToggleSearchMode: (Boolean) -> Unit) {
+    TopAppBar(
+        modifier = Modifier.padding(top = 8.dp),
+        title = { Text(text = stringResource(id = R.string.dashboard_title)) },
+        actions = {
+            IconButton(onClick = { onToggleSearchMode(true) }) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_search),
+                    contentDescription = ""
+                )
+            }
+        }
+    )
+}
+
+
+@Composable
+fun SearchField(
+    modifier: Modifier = Modifier,
+    searchQuery: String,
+    onSearchQueryChanged: (String) -> Unit,
+) {
+    val keyboardController = LocalSoftwareKeyboardController.current
+    val textFieldValue =
+        TextFieldValue(text = searchQuery, selection = TextRange(searchQuery.length))
+
+    TextField(modifier = modifier
+        .clip(RoundedCornerShape(64.dp)),
+        value = textFieldValue,
+        onValueChange = { tfv -> onSearchQueryChanged(tfv.text) },
+        placeholder = {
+            Text(text = stringResource(R.string.search_field_prompt))
+        },
+        trailingIcon = {
+            if (searchQuery.isNotEmpty()) {
+                IconButton(
+                    onClick = { onSearchQueryChanged("") }
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_trash),
+                        contentDescription = "",
+                    )
+                }
+            }
+        },
+        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+        keyboardActions = KeyboardActions(
+            onDone = {
+                keyboardController?.hide()
+                // do something here
+            }
+        )
+    )
 }
 
 @Composable
 private fun CategoryList(
     categories: List<CategoryVo>,
     onFavIconClick: (String, Boolean) -> Unit,
-    onRecipeClick: (RecipeListItemVo) -> Unit
+    onRecipeClick: (String) -> Unit
 ) {
     LazyColumn {
         items(items = categories) { category ->
@@ -103,7 +227,7 @@ private fun HorizontalRecipeList(
     title: String,
     recipes: List<RecipeListItemVo>,
     onFavIconClick: (String, Boolean) -> Unit,
-    onRecipeClick: (RecipeListItemVo) -> Unit,
+    onRecipeClick: (String) -> Unit,
 ) {
     Column(modifier = Modifier.padding(top = 16.dp)) {
         Text(text = title, style = MaterialTheme.typography.titleMedium)
@@ -124,7 +248,7 @@ private fun HorizontalRecipeList(
 private fun RecipeItem(
     recipe: RecipeListItemVo,
     onFavIconClick: (String, Boolean) -> Unit,
-    onRecipeClick: (RecipeListItemVo) -> Unit
+    onRecipeClick: (String) -> Unit
 ) {
     val itemWidth = with(LocalDensity.current) { 640.toDp() }
     val itemHeight = with(LocalDensity.current) { 480.toDp() }
@@ -135,7 +259,7 @@ private fun RecipeItem(
     ) {
         Box(modifier = Modifier
             .clip(RoundedCornerShape(8.dp))
-            .clickable { onRecipeClick(recipe) }) {
+            .clickable { onRecipeClick(recipe.id) }) {
             AsyncImage(
                 modifier = Modifier
                     .height(itemHeight)
@@ -165,6 +289,6 @@ private fun RecipeItem(
 @Preview
 private fun TopBarPreview() {
     GrillshowTheme {
-        DashboardTopBar()
+        //  DashboardTopBar()
     }
 }

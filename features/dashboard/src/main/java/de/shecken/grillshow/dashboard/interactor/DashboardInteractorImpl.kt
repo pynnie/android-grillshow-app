@@ -2,6 +2,7 @@ package de.shecken.grillshow.dashboard.interactor
 
 import de.shecken.grillshow.dashboard.vo.CategoryVo
 import de.shecken.grillshow.dashboard.vo.RecipeListItemVo
+import de.shecken.grillshow.dashboard.vo.SearchResultVo
 import de.shecken.grillshow.repository.recipe.RecipeRepository
 import de.shecken.grillshow.repository.recipe.model.Category
 import kotlinx.coroutines.flow.Flow
@@ -14,6 +15,17 @@ internal class DashboardInteractorImpl(private val recipeRepository: RecipeRepos
         recipeRepository.categories.map { categories ->
             categories.map { category ->
                 mapCategoryToCategoryVo(category)
+            }
+        }
+
+    override fun searchForRecipes(query: String): Flow<List<SearchResultVo>> =
+        recipeRepository.searchRecipes(query).map { recipes ->
+            recipes.map { recipe ->
+                SearchResultVo(
+                    id = recipe.id,
+                    title = recipe.title,
+                    imageUrl = recipe.thumbnailUrl
+                )
             }
         }
 

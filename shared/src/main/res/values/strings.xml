@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="navigation_dashboard">HÜÜAAAHH</string>
-    <string name="navigation_favorites">Favoriten</string>
+    <string name="navigation_favorites">Lieblingslunser</string>
     <string name="navigation_search">Suche</string>
     <string name="navigation_info">Mehr</string>
     <string name="dashboard_title">HÜÜAAAHH</string>
@@ -21,7 +21,7 @@
     <string name="info_dev_subtitle">pynnie</string>
     <string name="info_mail">Email</string>
     <string name="info_contact_mail_address">grillshowapp@gmail.com</string>
-    <string name="info_legal">Rechliches</string>
+    <string name="info_legal">Rechtliches</string>
     <string name="info_terms">AGB</string>
     <string name="info_privacy">Datenschutz</string>
     <string name="info_licenses">Lizenzen</string>

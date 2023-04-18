@@ -10,16 +10,14 @@ import de.shecken.favorites.navigation.favoritesRoute
 import de.shecken.grillshow.info.navigation.InfoRouter
 import de.shecken.grillshow.info.navigation.infoRoute
 import de.shecken.grillshow.info.navigation.licensesScreen
-import de.shecken.grillshow.shared.ui.navigation.BottomBarRouter
-import de.shecken.grillshow.shop.navigation.SearchRouter
-import de.shecken.grillshow.shop.navigation.searchRoute
+import de.shecken.grillshow.navigation.BottomBarRouter
 
 /**
  * Main Router class for the project. Should implement all sub-module Router interfaces using the [navController] injected from the
  * [MainActivity].
  */
 internal class Router(private val context: Context) : DashboardRouter, BottomBarRouter,
-    FavoritesRouter, SearchRouter, InfoRouter {
+    FavoritesRouter, InfoRouter {
 
     lateinit var navController: NavController
 
@@ -29,8 +27,6 @@ internal class Router(private val context: Context) : DashboardRouter, BottomBar
     fun start() = dashboardRoute
 
     override fun openDashboard() = navController.navigate(dashboardRoute)
-
-    override fun openSearch() = navController.navigate(searchRoute)
 
     override fun openFavorites() = navController.navigate(favoritesRoute)
 

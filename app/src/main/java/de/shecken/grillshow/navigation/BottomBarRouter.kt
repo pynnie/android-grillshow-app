@@ -1,4 +1,4 @@
-package de.shecken.grillshow.shared.ui.navigation
+package de.shecken.grillshow.navigation
 
 interface BottomBarRouter {
 
@@ -6,11 +6,6 @@ interface BottomBarRouter {
      * Navigate to dashboard route
      */
     fun openDashboard()
-
-    /**
-     * Navigate to search route
-     */
-    fun openSearch()
 
     /**
      * Navigate to favorites route

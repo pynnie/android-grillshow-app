@@ -6,6 +6,7 @@ import de.shecken.grillshow.dashboard.fakeCategoryVo1
 import de.shecken.grillshow.dashboard.fakeRecipe1
 import de.shecken.grillshow.repository.recipe.RecipeRepository
 import de.shecken.grillshow.repository.recipe.model.Category
+import de.shecken.grillshow.sharedtest.coroutineTest
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
@@ -58,5 +59,15 @@ class DashboardInteractorImplTest {
         // then
         coVerify { recipeRepositoryMock.getRecipeForId(fakeRecipe.id) }
         coVerify { recipeRepositoryMock.updateRecipe(fakeRecipe.copy(isFavorite = true)) }
+    }
+
+    @Test
+    fun searchForRecipes() = coroutineTest {
+        // given
+        val query = "test"
+        // when
+        underTest.searchForRecipes(query)
+        // then
+        coVerify { recipeRepositoryMock.searchRecipes(query) }
     }
 }

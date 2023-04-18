@@ -219,7 +219,7 @@ private fun DevInfoPreview() {
         Column {
             InfoItem(
                 devInfo = InfoItemVo(
-                    R.string.info_dev, R.string.info_dev_subtitle, R.drawable.ic_person
+                    R.string.info_dev, R.string.info_dev_subtitle, R.drawable.ic_mail
                 )
             )
             InfoItem(
