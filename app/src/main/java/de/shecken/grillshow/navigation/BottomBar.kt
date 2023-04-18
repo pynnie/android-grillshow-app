@@ -1,4 +1,4 @@
-package de.shecken.grillshow.shared.ui.navigation
+package de.shecken.grillshow.navigation
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
@@ -19,7 +19,6 @@ import org.koin.androidx.compose.getViewModel
 fun BottomBar(viewModel: BottomBarViewModel = getViewModel()) {
     BottomBar(
         onDashboardClick = viewModel::onDashboardClick,
-        onSearchClick = viewModel::onSearchClick,
         onFavoritesClick = viewModel::onFavoritesClick,
         onInfoClick = viewModel::onInfoClick
     )
@@ -29,13 +28,11 @@ fun BottomBar(viewModel: BottomBarViewModel = getViewModel()) {
 private fun BottomBar(
     modifier: Modifier = Modifier,
     onDashboardClick: () -> Unit,
-    onSearchClick: () -> Unit,
     onFavoritesClick: () -> Unit,
     onInfoClick: () -> Unit
 ) {
     val navigationOptions = listOf(
         NavigationOption.Dashboard(onOptionClick = onDashboardClick),
-        NavigationOption.Search(onOptionClick = onSearchClick),
         NavigationOption.Favorites(onOptionClick = onFavoritesClick),
         NavigationOption.Info(onOptionClick = onInfoClick)
     )
@@ -72,12 +69,6 @@ sealed class NavigationOption(
         onOptionClick = onOptionClick
     )
 
-    class Search(onOptionClick: () -> Unit) : NavigationOption(
-        labelTextRes = R.string.navigation_search,
-        iconRes = R.drawable.ic_search,
-        onOptionClick = onOptionClick
-    )
-
     class Favorites(onOptionClick: () -> Unit) : NavigationOption(
         labelTextRes = R.string.navigation_favorites,
         iconRes = R.drawable.ic_favorite,
@@ -97,7 +88,6 @@ private fun BottomNavigationPreview() {
     GrillshowTheme() {
         BottomBar(
             onDashboardClick = {},
-            onSearchClick = {},
             onFavoritesClick = {},
             onInfoClick = {})
     }

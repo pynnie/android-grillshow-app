@@ -10,7 +10,6 @@ refreshVersions {
 }
 
 include(":app")
-include(":features:search")
 include(":features:dashboard")
 include(":features:favorites")
 include(":networking")

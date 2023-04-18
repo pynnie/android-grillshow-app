@@ -16,8 +16,7 @@ import de.shecken.grillshow.info.navigation.infoGraph
 import de.shecken.grillshow.repository.preferences.PreferencesRepository
 import de.shecken.grillshow.repository.recipe.RecipeRepository
 import de.shecken.grillshow.shared.GrillshowTheme
-import de.shecken.grillshow.shared.ui.navigation.BottomBar
-import de.shecken.grillshow.shop.navigation.searchGraph
+import de.shecken.grillshow.navigation.BottomBar
 import org.koin.android.ext.android.inject
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -58,7 +57,6 @@ internal class MainActivity : AppCompatActivity() {
                         startDestination = router.start()
                     ) {
                         dashboardGraph()
-                        searchGraph()
                         favoritesGraph()
                         infoGraph()
                     }

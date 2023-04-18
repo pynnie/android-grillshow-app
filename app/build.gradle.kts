@@ -13,7 +13,6 @@ androidAppConfig()
 dependencies {
     baseDependencies()
     baseTestDependencies()
-    implementation(project(":features:search"))
     implementation(project(":features:dashboard"))
     implementation(project(":features:favorites"))
     implementation(project(":features:info"))
