@@ -8,7 +8,7 @@ import de.shecken.grillshow.repository.repositoryModule
 import de.shecken.grillshow.shared.di.sharedModule
 import de.shecken.grillshow.dashboard.di.dashboardModule
 import de.shecken.grillshow.details.di.detailsModule
-import de.shecken.grillshow.info.di.infoModule
+import de.shecken.grillshow.di.infoModule
 import kotlinx.serialization.ExperimentalSerializationApi
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin

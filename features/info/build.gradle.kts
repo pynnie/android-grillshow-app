@@ -14,4 +14,7 @@ dependencies {
     baseDependencies()
     baseTestDependencies()
     baseFeatureModuleDependencies(withCompose = true)
+
+    implementation(AdditionalLibs.aboutLibsCore)
+    implementation(AdditionalLibs.aboutLibsCompose)
 }
