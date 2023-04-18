@@ -3,6 +3,7 @@
 package de.shecken.grillshow.info.ui
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -26,36 +27,44 @@ import org.koin.androidx.compose.getViewModel
 fun InfoScreen(viewModel: InfoViewModel = getViewModel()) {
 
     val version by viewModel.versionName.collectAsStateWithLifecycle()
-    val socialMediaList by viewModel.socialMediaLinks.collectAsStateWithLifecycle()
-    val devInfoList by viewModel.devInfo.collectAsStateWithLifecycle()
-    InfoScreen(version = version,
-        socialMediaList = socialMediaList,
+    InfoScreen(
+        version = version,
+        onDevInfoClick = viewModel::onDevInfoClick,
         onSocialMediaItemClick = viewModel::onSocialMediaLinkClicked,
-        devInfoList = devInfoList,
-        onContactClick = {})
+        onContactClick = viewModel::onContactClick,
+        onTermsClick = viewModel::onTermsClick,
+        onPrivacyClick = viewModel::onPrivacyClick,
+        onLicensesClick = viewModel::onLicensesClick
+    )
 }
 
 @Composable
 private fun InfoScreen(
     version: String,
-    socialMediaList: List<SocialMediaItemVo>,
-    devInfoList: List<InfoItemVo>,
+    onDevInfoClick: () -> Unit,
     onContactClick: () -> Unit,
-    onSocialMediaItemClick: (String) -> Unit
+    onSocialMediaItemClick: (Int) -> Unit,
+    onTermsClick: () -> Unit,
+    onPrivacyClick: () -> Unit,
+    onLicensesClick: () -> Unit
 ) {
-    Scaffold(modifier = Modifier.padding(horizontal = 8.dp), topBar = { InfoTopBar() }) { padding ->
+    Scaffold(modifier = Modifier
+        .padding(horizontal = 8.dp),
+        topBar = { InfoTopBar() }) { padding ->
 
         Box(
             modifier = Modifier
                 .padding(padding)
-                .fillMaxSize()
+                .fillMaxWidth()
         ) {
             InfoScreenContent(
                 version = version,
-                socialMediaList = socialMediaList,
+                onDevInfoClick = onDevInfoClick,
                 onSocialMediaItemClick = onSocialMediaItemClick,
-                devInfoList = devInfoList,
-                onContactClick = onContactClick
+                onContactClick = onContactClick,
+                onTermsClick = onTermsClick,
+                onPrivacyClick = onPrivacyClick,
+                onLicensesClick = onLicensesClick
             )
         }
     }
@@ -70,25 +79,46 @@ private fun InfoTopBar() {
 @Composable
 private fun InfoScreenContent(
     version: String,
-    socialMediaList: List<SocialMediaItemVo>,
-    devInfoList: List<InfoItemVo>,
+    onDevInfoClick: () -> Unit,
     onContactClick: () -> Unit,
-    onSocialMediaItemClick: (String) -> Unit
+    onSocialMediaItemClick: (Int) -> Unit,
+    onTermsClick: () -> Unit,
+    onPrivacyClick: () -> Unit,
+    onLicensesClick: () -> Unit
 ) {
-    Column(Modifier.fillMaxWidth()) {
+    Column(
+        Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 8.dp)
+    ) {
         InfoHeader(modifier = Modifier.padding(bottom = 8.dp), version = version)
 
         Divider()
 
-        DevInfoBlock(
-            modifier = Modifier.padding(vertical = 8.dp),
-            devInfoList = devInfoList, onContactClick = onContactClick
-        )
+        Spacer(modifier = Modifier.height(16.dp))
 
         SocialMediaList(
-            socialMediaList = socialMediaList, onSocialMediaItemClick = onSocialMediaItemClick
+            onSocialMediaItemClick = onSocialMediaItemClick
         )
+        Spacer(modifier = Modifier.height(16.dp))
+
+        InfoLinks(onDevInfoClick, onContactClick, onTermsClick, onPrivacyClick, onLicensesClick)
     }
+}
+
+@Composable
+private fun InfoLinks(
+    onDevInfoClick: () -> Unit,
+    onContactClick: () -> Unit,
+    onTermsClick: () -> Unit,
+    onPrivacyClick: () -> Unit,
+    onLicensesClick: () -> Unit
+) {
+    InfoItem(devInfo = devInfo, onClick = onDevInfoClick)
+    InfoItem(devInfo = contactInfo, onClick = onContactClick)
+    InfoItem(devInfo = termsInfo, onClick = onTermsClick)
+    InfoItem(devInfo = privacyInfo, onClick = onPrivacyClick)
+    InfoItem(devInfo = licensesInfo, onClick = onLicensesClick)
 }
 
 @Composable
@@ -97,7 +127,7 @@ private fun InfoHeader(modifier: Modifier = Modifier, version: String) {
         modifier = modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Image(
-            modifier = Modifier.height(200.dp),
+            modifier = Modifier.height(100.dp),
             painter = painterResource(id = R.drawable.logo),
             contentDescription = ""
         )
@@ -113,14 +143,13 @@ private fun InfoHeader(modifier: Modifier = Modifier, version: String) {
 @Composable
 private fun SocialMediaList(
     modifier: Modifier = Modifier,
-    socialMediaList: List<SocialMediaItemVo>,
-    onSocialMediaItemClick: (String) -> Unit
+    onSocialMediaItemClick: (Int) -> Unit
 ) {
     Card(modifier = modifier.padding(vertical = 8.dp)) {
         Row(
             modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly
         ) {
-            socialMediaList.forEach { socialMediaItem ->
+            socialMediaLinks.forEach { socialMediaItem ->
                 SocialMediaItem(
                     socialMediaItem = socialMediaItem,
                     onSocialMediaItemClick = onSocialMediaItemClick
@@ -131,53 +160,42 @@ private fun SocialMediaList(
 }
 
 @Composable
-private fun DevInfoBlock(
-    modifier: Modifier = Modifier, devInfoList: List<InfoItemVo>, onContactClick: () -> Unit
-) {
-    Card(
+private fun InfoItem(modifier: Modifier = Modifier, devInfo: InfoItemVo, onClick: () -> Unit = {}) {
+    Row(
         modifier = modifier
             .padding(vertical = 8.dp)
-            .fillMaxWidth()
-    ) {
-        Column(modifier = Modifier.padding(8.dp)) {
-            devInfoList.forEach { devInfo ->
-                DevInfoItem(devInfo = devInfo)
-            }
-        }
-    }
-}
-
-@Composable
-private fun DevInfoItem(modifier: Modifier = Modifier, devInfo: InfoItemVo) {
-    Row(
-        modifier = modifier.padding(vertical = 8.dp), verticalAlignment = Alignment.CenterVertically
+            .clickable { onClick() },
+        verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
-            modifier = Modifier.size(48.dp),
+            modifier = Modifier.size(24.dp),
             painter = painterResource(id = devInfo.iconRes),
             contentDescription = ""
         )
 
-        Spacer(modifier = Modifier.width(8.dp))
+        Spacer(modifier = Modifier.width(16.dp))
         Column {
             Text(
                 text = stringResource(id = devInfo.titleRes),
                 style = MaterialTheme.typography.titleMedium
             )
-            Spacer(modifier = Modifier.height(4.dp))
-            Text(
-                text = stringResource(id = devInfo.subtitleRes),
-                style = MaterialTheme.typography.labelMedium
-            )
+            if (devInfo.subtitleRes != null) {
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(
+                    text = stringResource(id = devInfo.subtitleRes),
+                    style = MaterialTheme.typography.labelMedium
+                )
+            }
+
         }
     }
 }
 
 @Composable
-fun SocialMediaItem(socialMediaItem: SocialMediaItemVo, onSocialMediaItemClick: (String) -> Unit) {
+fun SocialMediaItem(socialMediaItem: SocialMediaItemVo, onSocialMediaItemClick: (Int) -> Unit) {
     IconButton(
 
-        onClick = { onSocialMediaItemClick(socialMediaItem.url) }) {
+        onClick = { onSocialMediaItemClick(socialMediaItem.urlRes) }) {
         Icon(
             modifier = Modifier.size(48.dp),
             painter = painterResource(id = socialMediaItem.iconRes),
@@ -198,10 +216,18 @@ private fun InfoHeaderPreview() {
 @Preview
 private fun DevInfoPreview() {
     GrillshowTheme {
-        DevInfoItem(
-            devInfo = InfoItemVo(
-                R.string.info_dev, R.string.info_dev_subtitle, R.drawable.ic_person
+        Column {
+            InfoItem(
+                devInfo = InfoItemVo(
+                    R.string.info_dev, R.string.info_dev_subtitle, R.drawable.ic_person
+                )
             )
-        )
+            InfoItem(
+                devInfo = InfoItemVo(
+                    titleRes = R.string.info_dev, iconRes = R.drawable.ic_terms
+                )
+            )
+        }
+
     }
 }

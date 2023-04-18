@@ -8,18 +8,7 @@ plugins {
     id("kotlin-android")
 }
 
-androidLibraryConfig(withCompose = true) {
-    defaultConfig {
-        buildConfigField("String", "FACEBOOK_URL", "\"https://www.facebook.com/Grillshow/\"")
-        buildConfigField("String", "TIKTOK_URL", "\"https://www.tiktok.com/@diegrillshow\"")
-        buildConfigField(
-            "String",
-            "INSTAGRAM_URL",
-            "\"https://instagram.com/diegrillshow?igshid=YmMyMTA2M2Y=\""
-        )
-        buildConfigField("String", "YOUTUBE_URL", "\"https://www.youtube.com/@Grillshow\"")
-    }
-}
+androidLibraryConfig(withCompose = true)
 
 dependencies {
     baseDependencies()

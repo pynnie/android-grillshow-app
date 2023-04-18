@@ -15,8 +15,14 @@
     <string name="search_field_prompt">Such was, Keule!</string>
     <string name="info_title">App Info</string>
     <string name="info_version">Version: %1$s</string>
-    <string name="info_dev">Entwickler</string>
-    <string name="info_dev_subtitle">Sebastian Hecken</string>
+    <string name="info_links">Social Media</string>
     <string name="info_contact">Kontakt</string>
-    <string name="info_contact_subtitle">bigpynnie@googlemail.de</string>
+    <string name="info_dev">Entwickler</string>
+    <string name="info_dev_subtitle">pynnie</string>
+    <string name="info_mail">Email</string>
+    <string name="info_contact_mail_address">grillshowapp@gmail.com</string>
+    <string name="info_legal">Rechliches</string>
+    <string name="info_terms">AGB</string>
+    <string name="info_privacy">Datenschutz</string>
+    <string name="info_licenses">Lizenzen</string>
 </resources>

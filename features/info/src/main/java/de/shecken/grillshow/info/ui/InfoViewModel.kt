@@ -1,7 +1,9 @@
 package de.shecken.grillshow.info.ui
 
+import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import de.shecken.grillshow.info.R
 import de.shecken.grillshow.info.interactor.InfoInteractor
 import de.shecken.grillshow.info.navigation.InfoRouter
 import kotlinx.coroutines.flow.SharingStarted
@@ -13,19 +15,17 @@ class InfoViewModel(interactor: InfoInteractor, private val router: InfoRouter) 
     val versionName =
         _versionName.stateIn(scope = viewModelScope, started = SharingStarted.Eagerly, "")
 
-    private val _socialMediaLinks = interactor.socialMediaLinks
-    val socialMediaLinks =
-        _socialMediaLinks.stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.Eagerly,
-            emptyList()
-        )
-
-    private val _devInfo = interactor.devInfo
-    val devInfo =
-        _devInfo.stateIn(scope = viewModelScope, started = SharingStarted.Eagerly, emptyList())
-
-    fun onSocialMediaLinkClicked(url: String) {
+    fun onSocialMediaLinkClicked(@StringRes url: Int) {
         router.openURL(url)
     }
+
+    fun onContactClick() = router.openEmail()
+
+    fun onDevInfoClick() = router.openURL(R.string.github_url)
+
+    fun onTermsClick() = router.openURL(R.string.terms_url)
+
+    fun onPrivacyClick() = router.openURL(R.string.privacy_url)
+
+    fun onLicensesClick() = router.openLicenses()
 }
