@@ -11,5 +11,5 @@ sealed class FavoritesScreenState {
         val onItemClick: (String) -> Unit
     ) : FavoritesScreenState()
 
-    object Empty : FavoritesScreenState()
+    data class Empty(val onDashboardButtonClick: () -> Unit) : FavoritesScreenState()
 }
