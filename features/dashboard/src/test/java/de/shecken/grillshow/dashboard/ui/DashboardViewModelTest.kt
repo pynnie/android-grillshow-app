@@ -9,7 +9,6 @@ import de.shecken.grillshow.dashboard.ui.DashboardSceenState.SearchScreenState
 import de.shecken.grillshow.dashboard.vo.CategoryVo
 import de.shecken.grillshow.dashboard.vo.SearchResultVo
 import de.shecken.grillshow.sharedtest.coroutineTest
-import de.shecken.grillshow.sharedtest.test
 import io.mockk.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -31,11 +30,13 @@ internal class DashboardViewModelTest {
     private val dashboardRouterMock = mockk<DashboardRouter>(relaxed = true)
 
     private val categories = MutableStateFlow(emptyList<CategoryVo>())
+    private val isAppInitialized = MutableStateFlow(true)
 
     @BeforeEach
     fun setUp() {
         Dispatchers.setMain(UnconfinedTestDispatcher())
         coEvery { dashboardInteractorMock.getCategoriesWithRecipes() } returns categories
+        coEvery { dashboardInteractorMock.isAppInitialized } returns isAppInitialized
         underTest = DashboardViewModel(dashboardRouterMock, dashboardInteractorMock)
     }
 
@@ -65,14 +66,8 @@ internal class DashboardViewModelTest {
         // when
         categories.value = emptyList()
         // then
-        underTest.screenState.test(this) {
-            assertValue(DashboardSceenState.Failure)
-        }
         underTest.screenState.test {
-            assertEquals(
-                DashboardSceenState.Failure,
-                awaitItem()
-            )
+            assert(awaitItem() is DashboardSceenState.Failure)
         }
     }
 
@@ -100,6 +95,19 @@ internal class DashboardViewModelTest {
         underTest.onQueryChange(query)
         // then
         verify { dashboardInteractorMock.searchForRecipes(query) }
+    }
+
+    @Test
+    fun toggleSearchMode() = coroutineTest {
+        // given
+        val searchMode = true
+        // when
+        underTest.toggleSearchMode(searchMode)
+        // then
+        underTest.screenState.test {
+            val actual = awaitItem()
+            assertTrue(actual is SearchScreenState)
+        }
     }
 
     @Test
@@ -165,6 +173,16 @@ internal class DashboardViewModelTest {
         underTest.screenState.test {
             val actual = awaitItem()
             assert(actual !is SearchScreenState)
+        }
+    }
+
+    @Test
+    fun `state should result in failure state, when not initialized`() = coroutineTest {
+        // when
+        isAppInitialized.value = false
+        // then
+        underTest.screenState.test {
+            assert(awaitItem() is DashboardSceenState.Failure)
         }
     }
 }

@@ -10,6 +10,11 @@ import kotlinx.coroutines.flow.Flow
 internal interface DashboardInteractor {
 
     /**
+     * flow of the app initialization state
+     */
+    val isAppInitialized: Flow<Boolean>
+
+    /**
      * @return flow of all [CategoryVo]s with the 10 latest [RecipeListItemVo]s as a [Flow]
      */
     fun getCategoriesWithRecipes(): Flow<List<CategoryVo>>
@@ -28,4 +33,16 @@ internal interface DashboardInteractor {
      * @param query the search query
      */
     fun searchForRecipes(query: String): Flow<List<SearchResultVo>>
+
+    /**
+     * Update the app initialization state
+     *
+     * @param newState the new state
+     */
+    suspend fun updateAppInitializedState(newState: Boolean)
+
+    /**
+     * Clear all recipes from the database and reload them from the network
+     */
+    suspend fun reloadRecipes()
 }

@@ -5,7 +5,9 @@ package de.shecken.grillshow.details.ui
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -24,6 +26,7 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTube
 import de.shecken.grillshow.dashboard.R
 import de.shecken.grillshow.details.vo.RecipeDetailsVo
 import de.shecken.grillshow.shared.GrillshowTheme
+import de.shecken.grillshow.shared.ui.Message
 import de.shecken.grillshow.shared.ui.FavIconButton
 import de.shecken.grillshow.shared.ui.FullScreenLoadingIndicator
 import org.koin.androidx.compose.getViewModel
@@ -67,8 +70,11 @@ private fun HandleScreenState(modifier: Modifier, state: DetailsScreenState) {
     ) {
         when (state) {
             is DetailsScreenState.Loading -> FullScreenLoadingIndicator()
-            is DetailsScreenState.Success -> HandleSuccessState(state.recipeDetails)
-            is DetailsScreenState.Failure -> Error()
+            is DetailsScreenState.Success -> HandleSuccessState(
+                recipeDetails = state.recipeDetails,
+                onVideoButtonClick = state.onVideoButtonClick
+            )
+            is DetailsScreenState.Failure -> Failure(state.onBackButtonClick)
         }
     }
 }
@@ -109,19 +115,25 @@ private fun DetailsTopBar(
 }
 
 @Composable
-private fun Error() {
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text("Error!")
+private fun Failure(onBackButtonClick: () -> Unit) {
+    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        Message(
+            title = stringResource(id = R.string.details_error_title),
+            message = stringResource(id = R.string.details_error_message),
+            buttonText = stringResource(id = R.string.details_error_button),
+            imageRes = R.drawable.ninja,
+            onButtonClick = onBackButtonClick
+        )
     }
 }
 
 @Composable
-private fun HandleSuccessState(recipeDetails: RecipeDetailsVo) {
-    Column(modifier = Modifier.fillMaxSize()) {
+private fun HandleSuccessState(recipeDetails: RecipeDetailsVo, onVideoButtonClick: () -> Unit) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+    ) {
         YoutubeVideo(videoId = recipeDetails.id, modifier = Modifier.fillMaxWidth())
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -131,13 +143,17 @@ private fun HandleSuccessState(recipeDetails: RecipeDetailsVo) {
 
         Spacer(modifier = Modifier.height(40.dp))
 
-        // subtitle for list
-        Text(
-            text = stringResource(id = R.string.details_list_title),
-            style = MaterialTheme.typography.titleSmall
-        )
-        IngredientList(recipeDetails.ingredientlist)
-
+        if (recipeDetails.ingredientlist.isEmpty()) {
+            EmptyIngredientList(onVideoButtonClick = onVideoButtonClick)
+            Spacer(modifier = Modifier.height(24.dp))
+        } else {
+            // subtitle for list
+            Text(
+                text = stringResource(id = R.string.details_list_title),
+                style = MaterialTheme.typography.titleSmall
+            )
+            IngredientList(ingredients = recipeDetails.ingredientlist)
+        }
     }
 }
 
@@ -190,6 +206,19 @@ private fun IngredientList(ingredients: List<String>) {
 }
 
 @Composable
+private fun EmptyIngredientList(onVideoButtonClick: () -> Unit) {
+    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        Message(
+            title = stringResource(id = R.string.details_no_ingredients_title),
+            message = stringResource(id = R.string.details_no_ingredients_message),
+            buttonText = stringResource(id = R.string.details_no_ingredients_button),
+            imageRes = R.drawable.johnny,
+            onButtonClick = onVideoButtonClick
+        )
+    }
+}
+
+@Composable
 private fun IngredientItem(item: String) {
     Text(
         modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
@@ -214,12 +243,17 @@ private fun TopBarPreview() {
     GrillshowTheme {
         DetailsTopBar(
             DetailsScreenState.Success(
-                RecipeDetailsVo(
+                recipeDetails = RecipeDetailsVo(
                     "id",
                     "Test Title",
                     previewIngredients,
                     false
-                ), { da, d2f -> }
-            ), {}) {}
+                ),
+                onFavIconClick = { _, _ -> },
+                onVideoButtonClick = {}
+            ),
+            onBackButtonClick = {},
+            onShareIconClick = {}
+        )
     }
 }

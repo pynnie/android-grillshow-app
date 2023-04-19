@@ -7,4 +7,6 @@ interface DashboardRouter {
     fun goBack()
 
     fun shareRecipe(recipeId: String)
+
+    fun openVideo(videoId: String)
 }

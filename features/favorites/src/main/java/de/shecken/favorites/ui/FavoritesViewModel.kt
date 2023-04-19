@@ -18,13 +18,14 @@ class FavoritesViewModel(
         FavoritesScreenState.Loading
     )
 
-
     fun onItemClick(recipeId: String) = favoritesRouter.openRecipeDetails(recipeId)
+
+    fun onDashboardButtonClick() = favoritesRouter.openDashboard()
 
     private fun loadFavorites() =
         interactor.getFavoriteRecipes().map { favList ->
             if (favList.isEmpty()) {
-                FavoritesScreenState.Empty
+                FavoritesScreenState.Empty(::onDashboardButtonClick)
             } else {
                 FavoritesScreenState.Success(
                     favoriteList = favList,

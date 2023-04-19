@@ -31,13 +31,17 @@ internal class DetailsViewModel(
 
     fun onShareIconClick(id: String) = detailsRouter.shareRecipe(id)
 
+    fun onVideoButtonClick() =
+        detailsRouter.openVideo((detailsScreenState.value as DetailsScreenState.Success).recipeDetails.id)
+
     private fun loadRecipeDetails() =
         interactor.getRecipeDetails(id).map { result ->
             result?.let { details ->
                 DetailsScreenState.Success(
                     recipeDetails = details,
-                    onFavIconClick = ::onFavIconClick
+                    onFavIconClick = ::onFavIconClick,
+                    onVideoButtonClick = ::onVideoButtonClick
                 )
-            } ?: DetailsScreenState.Failure
+            } ?: DetailsScreenState.Failure(::onBackButtonClick)
         }
 }

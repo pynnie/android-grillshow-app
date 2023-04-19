@@ -40,8 +40,8 @@ fun FavIconButton(
 private fun FavIconPreview() {
     GrillshowTheme {
         Row {
-            FavIconButton(recipeId = "123", isFavorite = true, onClick = { da, gfg -> })
-            FavIconButton(recipeId = "123", isFavorite = false, onClick = { da, gfg -> })
+            FavIconButton(recipeId = "123", isFavorite = true, onClick = { _, _ -> })
+            FavIconButton(recipeId = "123", isFavorite = false, onClick = { _, _ -> })
         }
     }
 }

@@ -13,7 +13,9 @@ internal sealed class DashboardSceenState {
         val onRecipeClick: (String) -> Unit
     ) : DashboardSceenState()
 
-    object Failure : DashboardSceenState()
+    data class Failure(
+        val onReloadClick: () -> Unit
+    ) : DashboardSceenState()
 
     sealed class SearchScreenState(val query: String) : DashboardSceenState() {
         data class Success(

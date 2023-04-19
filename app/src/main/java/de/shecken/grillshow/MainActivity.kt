@@ -47,7 +47,7 @@ internal class MainActivity : AppCompatActivity() {
                             recipeRepo.fetchAllRecipes()
                             recipeRepo.fetchCategories()
                         }
-                        keepSplashScreen = false // Adjust for your app initialization process
+                        keepSplashScreen = false
                     }
                 }
                 Scaffold(bottomBar = { BottomBar() }) {

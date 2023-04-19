@@ -26,14 +26,13 @@ import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import de.shecken.grillshow.dashboard.R
 import de.shecken.grillshow.dashboard.vo.CategoryVo
 import de.shecken.grillshow.dashboard.vo.RecipeListItemVo
-import de.shecken.grillshow.shared.GrillshowTheme
+import de.shecken.grillshow.shared.ui.Message
 import de.shecken.grillshow.shared.ui.FavIconButton
 import de.shecken.grillshow.shared.ui.FullScreenLoadingIndicator
 import org.koin.androidx.compose.getViewModel
@@ -79,20 +78,22 @@ private fun HandleScreenState(modifier: Modifier, state: DashboardSceenState) {
                 onFavIconClick = state.onFavIconClick,
                 onRecipeClick = state.onRecipeClick
             )
-            is DashboardSceenState.Failure -> Error()
+            is DashboardSceenState.Failure -> Failure(state.onReloadClick)
             is DashboardSceenState.SearchScreenState -> SearchScreen(state = state)
         }
     }
 }
 
 @Composable
-private fun Error() {
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text("Error!")
+private fun Failure(onReloadClick: () -> Unit) {
+    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        Message(
+            title = stringResource(id = R.string.dashboard_error_title),
+            message = stringResource(id = R.string.dashboard_error_message),
+            buttonText = stringResource(id = R.string.dashboard_error_button),
+            imageRes = R.drawable.ninja,
+            onButtonClick = onReloadClick
+        )
     }
 }
 
@@ -282,13 +283,5 @@ private fun RecipeItem(
             maxLines = 2,
             overflow = TextOverflow.Ellipsis
         )
-    }
-}
-
-@Composable
-@Preview
-private fun TopBarPreview() {
-    GrillshowTheme {
-        //  DashboardTopBar()
     }
 }

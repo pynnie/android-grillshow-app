@@ -9,7 +9,8 @@ internal sealed class DetailsScreenState {
     data class Success(
         val recipeDetails: RecipeDetailsVo,
         val onFavIconClick: (String, Boolean) -> Unit,
+        val onVideoButtonClick: () -> Unit
     ) : DetailsScreenState()
 
-    object Failure : DetailsScreenState()
+    data class Failure(val onBackButtonClick: () -> Unit) : DetailsScreenState()
 }

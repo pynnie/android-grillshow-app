@@ -16,6 +16,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import de.shecken.grillshow.favorites.R
 import de.shecken.grillshow.shared.ui.FullScreenLoadingIndicator
 import de.shecken.grillshow.shared.ui.ListDivider
+import de.shecken.grillshow.shared.ui.Message
 import de.shecken.grillshow.shared.ui.RecipeListItem
 import org.koin.androidx.compose.getViewModel
 
@@ -43,7 +44,7 @@ private fun HandleScreenState(modifier: Modifier, state: FavoritesScreenState) {
         when (state) {
             is FavoritesScreenState.Loading -> FullScreenLoadingIndicator()
             is FavoritesScreenState.Success -> HandleSuccessState(state)
-            is FavoritesScreenState.Empty -> Error()
+            is FavoritesScreenState.Empty -> EmptyState(state.onDashboardButtonClick)
         }
     }
 }
@@ -73,12 +74,14 @@ private fun FavoritesTopBar() {
 }
 
 @Composable
-private fun Error() {
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text("Error!")
+private fun EmptyState(onDashboardButtonClick: () -> Unit) {
+    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        Message(
+            title = stringResource(id = R.string.favorites_empty_title),
+            message = stringResource(id = R.string.favorites_empty_message),
+            buttonText = stringResource(id = R.string.favorites_empty_button),
+            imageRes = R.drawable.johnny,
+            onButtonClick = onDashboardButtonClick
+        )
     }
 }

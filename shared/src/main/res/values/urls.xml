@@ -7,4 +7,5 @@
     <string name="github_url">https://github.com/pynnie</string>
     <string name="terms_url"></string>
     <string name="privacy_url"></string>
+    <string name="youtube_video_url_template">https://www.youtube.com/watch?v=%1$s</string>
 </resources>

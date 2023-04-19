@@ -6,11 +6,26 @@
     <string name="navigation_info">Mehr</string>
     <string name="dashboard_title">HÜÜAAAHH</string>
     <string name="dashboard_latest_recipes">Neuste Lunser</string>
+    <string name="dashboard_error_title">Keine Videos gefunden</string>
+    <string name="dashboard_error_message">Was ist das? Keine Videos gefunden?\nDahinter steckt bestimmt wieder der Ninja!\nCheck deine Internetverbindung und versuch es noch mal.</string>
+    <string name="dashboard_error_button">Videos laden</string>
     <string name="search_title">Suche</string>
     <string name="favorites_title">Lieblingslunser</string>
+    <string name="favorites_empty_title">Keine Lieblingslunser vorhanden</string>
+    <string name="favorites_empty_message">Anscheinend konntest du dich noch nicht entscheiden,\nwelche von Onkel Johnny\'s Spezialitäten dir am besten gefällt.</string>
+    <string name="favorites_empty_button">Zu den Lunsern</string>
     <string name="details_title">Lunserdetails</string>
     <string name="details_list_title">Das braucht ihr:</string>
-    <string name="details_share_message">🔥🔥 Baller dir dieses Grillrezept rein: https://www.youtube.com/watch?v=%1$s</string>
+    <string name="details_share_message">🔥🔥 Baller dir dieses Grillrezept rein: %1$s</string>
+    <string name="details_error_title">Lunser nicht gefunden</string>
+    <string name="details_error_message">Wir konnten den Lunser nicht finden. Schnell weg hier!</string>
+    <string name="details_error_button">Weg hier!</string>
+    <string name="details_no_ingredients_title">Keine Zutaten vorhanden</string>
+    <string name="details_no_ingredients_message">Zu diesem Lunser gibt es keine Zutatenliste.\nBaller dir einfach das Video rein für alle Details!</string>
+    <string name="details_no_ingredients_button">Zum Video</string>
+    <string name="details_error_no_wifi_title">Keine Internetverbindung</string>
+    <string name="details_error_no_wifi_message">Check deine Verbindung, um dir das Video rein ballern zu können</string>
+    <string name="details_error_no_wifi_button">Einstellungen</string>
     <string name="search_empty_message">keine Lunser gefunden</string>
     <string name="search_field_prompt">Such was, Keule!</string>
     <string name="info_title">App Info</string>

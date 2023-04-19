@@ -3,13 +3,20 @@ package de.shecken.grillshow.dashboard.interactor
 import de.shecken.grillshow.dashboard.vo.CategoryVo
 import de.shecken.grillshow.dashboard.vo.RecipeListItemVo
 import de.shecken.grillshow.dashboard.vo.SearchResultVo
+import de.shecken.grillshow.repository.preferences.PreferencesRepository
 import de.shecken.grillshow.repository.recipe.RecipeRepository
 import de.shecken.grillshow.repository.recipe.model.Category
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-internal class DashboardInteractorImpl(private val recipeRepository: RecipeRepository) :
+internal class DashboardInteractorImpl(
+    private val recipeRepository: RecipeRepository,
+    private val prefsRepository: PreferencesRepository
+) :
     DashboardInteractor {
+
+    override val isAppInitialized: Flow<Boolean>
+        get() = prefsRepository.appPreferencesFlow.map { prefs -> prefs.isInitComplete }
 
     override fun getCategoriesWithRecipes(): Flow<List<CategoryVo>> =
         recipeRepository.categories.map { categories ->
@@ -28,6 +35,16 @@ internal class DashboardInteractorImpl(private val recipeRepository: RecipeRepos
                 )
             }
         }
+
+    override suspend fun reloadRecipes() {
+        with(recipeRepository) {
+            clearRecipes()
+            clearCategories()
+            fetchAllRecipes()
+            fetchCategories()
+        }
+
+    }
 
     private fun mapCategoryToCategoryVo(category: Category) = with(category) {
         CategoryVo(
@@ -48,5 +65,9 @@ internal class DashboardInteractorImpl(private val recipeRepository: RecipeRepos
         recipeRepository.getRecipeForId(id)?.let { recipe ->
             recipeRepository.updateRecipe(recipe.copy(isFavorite = isFavorite))
         }
+    }
+
+    override suspend fun updateAppInitializedState(newState: Boolean) {
+        prefsRepository.updateInitCompleted(newState)
     }
 }
