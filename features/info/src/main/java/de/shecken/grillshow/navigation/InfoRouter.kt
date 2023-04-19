@@ -1,6 +1,7 @@
-package de.shecken.grillshow.info.navigation
+package de.shecken.grillshow.navigation
 
 import androidx.annotation.StringRes
+import de.shecken.grillshow.legal.LegalScreenType
 
 interface InfoRouter {
 
@@ -11,6 +12,8 @@ interface InfoRouter {
     fun openEmail()
 
     fun openLicenses()
+
+    fun openLegalPage(legalType: LegalScreenType)
 
     fun goBack()
 }

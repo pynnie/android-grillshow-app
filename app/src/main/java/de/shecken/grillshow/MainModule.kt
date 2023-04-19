@@ -1,7 +1,7 @@
 package de.shecken.grillshow
 
 import de.shecken.favorites.navigation.FavoritesRouter
-import de.shecken.grillshow.info.navigation.InfoRouter
+import de.shecken.grillshow.navigation.InfoRouter
 import de.shecken.grillshow.navigation.BottomBarRouter
 import de.shecken.grillshow.navigation.BottomBarViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel

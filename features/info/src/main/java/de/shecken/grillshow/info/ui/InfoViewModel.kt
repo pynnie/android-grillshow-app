@@ -5,7 +5,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import de.shecken.grillshow.info.R
 import de.shecken.grillshow.info.interactor.InfoInteractor
-import de.shecken.grillshow.info.navigation.InfoRouter
+import de.shecken.grillshow.legal.LegalScreenType
+import de.shecken.grillshow.navigation.InfoRouter
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
 
@@ -23,9 +24,9 @@ class InfoViewModel(interactor: InfoInteractor, private val router: InfoRouter) 
 
     fun onDevInfoClick() = router.openURL(R.string.github_url)
 
-    fun onTermsClick() = router.openURL(R.string.terms_url)
+    fun onTermsClick() = router.openLegalPage(LegalScreenType.TERMS)
 
-    fun onPrivacyClick() = router.openURL(R.string.privacy_url)
+    fun onPrivacyClick() = router.openLegalPage(LegalScreenType.PRIVACY)
 
     fun onLicensesClick() = router.openLicenses()
 }
