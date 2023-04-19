@@ -9,7 +9,6 @@ import de.shecken.grillshow.details.interactor.DetailsInteractor
 import de.shecken.grillshow.details.vo.RecipeDetailsVo
 import de.shecken.grillshow.recipeId
 import de.shecken.grillshow.sharedtest.coroutineTest
-import de.shecken.grillshow.sharedtest.test
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
@@ -72,18 +71,23 @@ internal class DetailsViewModelTest {
     }
 
     @Test
+    fun onVideoButtonClick() {
+        // given
+        val fakeDetails = fakeDetailsVo1
+        details.value = fakeDetails
+        // when
+        underTest.onVideoButtonClick()
+        // then
+        verify { detailsRouterMock.openVideo(fakeDetailsVo1.id) }
+    }
+
+    @Test
     fun `null response should result in failure state`() = coroutineTest {
         // when
         details.value = null
         // then
-        underTest.detailsScreenState.test(this) {
-            assertValue(DetailsScreenState.Failure)
-        }
         underTest.detailsScreenState.test {
-            assertEquals(
-                DetailsScreenState.Failure,
-                awaitItem()
-            )
+            assert(awaitItem() is DetailsScreenState.Failure)
         }
     }
 
