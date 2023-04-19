@@ -17,4 +17,5 @@ dependencies {
 
     implementation(AdditionalLibs.aboutLibsCore)
     implementation(AdditionalLibs.aboutLibsCompose)
+    implementation(Google.accompanist.webView)
 }

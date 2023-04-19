@@ -7,10 +7,8 @@ import androidx.annotation.StringRes
 import androidx.navigation.NavController
 import de.shecken.favorites.navigation.FavoritesRouter
 import de.shecken.favorites.navigation.favoritesRoute
-import de.shecken.grillshow.info.navigation.InfoRouter
-import de.shecken.grillshow.info.navigation.infoRoute
-import de.shecken.grillshow.info.navigation.licensesScreen
-import de.shecken.grillshow.navigation.BottomBarRouter
+import de.shecken.grillshow.legal.LegalScreenType
+import de.shecken.grillshow.navigation.*
 
 /**
  * Main Router class for the project. Should implement all sub-module Router interfaces using the [navController] injected from the
@@ -69,6 +67,9 @@ internal class Router(private val context: Context) : DashboardRouter, BottomBar
         }
         context.startActivity(intent)
     }
+
+    override fun openLegalPage(legalType: LegalScreenType) =
+        navController.navigate("$legalScreen/${legalType.name}")
 
     private fun openExternalUrl(url: String) {
         val intent =
