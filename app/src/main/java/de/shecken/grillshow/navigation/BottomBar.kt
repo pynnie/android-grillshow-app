@@ -11,13 +11,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import de.shecken.grillshow.shared.GrillshowTheme
 import de.shecken.grillshow.shared.R
 import org.koin.androidx.compose.getViewModel
 
 @Composable
 fun BottomBar(viewModel: BottomBarViewModel = getViewModel()) {
+
+    val selectedItem by viewModel.selectedItem.collectAsStateWithLifecycle()
     BottomBar(
+        selectedItem = selectedItem,
+        onSelectionUpdate = viewModel::updateSelectedItem,
         onDashboardClick = viewModel::onDashboardClick,
         onFavoritesClick = viewModel::onFavoritesClick,
         onInfoClick = viewModel::onInfoClick
@@ -27,6 +32,8 @@ fun BottomBar(viewModel: BottomBarViewModel = getViewModel()) {
 @Composable
 private fun BottomBar(
     modifier: Modifier = Modifier,
+    selectedItem: Int,
+    onSelectionUpdate: (Int) -> Unit,
     onDashboardClick: () -> Unit,
     onFavoritesClick: () -> Unit,
     onInfoClick: () -> Unit
@@ -36,14 +43,14 @@ private fun BottomBar(
         NavigationOption.Favorites(onOptionClick = onFavoritesClick),
         NavigationOption.Info(onOptionClick = onInfoClick)
     )
-    var selectedItem by remember { mutableStateOf(0) }
+
 
     NavigationBar(modifier = modifier) {
         navigationOptions.forEachIndexed { index, navigationOption ->
             NavigationBarItem(
                 selected = selectedItem == index,
                 onClick = {
-                    selectedItem = index
+                    onSelectionUpdate(index)
                     navigationOption.onOptionClick()
                 },
                 icon = {
@@ -87,6 +94,8 @@ sealed class NavigationOption(
 private fun BottomNavigationPreview() {
     GrillshowTheme() {
         BottomBar(
+            selectedItem = 0,
+            onSelectionUpdate = {},
             onDashboardClick = {},
             onFavoritesClick = {},
             onInfoClick = {})
