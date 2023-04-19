@@ -61,7 +61,6 @@ internal class DashboardViewModel(
         }
     }
 
-
     private fun updateSearchResults(query: String) =
         if (query.isNotEmpty()) {
             interactor.searchForRecipes(query).map { resultList ->

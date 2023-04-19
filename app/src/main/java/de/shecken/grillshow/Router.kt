@@ -42,7 +42,8 @@ internal class Router(private val context: Context) : DashboardRouter, BottomBar
     override fun shareRecipe(recipeId: String) {
         val sendIntent: Intent = Intent().apply {
             action = Intent.ACTION_SEND
-            putExtra(Intent.EXTRA_TEXT, context.getString(R.string.details_share_message, recipeId))
+            val videoUrl = context.getString(R.string.youtube_video_url_template, recipeId)
+            putExtra(Intent.EXTRA_TEXT, context.getString(R.string.details_share_message, videoUrl))
             type = INTENT_TYPE
         }
         val shareIntent = Intent.createChooser(sendIntent, null)
@@ -55,6 +56,11 @@ internal class Router(private val context: Context) : DashboardRouter, BottomBar
     override fun openURL(url: String) = openExternalUrl(url)
 
     override fun openURL(@StringRes urlRes: Int) = openURL(context.getString(urlRes))
+
+    override fun openVideo(videoId: String) {
+        val videoUrl = context.getString(R.string.youtube_video_url_template, videoId)
+        openExternalUrl(videoUrl)
+    }
 
     override fun openEmail() {
         val intent = Intent(Intent.ACTION_SENDTO).apply {
