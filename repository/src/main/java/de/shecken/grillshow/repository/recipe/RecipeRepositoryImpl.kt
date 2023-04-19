@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 import java.time.Instant
 
 class RecipeRepositoryImpl(
@@ -44,7 +45,11 @@ class RecipeRepositoryImpl(
             description = "",
             recipes = latest
         )
-        return@combine cats.toMutableList().also { list -> list[0] = latestCategory }
+        return@combine cats.toMutableList().also { list ->
+            if (list.isNotEmpty()) {
+                list[0] = latestCategory
+            }
+        }
     }
 
     override suspend fun fetchAllRecipes() = withContext(dispatcher) {
@@ -59,10 +64,14 @@ class RecipeRepositoryImpl(
         )
 
     override suspend fun fetchCategories() = withContext(dispatcher) {
-        api.requestAllPlaylistsFromChannel().items.forEach { playListItem ->
-            categoryDao.insert(playListItem.toCategoryEntity())
+        try {
+            api.requestAllPlaylistsFromChannel().items.forEach { playListItem ->
+                categoryDao.insert(playListItem.toCategoryEntity())
+            }
+            mapCategoriesToRecipes()
+        } catch (e: Exception) {
+            Timber.e(e)
         }
-        mapCategoriesToRecipes()
     }
 
     override suspend fun getRecipeForId(id: String) = withContext(dispatcher) {
@@ -105,25 +114,34 @@ class RecipeRepositoryImpl(
         latestUploadDateString: String? = null
     ) {
         withContext(dispatcher) {
-            val response = api.requestPlaylistItems(
-                pageToken = pageToken,
-                playlistId = playlistId
-            )
-            response.items.forEach { responseItem ->
-                if (isNew(latestUploadDateString, responseItem.contentDetails.videoPublishedAt)) {
-                    if (isRecipe(responseItem.snippet.title)) {
-                        recipeDao.insert(responseItem.toRecipeEntity())
-                    }
-                } else {
-                    return@withContext
-                }
-            }
-            response.nextPageToken?.let { token ->
-                fetchRecipes(
-                    pageToken = token,
-                    latestUploadDateString = latestUploadDateString,
+            try {
+                val response = api.requestPlaylistItems(
+                    pageToken = pageToken,
                     playlistId = playlistId
                 )
+                response.items.forEach { responseItem ->
+                    if (isNew(
+                            latestUploadDateString,
+                            responseItem.contentDetails.videoPublishedAt
+                        )
+                    ) {
+                        if (isRecipe(responseItem.snippet.title)) {
+                            recipeDao.insert(responseItem.toRecipeEntity())
+                        }
+                    } else {
+                        return@withContext
+                    }
+                }
+                response.nextPageToken?.let { token ->
+                    fetchRecipes(
+                        pageToken = token,
+                        latestUploadDateString = latestUploadDateString,
+                        playlistId = playlistId
+                    )
+                }
+            } catch (e: Exception) {
+                Timber.e(e)
+                return@withContext
             }
         }
     }
@@ -135,16 +153,21 @@ class RecipeRepositoryImpl(
     }
 
     private suspend fun updateRecipesForCategory(category: CategoryEntity, pageToken: String = "") {
-        val playlistResponse =
-            api.requestPlaylistItems(playlistId = category.id, pageToken = pageToken)
-        playlistResponse.items.forEach { item ->
-            recipeDao.getRecipeById(item.contentDetails.videoId)?.let { recipeToUpdate ->
-                recipeDao.insert(recipeToUpdate.copy(categoryId = category.id))
+        try {
+            val playlistResponse =
+                api.requestPlaylistItems(playlistId = category.id, pageToken = pageToken)
+            playlistResponse.items.forEach { item ->
+                recipeDao.getRecipeById(item.contentDetails.videoId)?.let { recipeToUpdate ->
+                    recipeDao.insert(recipeToUpdate.copy(categoryId = category.id))
+                }
             }
+            playlistResponse.nextPageToken?.let { token ->
+                updateRecipesForCategory(category = category, pageToken = token)
+            }
+        } catch (e: Exception) {
+            Timber.e(e)
         }
-        playlistResponse.nextPageToken?.let { token ->
-            updateRecipesForCategory(category = category, pageToken = token)
-        }
+
     }
 
     private fun isRecipe(videoTitle: String) =
