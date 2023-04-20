@@ -28,6 +28,9 @@
     <string name="details_error_no_wifi_button">Einstellungen</string>
     <string name="search_empty_message">keine Lunser gefunden</string>
     <string name="search_field_prompt">Such was, Keule!</string>
+    <string name="category_error_title">Keine Lunser gefunden</string>
+    <string name="category_error_message">Hier scheint es keien Rezepte zu geben.\nLass es uns noch mal versuchen.</string>
+    <string name="category_error_button">Neu laden</string>
     <string name="info_title">App Info</string>
     <string name="info_version">Version: %1$s</string>
     <string name="info_links">Social Media</string>

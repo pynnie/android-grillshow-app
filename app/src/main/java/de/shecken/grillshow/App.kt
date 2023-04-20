@@ -6,8 +6,7 @@ import de.shecken.grillshow.database.di.databaseModule
 import de.shecken.grillshow.networking.youtube.networkModule
 import de.shecken.grillshow.repository.repositoryModule
 import de.shecken.grillshow.shared.di.sharedModule
-import de.shecken.grillshow.dashboard.di.dashboardModule
-import de.shecken.grillshow.details.di.detailsModule
+import de.shecken.grillshow.di.dashboardModule
 import de.shecken.grillshow.di.infoModule
 import kotlinx.serialization.ExperimentalSerializationApi
 import org.koin.android.ext.koin.androidContext
@@ -36,7 +35,6 @@ internal class App : Application() {
                     repositoryModule,
                     mainModule,
                     sharedModule,
-                    detailsModule,
                     infoModule
                 )
             )

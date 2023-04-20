@@ -12,7 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import de.shecken.grillshow.dashboard.R
-import de.shecken.grillshow.dashboard.vo.SearchResultVo
+import de.shecken.grillshow.vo.SearchResultVo
 import de.shecken.grillshow.shared.ui.ListDivider
 import de.shecken.grillshow.shared.ui.RecipeListItem
 

@@ -30,8 +30,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import de.shecken.grillshow.dashboard.R
-import de.shecken.grillshow.dashboard.vo.CategoryVo
-import de.shecken.grillshow.dashboard.vo.RecipeListItemVo
+import de.shecken.grillshow.vo.CategoryVo
+import de.shecken.grillshow.vo.RecipeListItemVo
 import de.shecken.grillshow.shared.ui.Message
 import de.shecken.grillshow.shared.ui.FavIconButton
 import de.shecken.grillshow.shared.ui.FullScreenLoadingIndicator
@@ -76,7 +76,8 @@ private fun HandleScreenState(modifier: Modifier, state: DashboardSceenState) {
             is DashboardSceenState.Success -> CategoryList(
                 categories = state.categories,
                 onFavIconClick = state.onFavIconClick,
-                onRecipeClick = state.onRecipeClick
+                onRecipeClick = state.onRecipeClick,
+                onCategoryClick = state.onCategoryClick
             )
             is DashboardSceenState.Failure -> Failure(state.onReloadClick)
             is DashboardSceenState.SearchScreenState -> SearchScreen(state = state)
@@ -209,15 +210,16 @@ fun SearchField(
 private fun CategoryList(
     categories: List<CategoryVo>,
     onFavIconClick: (String, Boolean) -> Unit,
-    onRecipeClick: (String) -> Unit
+    onRecipeClick: (String) -> Unit,
+    onCategoryClick: (String) -> Unit
 ) {
     LazyColumn {
         items(items = categories) { category ->
             HorizontalRecipeList(
-                title = category.title,
-                recipes = category.recipes,
+                category = category,
                 onFavIconClick = onFavIconClick,
-                onRecipeClick = onRecipeClick
+                onRecipeClick = onRecipeClick,
+                onCategoryClick = onCategoryClick
             )
         }
     }
@@ -225,16 +227,31 @@ private fun CategoryList(
 
 @Composable
 private fun HorizontalRecipeList(
-    title: String,
-    recipes: List<RecipeListItemVo>,
+    category: CategoryVo,
     onFavIconClick: (String, Boolean) -> Unit,
     onRecipeClick: (String) -> Unit,
+    onCategoryClick: (String) -> Unit
 ) {
     Column(modifier = Modifier.padding(top = 16.dp)) {
-        Text(text = title, style = MaterialTheme.typography.titleMedium)
+
+        Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+
+            Text(text = category.title, style = MaterialTheme.typography.titleMedium)
+            Spacer(modifier = Modifier.weight(1f))
+            IconButton(
+                modifier = Modifier.size(48.dp),
+                onClick = { onCategoryClick(category.id) }) {
+                Icon(
+                    modifier = Modifier.size(48.dp),
+                    painter = painterResource(id = R.drawable.ic_chevron_right),
+                    contentDescription = ""
+                )
+            }
+        }
+
         Spacer(modifier = Modifier.height(8.dp))
         LazyRow(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-            items(items = recipes) { recipe ->
+            items(items = category.recipes) { recipe ->
                 RecipeItem(
                     recipe = recipe,
                     onFavIconClick = onFavIconClick,
@@ -253,10 +270,13 @@ private fun RecipeItem(
 ) {
     val itemWidth = with(LocalDensity.current) { 640.toDp() }
     val itemHeight = with(LocalDensity.current) { 480.toDp() }
-    Column(
-        modifier = Modifier
-            .padding(horizontal = 8.dp)
-            .width(itemWidth)
+
+    Card(
+        modifier = Modifier.width(itemWidth),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.primaryContainer,
+            contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+        )
     ) {
         Box(modifier = Modifier
             .clip(RoundedCornerShape(8.dp))
@@ -270,6 +290,7 @@ private fun RecipeItem(
             )
             FavIconButton(
                 modifier = Modifier
+                    .size(48.dp)
                     .align(Alignment.TopEnd),
                 recipeId = recipe.id,
                 isFavorite = recipe.isFavorite,
@@ -278,10 +299,13 @@ private fun RecipeItem(
         }
 
         Text(
+            modifier = Modifier.padding(8.dp),
             text = recipe.title,
             style = MaterialTheme.typography.titleSmall,
             maxLines = 2,
             overflow = TextOverflow.Ellipsis
         )
     }
+
+
 }

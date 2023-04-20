@@ -1,4 +1,4 @@
-package de.shecken.grillshow.details.vo
+package de.shecken.grillshow.vo
 
 data class RecipeDetailsVo(
     val id: String,

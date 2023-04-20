@@ -2,12 +2,12 @@ package de.shecken.grillshow.dashboard.ui
 
 import app.cash.turbine.test
 import de.shecken.grillshow.dashboard.interactor.DashboardInteractor
-import de.shecken.grillshow.DashboardRouter
+import de.shecken.grillshow.navigation.DashboardRouter
 import de.shecken.grillshow.dashboard.fakeCategoryVo1
 import de.shecken.grillshow.dashboard.fakeRecipeListItemVo1
 import de.shecken.grillshow.dashboard.ui.DashboardSceenState.SearchScreenState
-import de.shecken.grillshow.dashboard.vo.CategoryVo
-import de.shecken.grillshow.dashboard.vo.SearchResultVo
+import de.shecken.grillshow.vo.CategoryVo
+import de.shecken.grillshow.vo.SearchResultVo
 import de.shecken.grillshow.sharedtest.coroutineTest
 import io.mockk.*
 import kotlinx.coroutines.Dispatchers
@@ -59,6 +59,16 @@ internal class DashboardViewModelTest {
         underTest.onRecipeClick(fakeRecipe.id)
         // then
         verify { dashboardRouterMock.openRecipeDetails(fakeRecipe.id) }
+    }
+
+    @Test
+    fun onCategoryClick() {
+        // given
+        val id = "abc"
+        // when
+        underTest.onCategoryClick(id)
+        // then
+        verify { dashboardRouterMock.openCategory(id) }
     }
 
     @Test

@@ -2,12 +2,12 @@ package de.shecken.grillshow.details.ui
 
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
-import de.shecken.grillshow.DashboardRouter
+import de.shecken.grillshow.navigation.DashboardRouter
 import de.shecken.grillshow.dashboard.fakeDetailsVo1
 import de.shecken.grillshow.dashboard.fakeRecipe1
 import de.shecken.grillshow.details.interactor.DetailsInteractor
-import de.shecken.grillshow.details.vo.RecipeDetailsVo
-import de.shecken.grillshow.recipeId
+import de.shecken.grillshow.vo.RecipeDetailsVo
+import de.shecken.grillshow.navigation.recipeId
 import de.shecken.grillshow.sharedtest.coroutineTest
 import io.mockk.coVerify
 import io.mockk.every

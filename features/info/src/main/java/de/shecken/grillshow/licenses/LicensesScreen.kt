@@ -8,11 +8,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import com.mikepenz.aboutlibraries.ui.compose.LibrariesContainer
 import com.mikepenz.aboutlibraries.ui.compose.LibraryDefaults
 import de.shecken.grillshow.info.R
+import de.shecken.grillshow.shared.ui.BackButton
 import org.koin.androidx.compose.getViewModel
 
 @Composable
@@ -44,12 +44,7 @@ private fun LicensesTopAppBar(onBackButtonClick: () -> Unit) {
     TopAppBar(
         title = { Text(text = stringResource(id = R.string.info_licenses)) },
         navigationIcon = {
-            IconButton(onClick = onBackButtonClick) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_back_arrow),
-                    contentDescription = ""
-                )
-            }
+            BackButton(onClick = onBackButtonClick)
         }
     )
 }

@@ -9,12 +9,11 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.accompanist.web.WebView
 import com.google.accompanist.web.rememberWebViewState
-import de.shecken.grillshow.info.R
+import de.shecken.grillshow.shared.ui.BackButton
 import org.koin.androidx.compose.getViewModel
 
 @Composable
@@ -41,11 +40,6 @@ private fun LegalScreen(type: LegalScreenType, onBackButtonClick: () -> Unit) {
 private fun LegalTopBar(@StringRes titleRes: Int, onBackButtonClick: () -> Unit) {
     TopAppBar(title = { Text(text = stringResource(id = titleRes)) },
         navigationIcon = {
-            IconButton(onClick = onBackButtonClick) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_back_arrow),
-                    contentDescription = ""
-                )
-            }
+            BackButton(onClick = onBackButtonClick)
         })
 }

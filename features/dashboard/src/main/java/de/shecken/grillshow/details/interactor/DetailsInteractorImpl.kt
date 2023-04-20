@@ -1,7 +1,7 @@
 package de.shecken.grillshow.details.interactor
 
 import de.shecken.grillshow.details.utils.IngredientExtractor
-import de.shecken.grillshow.details.vo.RecipeDetailsVo
+import de.shecken.grillshow.vo.RecipeDetailsVo
 import de.shecken.grillshow.repository.recipe.RecipeRepository
 import kotlinx.coroutines.flow.map
 

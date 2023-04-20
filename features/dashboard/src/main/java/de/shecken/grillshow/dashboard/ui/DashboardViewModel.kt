@@ -2,10 +2,10 @@ package de.shecken.grillshow.dashboard.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import de.shecken.grillshow.DashboardRouter
+import de.shecken.grillshow.navigation.DashboardRouter
 import de.shecken.grillshow.dashboard.interactor.DashboardInteractor
 import de.shecken.grillshow.dashboard.ui.DashboardSceenState.*
-import de.shecken.grillshow.dashboard.vo.SearchResultVo
+import de.shecken.grillshow.vo.SearchResultVo
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -61,6 +61,14 @@ internal class DashboardViewModel(
         }
     }
 
+    fun onFavIconClick(id: String, isFavorite: Boolean) = viewModelScope.launch {
+        interactor.updateFavoriteProperty(id = id, isFavorite = isFavorite)
+    }
+
+    fun onRecipeClick(recipeId: String) = dashboardRouter.openRecipeDetails(recipeId)
+
+    fun onCategoryClick(categoryId: String) = dashboardRouter.openCategory(categoryId)
+
     private fun updateSearchResults(query: String) =
         if (query.isNotEmpty()) {
             interactor.searchForRecipes(query).map { resultList ->
@@ -80,7 +88,8 @@ internal class DashboardViewModel(
                     Success(
                         categories = categoryList,
                         onFavIconClick = ::onFavIconClick,
-                        onRecipeClick = ::onRecipeClick
+                        onRecipeClick = ::onRecipeClick,
+                        onCategoryClick = ::onCategoryClick
                     )
                 }
             }
@@ -89,13 +98,9 @@ internal class DashboardViewModel(
         SearchScreenState.Empty(_searchQuery.value)
     } else {
         SearchScreenState.Success(
-            recipes = recipeList, currentQuery = _searchQuery.value, onRecipeClick = ::onRecipeClick
+            recipes = recipeList,
+            currentQuery = _searchQuery.value,
+            onRecipeClick = ::onRecipeClick
         )
     }
-
-    fun onFavIconClick(id: String, isFavorite: Boolean) = viewModelScope.launch {
-        interactor.updateFavoriteProperty(id = id, isFavorite = isFavorite)
-    }
-
-    fun onRecipeClick(recipeId: String) = dashboardRouter.openRecipeDetails(recipeId)
 }

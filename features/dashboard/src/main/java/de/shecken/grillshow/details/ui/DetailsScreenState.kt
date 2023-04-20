@@ -1,6 +1,6 @@
 package de.shecken.grillshow.details.ui
 
-import de.shecken.grillshow.details.vo.RecipeDetailsVo
+import de.shecken.grillshow.vo.RecipeDetailsVo
 
 internal sealed class DetailsScreenState {
 
