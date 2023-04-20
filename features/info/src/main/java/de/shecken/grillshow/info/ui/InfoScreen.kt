@@ -12,6 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -103,6 +104,10 @@ private fun InfoScreenContent(
         Spacer(modifier = Modifier.height(16.dp))
 
         InfoLinks(onDevInfoClick, onContactClick, onTermsClick, onPrivacyClick, onLicensesClick)
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Disclaimer()
     }
 }
 
@@ -137,6 +142,23 @@ private fun InfoHeader(modifier: Modifier = Modifier, version: String) {
         Text(text = stringResource(id = R.string.info_version, version))
 
         Spacer(modifier = Modifier.height(4.dp))
+    }
+}
+
+@Composable
+fun Disclaimer() {
+    Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
+        Text(
+            text = stringResource(id = R.string.info_disclaimer_title),
+            style = MaterialTheme.typography.titleMedium,
+            textAlign = TextAlign.Center
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        Text(
+            text = stringResource(id = R.string.info_disclaimer_message),
+            style = MaterialTheme.typography.bodySmall,
+            textAlign = TextAlign.Center
+        )
     }
 }
 

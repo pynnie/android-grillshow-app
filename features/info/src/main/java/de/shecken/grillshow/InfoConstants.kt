@@ -48,5 +48,9 @@ internal val socialMediaLinks =
         SocialMediaItemVo(
             iconRes = R.drawable.ic_youtube,
             urlRes = R.string.youtube_url
+        ),
+        SocialMediaItemVo(
+            iconRes = R.drawable.ic_shop,
+            urlRes = R.string.shop_url
         )
     )

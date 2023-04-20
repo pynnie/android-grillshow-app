@@ -5,7 +5,6 @@
     <string name="instagram_url">https://instagram.com/diegrillshow?igshid=YmMyMTA2M2Y=</string>
     <string name="youtube_url">https://www.youtube.com/@Grillshow</string>
     <string name="github_url">https://github.com/pynnie</string>
-    <string name="terms_url"></string>
-    <string name="privacy_url"></string>
+    <string name="shop_url">https://www.diegrillshow.de/</string>
     <string name="youtube_video_url_template">https://www.youtube.com/watch?v=%1$s</string>
 </resources>
