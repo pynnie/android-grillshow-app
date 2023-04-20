@@ -100,6 +100,21 @@ class RecipeRepositoryImpl(
         recipeDao.searchRecipes(query)
             .map { list -> list.map { entity -> entity.toRecipe() } }
 
+    override fun getCategoryById(categoryId: String): Flow<Category?> =
+        combine(
+            categoryDao.getCategoryByIdAsFlow(categoryId),
+            recipeDao.getRecipesForCategory(categoryId)
+        ) { category, recipes ->
+            category?.let { notNullCategory ->
+                Category(
+                    id = categoryId,
+                    title = notNullCategory.title,
+                    description = notNullCategory.description,
+                    recipes = recipes.map { it.toRecipe() })
+            }
+
+        }
+
     override suspend fun clearCategories() = withContext(dispatcher) {
         categoryDao.clearAll()
     }

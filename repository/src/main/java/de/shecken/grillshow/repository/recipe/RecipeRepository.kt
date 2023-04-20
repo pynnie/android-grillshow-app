@@ -61,6 +61,13 @@ interface RecipeRepository {
     fun searchRecipes(query: String): Flow<List<Recipe>>
 
     /**
+     * Get [Category] with all it's recipes
+     *
+     * @param categoryId of the category
+     */
+    fun getCategoryById(categoryId: String): Flow<Category?>
+
+    /**
      * Clear all recipes from the database
      */
     suspend fun clearRecipes()

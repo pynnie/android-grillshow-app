@@ -1,6 +1,7 @@
 package de.shecken.grillshow.database.recipe
 
 import androidx.room.*
+import de.shecken.grillshow.database.DatabaseConstants.COLUMN_CATEGORY_ID
 import de.shecken.grillshow.database.DatabaseConstants.DEFAULT_LIST_SIZE
 import de.shecken.grillshow.database.DatabaseConstants.COLUMN_ID
 import de.shecken.grillshow.database.DatabaseConstants.COLUMN_IS_FAVORITE
@@ -38,6 +39,9 @@ interface RecipeDao {
 
     @Query("SELECT * FROM $TABLE_RECIPE_ENTITY WHERE $COLUMN_IS_FAVORITE = 1 ")
     fun getAllFavorites(): Flow<List<RecipeEntity>>
+
+    @Query("SELECT * FROM $TABLE_RECIPE_ENTITY WHERE $COLUMN_CATEGORY_ID = :categoryId")
+    fun getRecipesForCategory(categoryId: String): Flow<List<RecipeEntity>>
 
     @Query("SELECT * FROM $TABLE_RECIPE_ENTITY WHERE $COLUMN_TITLE LIKE '%' || :query || '%'")
     fun searchRecipes(query: String): Flow<List<RecipeEntity>>
