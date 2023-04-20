@@ -7,22 +7,57 @@ import androidx.annotation.StringRes
 import androidx.navigation.NavController
 import de.shecken.favorites.navigation.FavoritesRouter
 import de.shecken.favorites.navigation.favoritesRoute
+import de.shecken.favorites.navigation.favoritesScreen
 import de.shecken.grillshow.legal.LegalScreenType
 import de.shecken.grillshow.navigation.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
+import kotlin.coroutines.CoroutineContext
 
 /**
  * Main Router class for the project. Should implement all sub-module Router interfaces using the [navController] injected from the
  * [MainActivity].
  */
-internal class Router(private val context: Context) : DashboardRouter, BottomBarRouter,
+internal class Router(
+    private val context: Context,
+    ioDispatcher: CoroutineContext,
+    private val coroutineScope: CoroutineScope
+) : DashboardRouter, BottomBarRouter,
     FavoritesRouter, InfoRouter {
 
-    lateinit var navController: NavController
+    private lateinit var navController: NavController
 
     /**
      * Defines the starting route of the app.
      */
     fun start() = dashboardRoute
+
+    fun setNavController(navController: NavController) {
+        this.navController = navController
+
+        observeRouterCurrentRoute()
+    }
+
+    private var currentRouteSubscription: Job? = null
+
+    private val _currentRoute = MutableStateFlow(start())
+    override var currentRoute: StateFlow<String> = _currentRoute
+
+    override var currentContentScreenId: StateFlow<ContentScreenId> = currentRoute
+        .map(transform = ::getContentScreenId)
+        .flowOn(ioDispatcher)
+        .stateIn(coroutineScope, SharingStarted.Eagerly, initialValue = getContentScreenId(start()))
+
+    override var currentRouteHasBottomBar: StateFlow<Boolean> = currentRoute
+        .map(transform = ::hasScreenVisibleBottomBar)
+        .flowOn(ioDispatcher)
+        .stateIn(
+            coroutineScope,
+            SharingStarted.Eagerly,
+            initialValue = hasScreenVisibleBottomBar(start())
+        )
 
     override fun openDashboard() = navController.navigate(dashboardRoute)
 
@@ -76,6 +111,37 @@ internal class Router(private val context: Context) : DashboardRouter, BottomBar
             Intent(Intent.ACTION_VIEW, Uri.parse(url)).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         context.startActivity(intent)
     }
+
+    private fun observeRouterCurrentRoute() {
+        currentRouteSubscription?.cancel()
+        currentRouteSubscription = coroutineScope.launch {
+            navController.currentBackStackEntryFlow
+                .map { it.destination.route ?: start() }
+                .collectLatest { _currentRoute.value = it }
+        }
+    }
+
+    private fun getContentScreenId(route: String) =
+        when {
+            route.startsWith(dashboardRoute) -> {
+                ContentScreenId.DASHBOARD
+            }
+            route.startsWith(favoritesRoute) -> {
+                ContentScreenId.FAVORITES
+            }
+            route.startsWith(infoRoute) -> {
+                ContentScreenId.INFO
+            }
+            else -> currentContentScreenId.value
+        }
+
+    private fun hasScreenVisibleBottomBar(route: String): Boolean {
+        val screensWithBottomBar = listOf(
+            dashboardScreen, favoritesScreen, infoScreen
+        )
+        return screensWithBottomBar.contains(route)
+    }
+
 
     companion object {
         private const val INTENT_TYPE = "text/plain"

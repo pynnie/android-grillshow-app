@@ -7,7 +7,7 @@ import de.shecken.favorites.ui.FavoriteScreen
 
 const val favoritesRoute = "favorites_route"
 
-const val favoritesScreen = "favorites_screen"
+const val favoritesScreen = "$favoritesRoute/favorites_screen"
 
 fun NavGraphBuilder.favoritesGraph() {
     navigation(startDestination = favoritesScreen, route = favoritesRoute) {

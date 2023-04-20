@@ -132,7 +132,6 @@ private fun HandleSuccessState(recipeDetails: RecipeDetailsVo, onVideoButtonClic
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .verticalScroll(rememberScrollState())
     ) {
         YoutubeVideo(videoId = recipeDetails.id, modifier = Modifier.fillMaxWidth())
 
@@ -207,7 +206,11 @@ private fun IngredientList(ingredients: List<String>) {
 
 @Composable
 private fun EmptyIngredientList(onVideoButtonClick: () -> Unit) {
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState()), contentAlignment = Alignment.Center
+    ) {
         Message(
             title = stringResource(id = R.string.details_no_ingredients_title),
             message = stringResource(id = R.string.details_no_ingredients_message),

@@ -1,20 +1,20 @@
 package de.shecken.grillshow.navigation
 
 import androidx.lifecycle.ViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
 
 class BottomBarViewModel(private val router: BottomBarRouter) : ViewModel() {
 
-    private var _selectedItem = MutableStateFlow(0)
-    val selectedItem = _selectedItem.asStateFlow()
+    val contentScreenId = router.currentContentScreenId
 
-    fun updateSelectedItem(newSelectedItem: Int) = _selectedItem.update { newSelectedItem }
+    val show = router.currentRouteHasBottomBar
 
-    fun onDashboardClick() = router.openDashboard()
+    fun navigateTo(contentScreenId: ContentScreenId) =
+        with(router) {
+            when (contentScreenId) {
+                ContentScreenId.DASHBOARD -> openDashboard()
+                ContentScreenId.FAVORITES -> openFavorites()
+                ContentScreenId.INFO -> openInfo()
+            }
+        }
 
-    fun onFavoritesClick() = router.openFavorites()
-
-    fun onInfoClick() = router.openInfo()
 }
