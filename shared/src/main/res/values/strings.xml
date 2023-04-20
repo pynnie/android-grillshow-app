@@ -43,4 +43,6 @@
     <string name="info_terms">AGB</string>
     <string name="info_privacy">Datenschutz</string>
     <string name="info_licenses">Lizenzen</string>
+    <string name="info_disclaimer_title">Von Fans für Fans!</string>
+    <string name="info_disclaimer_message">Die Grillshow App ist ein Privatprojekt. Der Entwickler übernimmt somit keine Gewähr für die Richtigkeit, Aktualität oder Vollständigkeit der Inhalte.</string>
 </resources>
