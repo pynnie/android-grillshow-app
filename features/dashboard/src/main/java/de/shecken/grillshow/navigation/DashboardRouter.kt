@@ -1,4 +1,4 @@
-package de.shecken.grillshow
+package de.shecken.grillshow.navigation
 
 interface DashboardRouter {
 
@@ -9,4 +9,6 @@ interface DashboardRouter {
     fun shareRecipe(recipeId: String)
 
     fun openVideo(videoId: String)
+
+    fun openCategory(categoryId: String)
 }

@@ -1,7 +1,7 @@
 package de.shecken.grillshow.dashboard.interactor
 
-import de.shecken.grillshow.dashboard.vo.CategoryVo
-import de.shecken.grillshow.dashboard.vo.SearchResultVo
+import de.shecken.grillshow.vo.CategoryVo
+import de.shecken.grillshow.vo.SearchResultVo
 import kotlinx.coroutines.flow.Flow
 
 /**

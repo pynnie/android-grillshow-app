@@ -9,6 +9,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import de.shecken.favorites.navigation.favoritesGraph
 import de.shecken.grillshow.navigation.BottomNavigationScreen
+import de.shecken.grillshow.navigation.dashboardGraph
 import de.shecken.grillshow.navigation.infoGraph
 import de.shecken.grillshow.repository.preferences.PreferencesRepository
 import de.shecken.grillshow.repository.recipe.RecipeRepository

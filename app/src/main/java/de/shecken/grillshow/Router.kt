@@ -68,6 +68,9 @@ internal class Router(
     override fun openRecipeDetails(recipeId: String) =
         navController.navigate("$detailsScreen/$recipeId")
 
+    override fun openCategory(categoryId: String) =
+        navController.navigate("$categoryScreen/$categoryId")
+
     override fun goBack() {
         navController.navigateUp()
     }

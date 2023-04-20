@@ -1,7 +1,7 @@
 package de.shecken.grillshow.dashboard.ui
 
-import de.shecken.grillshow.dashboard.vo.CategoryVo
-import de.shecken.grillshow.dashboard.vo.SearchResultVo
+import de.shecken.grillshow.vo.CategoryVo
+import de.shecken.grillshow.vo.SearchResultVo
 
 internal sealed class DashboardSceenState {
 
@@ -10,7 +10,8 @@ internal sealed class DashboardSceenState {
     data class Success(
         val categories: List<CategoryVo>,
         val onFavIconClick: (String, Boolean) -> Unit,
-        val onRecipeClick: (String) -> Unit
+        val onRecipeClick: (String) -> Unit,
+        val onCategoryClick: (String) -> Unit
     ) : DashboardSceenState()
 
     data class Failure(

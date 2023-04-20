@@ -1,4 +1,4 @@
-package de.shecken.grillshow.dashboard.vo
+package de.shecken.grillshow.vo
 
 data class SearchResultVo(
     val id: String,

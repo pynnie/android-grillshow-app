@@ -4,8 +4,8 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import de.shecken.grillshow.details.interactor.DetailsInteractor
-import de.shecken.grillshow.DashboardRouter
-import de.shecken.grillshow.recipeId
+import de.shecken.grillshow.navigation.DashboardRouter
+import de.shecken.grillshow.navigation.recipeId
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 

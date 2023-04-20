@@ -24,8 +24,9 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
 import de.shecken.grillshow.dashboard.R
-import de.shecken.grillshow.details.vo.RecipeDetailsVo
+import de.shecken.grillshow.vo.RecipeDetailsVo
 import de.shecken.grillshow.shared.GrillshowTheme
+import de.shecken.grillshow.shared.ui.BackButton
 import de.shecken.grillshow.shared.ui.Message
 import de.shecken.grillshow.shared.ui.FavIconButton
 import de.shecken.grillshow.shared.ui.FullScreenLoadingIndicator
@@ -88,12 +89,7 @@ private fun DetailsTopBar(
     TopAppBar(
         title = { Text(text = stringResource(id = R.string.details_title)) },
         navigationIcon = {
-            IconButton(onClick = { onBackButtonClick() }) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_back_arrow),
-                    contentDescription = ""
-                )
-            }
+            BackButton(onClick = onBackButtonClick)
         },
         actions = {
             if (state is DetailsScreenState.Success) {

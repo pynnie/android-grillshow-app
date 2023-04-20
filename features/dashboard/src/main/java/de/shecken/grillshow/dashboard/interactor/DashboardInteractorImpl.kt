@@ -1,11 +1,11 @@
 package de.shecken.grillshow.dashboard.interactor
 
-import de.shecken.grillshow.dashboard.vo.CategoryVo
-import de.shecken.grillshow.dashboard.vo.RecipeListItemVo
-import de.shecken.grillshow.dashboard.vo.SearchResultVo
 import de.shecken.grillshow.repository.preferences.PreferencesRepository
 import de.shecken.grillshow.repository.recipe.RecipeRepository
-import de.shecken.grillshow.repository.recipe.model.Category
+import de.shecken.grillshow.toCategoryVo
+import de.shecken.grillshow.toSearchResultVo
+import de.shecken.grillshow.vo.CategoryVo
+import de.shecken.grillshow.vo.SearchResultVo
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
@@ -20,20 +20,12 @@ internal class DashboardInteractorImpl(
 
     override fun getCategoriesWithRecipes(): Flow<List<CategoryVo>> =
         recipeRepository.categories.map { categories ->
-            categories.map { category ->
-                mapCategoryToCategoryVo(category)
-            }
+            categories.map { category -> category.toCategoryVo() }
         }
 
     override fun searchForRecipes(query: String): Flow<List<SearchResultVo>> =
         recipeRepository.searchRecipes(query).map { recipes ->
-            recipes.map { recipe ->
-                SearchResultVo(
-                    id = recipe.id,
-                    title = recipe.title,
-                    imageUrl = recipe.thumbnailUrl
-                )
-            }
+            recipes.map { recipe -> recipe.toSearchResultVo() }
         }
 
     override suspend fun reloadRecipes() {
@@ -44,21 +36,6 @@ internal class DashboardInteractorImpl(
             fetchCategories()
         }
 
-    }
-
-    private fun mapCategoryToCategoryVo(category: Category) = with(category) {
-        CategoryVo(
-            id = id,
-            title = title,
-            recipes = recipes.map { recipe ->
-                RecipeListItemVo(
-                    id = recipe.id,
-                    title = recipe.title,
-                    imageUrl = recipe.thumbnailUrl,
-                    isFavorite = recipe.isFavorite
-                )
-            }
-        )
     }
 
     override suspend fun updateFavoriteProperty(id: String, isFavorite: Boolean) {

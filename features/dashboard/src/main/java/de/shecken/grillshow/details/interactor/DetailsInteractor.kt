@@ -1,6 +1,6 @@
 package de.shecken.grillshow.details.interactor
 
-import de.shecken.grillshow.details.vo.RecipeDetailsVo
+import de.shecken.grillshow.vo.RecipeDetailsVo
 import kotlinx.coroutines.flow.Flow
 
 interface DetailsInteractor {

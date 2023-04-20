@@ -4,6 +4,7 @@ import de.shecken.favorites.navigation.FavoritesRouter
 import de.shecken.grillshow.navigation.InfoRouter
 import de.shecken.grillshow.navigation.BottomBarRouter
 import de.shecken.grillshow.navigation.BottomBarViewModel
+import de.shecken.grillshow.navigation.DashboardRouter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import org.koin.androidx.viewmodel.dsl.viewModel
