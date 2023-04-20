@@ -10,6 +10,8 @@ import org.gradle.api.Project
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.configure
 
+private const val RELEASE_SIGNING_CONFIG = "release"
+
 fun Project.androidAppConfig(additionalConfig: BaseAppModuleExtension.() -> Unit = { }) {
     apply(plugin = "com.android.application")
     extensions.configure<BaseAppModuleExtension> {
@@ -23,11 +25,21 @@ fun Project.androidAppConfig(additionalConfig: BaseAppModuleExtension.() -> Unit
             testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         }
 
+        signingConfigs {
+            create(RELEASE_SIGNING_CONFIG) {
+                keyAlias = System.getenv("BITRISEIO_ANDROID_KEYSTORE_ALIAS")
+                keyPassword = System.getenv("BITRISEIO_ANDROID_KEYSTORE_PRIVATE_KEY_PASSWORD")
+                storePassword = System.getenv("BITRISEIO_ANDROID_KEYSTORE_PASSWORD")
+                storeFile = file("../keystore/grillshow.jks")
+            }
+        }
+
         buildTypes {
             debug {
                 isMinifyEnabled = false
             }
             release {
+                signingConfig = signingConfigs.getByName(RELEASE_SIGNING_CONFIG)
                 isMinifyEnabled = true
                 proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
             }
@@ -49,7 +61,11 @@ fun Project.androidAppConfig(additionalConfig: BaseAppModuleExtension.() -> Unit
         additionalConfig()
     }
 }
-fun Project.androidLibraryConfig(withCompose: Boolean, additionalConfig: LibraryExtension.() -> Unit = { }) {
+
+fun Project.androidLibraryConfig(
+    withCompose: Boolean,
+    additionalConfig: LibraryExtension.() -> Unit = { }
+) {
     apply(plugin = "com.android.library")
     extensions.configure<LibraryExtension> {
         compileSdk = AppConfig.compileSdk
