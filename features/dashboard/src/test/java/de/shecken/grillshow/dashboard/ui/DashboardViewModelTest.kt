@@ -62,6 +62,16 @@ internal class DashboardViewModelTest {
     }
 
     @Test
+    fun onCategoryClick() {
+        // given
+        val id = "abc"
+        // when
+        underTest.onCategoryClick(id)
+        // then
+        verify { dashboardRouterMock.openCategory(id) }
+    }
+
+    @Test
     fun `empty category list should result in failure state`() = coroutineTest {
         // when
         categories.value = emptyList()
