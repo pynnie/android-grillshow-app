@@ -28,26 +28,21 @@ class RecipeRepositoryImpl(
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : RecipeRepository {
 
-    private val latestRecipes: Flow<List<Recipe>> = recipeDao.getLatestRecipes().map { list ->
-        list.map { entity -> entity.toRecipe() }
-    }
-
     private val channelCategories = categoryDao.loadCategoriesAndRecipes().map { theMap ->
         theMap.map { entry ->
             entry.key.toCategory(entry.value.map { entity -> entity.toRecipe() })
         }
     }
 
-    override val categories = combine(latestRecipes, channelCategories) { latest, cats ->
-        val latestCategory = Category(
-            id = "",
-            title = stringProvider.provideString(R.string.dashboard_latest_recipes),
-            description = "",
-            recipes = latest
-        )
+    private val uploadsCategoryId = BuildConfig.GRILLSHOW_UPLOADS_PLAYLIST_ID
+
+    override val categories = combine(
+        loadLatestCategory(LATEST_RECIPES_DASHBOARD_LIMIT),
+        channelCategories
+    ) { latest, cats ->
         return@combine cats.toMutableList().also { list ->
             if (list.isNotEmpty()) {
-                list[0] = latestCategory
+                list[0] = latest
             }
         }
     }
@@ -59,7 +54,7 @@ class RecipeRepositoryImpl(
 
     override suspend fun fetchLatestRecipes() =
         fetchRecipes(
-            playlistId = BuildConfig.GRILLSHOW_UPLOADS_PLAYLIST_ID,
+            playlistId = uploadsCategoryId,
             latestUploadDateString = recipeDao.getLatestUploadDate()
         )
 
@@ -101,11 +96,19 @@ class RecipeRepositoryImpl(
             .map { list -> list.map { entity -> entity.toRecipe() } }
 
     override fun getCategoryById(categoryId: String): Flow<Category?> =
-        if (categoryId == BuildConfig.GRILLSHOW_UPLOADS_PLAYLIST_ID) {
-            loadLatestCategory()
+        if (categoryId == uploadsCategoryId) {
+            loadLatestCategory(limit = LATEST_RECIPES_CATEGORY_LIMIT)
         } else {
             loadCategoryById(categoryId)
         }
+
+    override suspend fun clearCategories() = withContext(dispatcher) {
+        categoryDao.clearAll()
+    }
+
+    override suspend fun clearRecipes() = withContext(dispatcher) {
+        recipeDao.clearAll()
+    }
 
     private fun loadCategoryById(categoryId: String) = combine(
         categoryDao.getCategoryByIdAsFlow(categoryId),
@@ -120,23 +123,16 @@ class RecipeRepositoryImpl(
         }
     }
 
-    private fun loadLatestCategory() =
-        recipeDao.getLatestRecipes(limit = LATEST_RECIPES_LIMIT).map { recipes ->
+    private fun loadLatestCategory(limit: Int) =
+        recipeDao.getLatestRecipes(limit = limit).map { recipes ->
             Category(
-                id = BuildConfig.GRILLSHOW_UPLOADS_PLAYLIST_ID,
+                id = uploadsCategoryId,
                 title = stringProvider.provideString(R.string.dashboard_latest_recipes),
                 description = "",
                 recipes = recipes.map { it.toRecipe() }
             )
         }
 
-    override suspend fun clearCategories() = withContext(dispatcher) {
-        categoryDao.clearAll()
-    }
-
-    override suspend fun clearRecipes() = withContext(dispatcher) {
-        recipeDao.clearAll()
-    }
 
     private suspend fun fetchRecipes(
         playlistId: String,
@@ -217,7 +213,8 @@ class RecipeRepositoryImpl(
         private const val RECIPE_SHORTS_REGEX = "die grillshow shorts"
         private const val RECIPE_SPECIAL_REGEX = "die grillshow special"
 
-        private const val LATEST_RECIPES_LIMIT = 50
+        private const val LATEST_RECIPES_CATEGORY_LIMIT = 50
+        private const val LATEST_RECIPES_DASHBOARD_LIMIT = 10
     }
 }
 

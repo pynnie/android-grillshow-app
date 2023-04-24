@@ -17,6 +17,4 @@ internal object DatabaseConstants {
     const val COLUMN_IS_FAVORITE = "isFavorite"
     const val COLUMN_TITLE = "title"
     const val COLUMN_CATEGORY_ID = "categoryId"
-
-    const val DEFAULT_LIST_SIZE = 10
 }
