@@ -34,8 +34,8 @@ interface RecipeDao {
     @Query("SELECT * FROM $TABLE_RECIPE_ENTITY WHERE $COLUMN_ID = :recipeId LIMIT 1")
     fun getRecipeFlowById(recipeId: String): Flow<RecipeEntity?>
 
-    @Query("SELECT * FROM $TABLE_RECIPE_ENTITY ORDER BY $COLUMN_UPLOADED_AT DESC LIMIT $DEFAULT_LIST_SIZE")
-    fun getLatestRecipes(): Flow<List<RecipeEntity>>
+    @Query("SELECT * FROM $TABLE_RECIPE_ENTITY ORDER BY $COLUMN_UPLOADED_AT DESC LIMIT :limit")
+    fun getLatestRecipes(limit: Int = DEFAULT_LIST_SIZE): Flow<List<RecipeEntity>>
 
     @Query("SELECT * FROM $TABLE_RECIPE_ENTITY WHERE $COLUMN_IS_FAVORITE = 1 ")
     fun getAllFavorites(): Flow<List<RecipeEntity>>

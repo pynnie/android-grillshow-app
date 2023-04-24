@@ -101,18 +101,33 @@ class RecipeRepositoryImpl(
             .map { list -> list.map { entity -> entity.toRecipe() } }
 
     override fun getCategoryById(categoryId: String): Flow<Category?> =
-        combine(
-            categoryDao.getCategoryByIdAsFlow(categoryId),
-            recipeDao.getRecipesForCategory(categoryId)
-        ) { category, recipes ->
-            category?.let { notNullCategory ->
-                Category(
-                    id = categoryId,
-                    title = notNullCategory.title,
-                    description = notNullCategory.description,
-                    recipes = recipes.map { it.toRecipe() })
-            }
+        if (categoryId == BuildConfig.GRILLSHOW_UPLOADS_PLAYLIST_ID) {
+            loadLatestCategory()
+        } else {
+            loadCategoryById(categoryId)
+        }
 
+    private fun loadCategoryById(categoryId: String) = combine(
+        categoryDao.getCategoryByIdAsFlow(categoryId),
+        recipeDao.getRecipesForCategory(categoryId)
+    ) { category, recipes ->
+        category?.let { notNullCategory ->
+            Category(
+                id = categoryId,
+                title = notNullCategory.title,
+                description = notNullCategory.description,
+                recipes = recipes.map { it.toRecipe() })
+        }
+    }
+
+    private fun loadLatestCategory() =
+        recipeDao.getLatestRecipes(limit = LATEST_RECIPES_LIMIT).map { recipes ->
+            Category(
+                id = BuildConfig.GRILLSHOW_UPLOADS_PLAYLIST_ID,
+                title = stringProvider.provideString(R.string.dashboard_latest_recipes),
+                description = "",
+                recipes = recipes.map { it.toRecipe() }
+            )
         }
 
     override suspend fun clearCategories() = withContext(dispatcher) {
@@ -201,6 +216,8 @@ class RecipeRepositoryImpl(
         private const val RECIPE_TITLE_REGEX = "die grillshow"
         private const val RECIPE_SHORTS_REGEX = "die grillshow shorts"
         private const val RECIPE_SPECIAL_REGEX = "die grillshow special"
+
+        private const val LATEST_RECIPES_LIMIT = 50
     }
 }
 
