@@ -105,7 +105,7 @@ private fun RecipeList(recipes: List<RecipeListItemVo>, onRecipeClick: (String) 
                 )
             }
             if (index < recipes.size) {
-                ListDivider()
+                Divider()
             }
         }
     }
