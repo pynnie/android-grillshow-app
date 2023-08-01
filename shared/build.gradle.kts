@@ -16,4 +16,5 @@ dependencies {
     baseTestDependencies()
     composeDependencies()
     implementation(Koin.android)
+    implementation(Google.accompanist.systemUiController)
 }

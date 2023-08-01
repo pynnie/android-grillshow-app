@@ -8,6 +8,7 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 private val DarkColors = darkColorScheme(
     primary = md_theme_dark_primary,
@@ -78,6 +79,12 @@ private val MontserratFontFamily = FontFamily(
 fun GrillshowTheme(
     content: @Composable () -> Unit
 ) {
+    rememberSystemUiController().apply {
+        setSystemBarsColor(
+            color = DarkColors.background
+        )
+    }
+
     MaterialTheme(
         colorScheme = DarkColors,
         content = content,

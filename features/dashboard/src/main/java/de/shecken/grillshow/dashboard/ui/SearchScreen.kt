@@ -13,7 +13,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import de.shecken.grillshow.dashboard.R
 import de.shecken.grillshow.vo.SearchResultVo
-import de.shecken.grillshow.shared.ui.ListDivider
+import de.shecken.grillshow.shared.ui.Divider
 import de.shecken.grillshow.shared.ui.RecipeListItem
 
 @Composable
@@ -45,7 +45,7 @@ private fun EmptyScreen() {
 @Composable
 private fun SearchResultList(
     recipes: List<SearchResultVo>,
-    onRecipeClick: (String) -> Unit
+    onRecipeClick: (String) -> Unit,
 ) {
     LazyColumn {
         itemsIndexed(recipes) { index, recipeItem ->
@@ -56,7 +56,7 @@ private fun SearchResultList(
                 onItemClick = onRecipeClick
             )
             if (index < recipes.lastIndex) {
-                ListDivider()
+                Divider()
             }
         }
     }

@@ -7,7 +7,7 @@ import androidx.compose.ui.unit.dp
 
 
 @Composable
-fun ListDivider() {
+fun Divider() {
     Divider(
         color = MaterialTheme.colorScheme.onSurface,
         thickness = 1.dp

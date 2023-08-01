@@ -15,7 +15,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import de.shecken.grillshow.favorites.R
 import de.shecken.grillshow.shared.ui.FullScreenLoadingIndicator
-import de.shecken.grillshow.shared.ui.ListDivider
+import de.shecken.grillshow.shared.ui.Divider
 import de.shecken.grillshow.shared.ui.Message
 import de.shecken.grillshow.shared.ui.RecipeListItem
 import org.koin.androidx.compose.getViewModel
@@ -60,7 +60,7 @@ private fun HandleSuccessState(state: FavoritesScreenState.Success) {
                 onItemClick = state.onItemClick
             )
             if (index < state.favoriteList.lastIndex) {
-                ListDivider()
+                Divider()
             }
         }
     }
