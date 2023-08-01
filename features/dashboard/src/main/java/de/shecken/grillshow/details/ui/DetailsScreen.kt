@@ -102,6 +102,7 @@ private fun DetailsTopBar(
                 IconButton(onClick = { onShareIconClick(state.recipeDetails.id) }) {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_share),
+                        tint = MaterialTheme.colorScheme.onSurface,
                         contentDescription = ""
                     )
                 }
@@ -220,7 +221,7 @@ private fun EmptyIngredientList(onVideoButtonClick: () -> Unit) {
 @Composable
 private fun IngredientItem(item: String) {
     Text(
-        modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+        modifier = Modifier.padding(horizontal = 16.dp, vertical = 16.dp),
         text = item,
         style = MaterialTheme.typography.bodyMedium
     )
