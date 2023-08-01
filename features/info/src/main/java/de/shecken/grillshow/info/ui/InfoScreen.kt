@@ -92,23 +92,35 @@ private fun InfoScreenContent(
             .fillMaxWidth()
             .padding(horizontal = 8.dp)
     ) {
-        InfoHeader(modifier = Modifier.padding(bottom = 8.dp), version = version)
+        InfoHeader(modifier = Modifier.padding(bottom = 8.dp))
 
         Divider()
 
-        Spacer(modifier = Modifier.height(16.dp))
-
-        SocialMediaList(
-            onSocialMediaItemClick = onSocialMediaItemClick
-        )
         Spacer(modifier = Modifier.height(16.dp))
 
         InfoLinks(onDevInfoClick, onContactClick, onTermsClick, onPrivacyClick, onLicensesClick)
 
         Spacer(modifier = Modifier.height(16.dp))
 
+        SocialMediaList(
+            onSocialMediaItemClick = onSocialMediaItemClick
+        )
+
+        Spacer(modifier = Modifier.height(24.dp))
+
         Disclaimer()
+
+        Spacer(modifier = Modifier.height(32.dp))
+
+        AppVersion(version = version)
     }
+}
+
+@Composable
+private fun AppVersion(version: String) {
+    Text(
+        text = stringResource(id = R.string.info_version, version),
+    )
 }
 
 @Composable
@@ -127,21 +139,16 @@ private fun InfoLinks(
 }
 
 @Composable
-private fun InfoHeader(modifier: Modifier = Modifier, version: String) {
+private fun InfoHeader(modifier: Modifier = Modifier) {
     Column(
         modifier = modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Image(
-            modifier = Modifier.height(100.dp),
+            modifier = Modifier.height(140.dp),
             painter = painterResource(id = R.drawable.logo),
             contentDescription = ""
         )
-
         Spacer(modifier = Modifier.height(8.dp))
-
-        Text(text = stringResource(id = R.string.info_version, version))
-
-        Spacer(modifier = Modifier.height(4.dp))
     }
 }
 
@@ -223,14 +230,6 @@ fun SocialMediaItem(socialMediaItem: SocialMediaItemVo, onSocialMediaItemClick: 
             painter = painterResource(id = socialMediaItem.iconRes),
             contentDescription = ""
         )
-    }
-}
-
-@Composable
-@Preview
-private fun InfoHeaderPreview() {
-    GrillshowTheme {
-        InfoHeader(version = "1.0")
     }
 }
 
