@@ -257,7 +257,7 @@ private fun CategoryList(
     onCategoryClick: (String) -> Unit
 ) {
     LazyColumn {
-        items(items = categories) { category ->
+        items(items = categories, key = { it.id }) { category ->
             HorizontalRecipeList(
                 category = category,
                 onFavIconClick = onFavIconClick,
@@ -294,7 +294,7 @@ private fun HorizontalRecipeList(
 
         Spacer(modifier = Modifier.height(8.dp))
         LazyRow(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-            items(items = category.recipes) { recipe ->
+            items(items = category.recipes, key = { it.id }) { recipe ->
                 RecipeItem(
                     recipe = recipe,
                     onFavIconClick = onFavIconClick,
@@ -357,7 +357,7 @@ private fun RecipeItemPreview() {
     GrillshowTheme {
         RecipeItem(
             recipe = RecipeListItemVo("", "Item1", "", false),
-            onFavIconClick = {_,_ ->},
+            onFavIconClick = { _, _ -> },
             onRecipeClick = {}
         )
     }

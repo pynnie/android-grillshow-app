@@ -8,7 +8,7 @@ class IngredientExtractorImpl : IngredientExtractor {
             .filter { it.startsWith(INGREDIENT_PREFIX, ignoreCase = true) }
             .map { ingredient ->
                 ingredient.replaceFirst(INGREDIENT_PREFIX, "").trim()
-            }
+            }.sorted()
 
     companion object {
         private const val INGREDIENT_PREFIX = "-"
