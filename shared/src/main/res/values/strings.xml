@@ -12,7 +12,7 @@
     <string name="search_title">Suche</string>
     <string name="favorites_title">Lieblingslunser</string>
     <string name="favorites_empty_title">Keine Lieblingslunser vorhanden</string>
-    <string name="favorites_empty_message">Anscheinend konntest du dich noch nicht entscheiden,\nwelche von Onkel Johnny\'s Spezialitäten dir am besten gefällt.</string>
+    <string name="favorites_empty_message">Anscheinend konntest du dich noch nicht entscheiden, welche von Onkel Johnny\'s Spezialitäten dir am besten gefällt.</string>
     <string name="favorites_empty_button">Zu den Lunsern</string>
     <string name="details_title">Lunserdetails</string>
     <string name="details_list_title">Das braucht ihr:</string>
