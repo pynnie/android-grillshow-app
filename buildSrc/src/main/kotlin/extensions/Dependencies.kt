@@ -51,4 +51,7 @@ fun DependencyHandlerScope.composeDependencies() {
     add("implementation", AndroidX.Navigation.compose)
     add("implementation", AdditionalLibs.koinCompose)
     add("implementation", COIL.compose)
+    add("implementation", AdditionalLibs.composeNavigator)
+    add("implementation", AdditionalLibs.composeNavigatorRuntime)
+    add("ksp", AdditionalLibs.composeNavigatorKsp)
 }
