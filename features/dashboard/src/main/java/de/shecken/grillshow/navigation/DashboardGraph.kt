@@ -5,6 +5,10 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.navArgument
+import de.onecode.navigator.api.Destination
+import de.onecode.navigator.api.Home
+import de.onecode.navigator.api.Navigation
+import de.onecode.navigator.api.Parameter
 import de.shecken.grillshow.category.CategoryScreen
 import de.shecken.grillshow.dashboard.ui.DashboardScreen
 import de.shecken.grillshow.details.ui.DetailsScreen
@@ -37,3 +41,12 @@ fun NavGraphBuilder.dashboardGraph() {
         }
     }
 }
+
+@Destination(name = dashboardScreen)
+@Home
+@Navigation(to = DetailsDestination::class)
+object DashboardDescription
+
+@Destination(name = detailsScreen)
+@Parameter(name = recipeId, type = String::class)
+object DetailsDestination

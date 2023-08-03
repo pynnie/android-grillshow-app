@@ -31,6 +31,7 @@ internal class MainActivity : AppCompatActivity() {
 
         setContent {
             GrillshowTheme {
+               // val navigatorController = rememberNavigatorController()
                 val navController = rememberNavController()
                     .also { router.setNavController(it) }
 
@@ -56,6 +57,7 @@ internal class MainActivity : AppCompatActivity() {
                         favoritesGraph()
                         infoGraph()
                     }
+
                 }
             }
         }
