@@ -9,15 +9,16 @@ import de.onecode.navigator.api.Destination
 import de.onecode.navigator.api.Home
 import de.onecode.navigator.api.Navigation
 import de.onecode.navigator.api.Parameter
+import de.onecode.navigator.api.Top
 import de.shecken.grillshow.category.CategoryScreen
 import de.shecken.grillshow.dashboard.ui.DashboardScreen
 import de.shecken.grillshow.details.ui.DetailsScreen
 
 const val dashboardRoute = "dashboard_route"
 
-const val dashboardScreen = "$dashboardRoute/dashboard_screen"
-const val detailsScreen = "$dashboardScreen/details_screen"
-const val categoryScreen = "$dashboardScreen/category_screen"
+const val dashboardScreen = "dashboard_screen"
+const val detailsScreen = "details_screen"
+const val categoryScreen = "category_screen"
 
 const val recipeId = "recipeId"
 const val categoryId = "categoryId"
@@ -44,9 +45,15 @@ fun NavGraphBuilder.dashboardGraph() {
 
 @Destination(name = dashboardScreen)
 @Home
+@Top
 @Navigation(to = DetailsDestination::class)
+@Navigation(to = CategoryDestination::class)
 object DashboardDescription
 
 @Destination(name = detailsScreen)
 @Parameter(name = recipeId, type = String::class)
 object DetailsDestination
+
+@Destination
+@Parameter(name = categoryId, type = String::class)
+object CategoryDestination
