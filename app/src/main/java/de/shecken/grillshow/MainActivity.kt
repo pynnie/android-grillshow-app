@@ -7,6 +7,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
+import de.onecode.navigator.rememberNavigatorController
 import de.shecken.favorites.navigation.favoritesGraph
 import de.shecken.grillshow.navigation.BottomNavigationScreen
 import de.shecken.grillshow.navigation.dashboardGraph
@@ -31,7 +32,6 @@ internal class MainActivity : AppCompatActivity() {
 
         setContent {
             GrillshowTheme {
-              //  val navigatorController = rememberNavigatorController()
                 val navController = rememberNavController()
                     .also { router.setNavController(it) }
 
@@ -60,14 +60,19 @@ internal class MainActivity : AppCompatActivity() {
 
                 }
 
-                /*Navigator {
+                val navigatorController = rememberNavigatorController()
+/*
+                Navigator(
+                    navigatorController = navigatorController
+                ) {
                     dashboardScreen {
                         DashboardScreen()
                     }
                     detailsScreen {
                         DetailsScreen()
                     }
-                }*/
+                }
+ */
             }
         }
     }
