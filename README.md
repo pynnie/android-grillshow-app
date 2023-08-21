@@ -12,14 +12,7 @@ This is a fan project for the YouTube channel "Die Grillshow"
     * [Koin]([https://developer.android.com/training/dependency-injection/hilt-android](https://insert-koin.io/)): Koin is a pragmatic lightweight dependency injection framework for Kotlin developers
     * [Retrofit2](https://github.com/square/retrofit): Type-safe REST client for Android and Java
     * [Gson](https://github.com/google/gson): Java library that can be used to convert Java Objects into their JSON representation and vice versa
-* Architecture
-    * MVVM Architecture
-    * Repository pattern
 * JUnit and Mockito for testing
-
-
-## Architecture
-This app follows [Google's official architecture guidance](https://developer.android.com/topic/architecture). It is based on the MVVM architecture and the Repository pattern.
 
 
 ## LICENSE
