@@ -14,5 +14,6 @@ dependencies {
     baseDependencies()
     baseTestDependencies()
     baseFeatureModuleDependencies(withCompose = true)
-    implementation(COIL.compose)
+
+    implementation(AdditionalLibs.youtubePlayer)
 }

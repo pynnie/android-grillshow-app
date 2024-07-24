@@ -49,7 +49,11 @@ fun Project.androidAppConfig(additionalConfig: BaseAppModuleExtension.() -> Unit
         additionalConfig()
     }
 }
-fun Project.androidLibraryConfig(withCompose: Boolean, additionalConfig: LibraryExtension.() -> Unit = { }) {
+
+fun Project.androidLibraryConfig(
+    withCompose: Boolean,
+    additionalConfig: LibraryExtension.() -> Unit = { }
+) {
     apply(plugin = "com.android.library")
     extensions.configure<LibraryExtension> {
         compileSdk = AppConfig.compileSdk

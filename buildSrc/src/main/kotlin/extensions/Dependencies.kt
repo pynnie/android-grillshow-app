@@ -15,7 +15,6 @@ fun DependencyHandlerScope.baseDependencies() {
     add("implementation", KotlinX.Coroutines.android)
     add("implementation", JakeWharton.timber)
     add("implementation", Koin.android)
-    add("implementation", AndroidX.lifecycle.runtimeKtx)
 }
 
 fun DependencyHandlerScope.baseTestDependencies() {
@@ -26,6 +25,7 @@ fun DependencyHandlerScope.baseTestDependencies() {
     add("testImplementation", Testing.mockK)
     add("testImplementation", Testing.kotest.assertions.core)
     add("testImplementation", KotlinX.coroutines.test)
+    add("testImplementation", AdditionalLibs.turbine)
 }
 
 fun DependencyHandlerScope.baseFeatureModuleDependencies(withCompose: Boolean = true) {
@@ -45,8 +45,10 @@ fun DependencyHandlerScope.composeDependencies() {
     add("implementation", AndroidX.Compose.foundation)
     add("implementation", AndroidX.Compose.material3)
     add("implementation", AndroidX.Lifecycle.viewModelCompose)
+    add("implementation", AndroidX.Lifecycle.runtime.compose)
     add("implementation", AndroidX.Activity.compose)
     add("implementation", AndroidX.ConstraintLayout.compose)
     add("implementation", AndroidX.Navigation.compose)
     add("implementation", AdditionalLibs.koinCompose)
+    add("implementation", COIL.compose)
 }

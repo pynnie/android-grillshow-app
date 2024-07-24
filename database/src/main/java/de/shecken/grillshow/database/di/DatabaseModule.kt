@@ -22,18 +22,28 @@ val databaseModule = module {
 
     single { MasterKey(get()) }
 
-    single { EncryptedSharedPreferences.create(get(), SHARED_PREFERENCES_NAME, get<MasterKey>(), AES256_SIV, AES256_GCM) }
+    single {
+        EncryptedSharedPreferences.create(
+            get(),
+            SHARED_PREFERENCES_NAME,
+            get<MasterKey>(),
+            AES256_SIV,
+            AES256_GCM
+        )
+    }
 
     single { SupportFactory(getOrCreateRoomPassphrase(get())) }
 
     single {
         Room
             .databaseBuilder(get(), AppDatabase::class.java, DATABASE_NAME)
+            .fallbackToDestructiveMigration()
             .apply { if (!DEBUG) openHelperFactory(get<SupportFactory>()) }
             .build()
     }
 
-    factory { get<AppDatabase>().userDao() }
+    factory { get<AppDatabase>().recipeDao() }
+    factory { get<AppDatabase>().categoryDao() }
 }
 
 private fun getOrCreateRoomPassphrase(sharedPreferences: SharedPreferences): ByteArray {
