@@ -3,6 +3,6 @@ object AppConfig {
     const val minSdk = 29
     const val targetSdk = 34
 
-    const val versionName = "1.0"
-    const val versionCode = 10
+    const val versionName = "1.0.1"
+    const val versionCode = 101
 }
