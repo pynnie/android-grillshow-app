@@ -23,7 +23,6 @@ fun DependencyHandlerScope.baseTestDependencies() {
     add("testImplementation", Testing.junit.jupiter.api)
     add("testRuntimeOnly", Testing.junit.jupiter.engine)
     add("testImplementation", Testing.mockK)
-    add("testImplementation", Testing.kotest.assertions.core)
     add("testImplementation", KotlinX.coroutines.test)
     add("testImplementation", AdditionalLibs.turbine)
 }
@@ -47,7 +46,6 @@ fun DependencyHandlerScope.composeDependencies() {
     add("implementation", AndroidX.Lifecycle.viewModelCompose)
     add("implementation", AndroidX.Lifecycle.runtime.compose)
     add("implementation", AndroidX.Activity.compose)
-    add("implementation", AndroidX.ConstraintLayout.compose)
     add("implementation", AndroidX.Navigation.compose)
     add("implementation", AdditionalLibs.koinCompose)
     add("implementation", COIL.compose)
