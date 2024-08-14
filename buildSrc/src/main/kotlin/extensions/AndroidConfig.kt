@@ -1,3 +1,5 @@
+@file:Suppress("UnstableApiUsage")
+
 package extensions
 
 import AndroidX
@@ -9,6 +11,7 @@ import org.gradle.api.JavaVersion
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.configure
+
 
 fun Project.androidAppConfig(additionalConfig: BaseAppModuleExtension.() -> Unit = { }) {
     apply(plugin = "com.android.application")
