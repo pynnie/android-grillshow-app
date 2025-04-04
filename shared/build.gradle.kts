@@ -9,7 +9,9 @@ plugins {
     id("kotlin-android")
 }
 
-androidLibraryConfig(withCompose = true)
+androidLibraryConfig(withCompose = true) {
+    namespace = "de.shecken.grillshow.shared"
+}
 
 dependencies {
     baseDependencies()

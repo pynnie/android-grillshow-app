@@ -5,12 +5,13 @@ buildscript {
     repositories {
         google()
         mavenCentral()
+		gradlePluginPortal()
     }
     dependencies {
-        classpath("com.android.tools.build:gradle:7.1.3")
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:_")
-        classpath("org.jlleitschuh.gradle:ktlint-gradle:_")
-        classpath("com.mikepenz.aboutlibraries.plugin:aboutlibraries-plugin:_")
+        classpath(Android.tools.build.gradlePlugin)
+        classpath(Kotlin.gradlePlugin)
+        classpath(libs.ktlint.gradle)
+        classpath(libs.aboutlibraries.plugin)
     }
 }
 
@@ -19,6 +20,7 @@ allprojects {
     repositories {
         google()
         mavenCentral()
+		gradlePluginPortal()
     }
 }
 

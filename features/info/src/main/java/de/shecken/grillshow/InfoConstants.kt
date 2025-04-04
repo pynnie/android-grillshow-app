@@ -1,6 +1,6 @@
 package de.shecken.grillshow.info.ui
 
-import de.shecken.grillshow.info.R
+import de.shecken.grillshow.shared.R
 import de.shecken.grillshow.info.vo.InfoItemVo
 import de.shecken.grillshow.info.vo.SocialMediaItemVo
 

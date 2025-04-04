@@ -3,13 +3,14 @@ package de.shecken.grillshow.repository.recipe
 import de.shecken.grillshow.database.category.CategoryDao
 import de.shecken.grillshow.database.category.CategoryEntity
 import de.shecken.grillshow.database.recipe.RecipeDao
+import de.shecken.grillshow.networking.BuildConfig.*
 import de.shecken.grillshow.networking.youtube.YoutubeDataApi
 import de.shecken.grillshow.repository.*
 import de.shecken.grillshow.repository.preferences.PreferencesRepository
 import de.shecken.grillshow.repository.recipe.model.Category
 import de.shecken.grillshow.repository.recipe.model.Recipe
+import de.shecken.grillshow.shared.R
 import de.shecken.grillshow.shared.provider.StringProvider
-import de.shecken.networking.BuildConfig
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -34,7 +35,7 @@ class RecipeRepositoryImpl(
         }
     }
 
-    private val uploadsCategoryId = BuildConfig.GRILLSHOW_UPLOADS_PLAYLIST_ID
+    private val uploadsCategoryId = GRILLSHOW_UPLOADS_PLAYLIST_ID
 
     override val categories = combine(
         loadLatestCategory(LATEST_RECIPES_DASHBOARD_LIMIT),
@@ -48,7 +49,7 @@ class RecipeRepositoryImpl(
     }
 
     override suspend fun fetchAllRecipes() = withContext(dispatcher) {
-        fetchRecipes(playlistId = BuildConfig.GRILLSHOW_UPLOADS_PLAYLIST_ID)
+        fetchRecipes(playlistId = GRILLSHOW_UPLOADS_PLAYLIST_ID)
         preferencesRepository.updateInitCompleted(true)
     }
 
