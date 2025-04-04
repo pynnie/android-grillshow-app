@@ -13,15 +13,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import de.shecken.grillshow.favorites.R
+import de.shecken.grillshow.shared.R
 import de.shecken.grillshow.shared.ui.FullScreenLoadingIndicator
 import de.shecken.grillshow.shared.ui.Divider
 import de.shecken.grillshow.shared.ui.Message
 import de.shecken.grillshow.shared.ui.RecipeListItem
-import org.koin.androidx.compose.getViewModel
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
-internal fun FavoriteScreen(viewModel: FavoritesViewModel = getViewModel()) {
+internal fun FavoriteScreen(viewModel: FavoritesViewModel = koinViewModel()) {
     val state by viewModel.favoritesScreenState.collectAsStateWithLifecycle()
 
     FavoritesScreen(state = state)

@@ -17,6 +17,7 @@ fun Project.androidAppConfig(additionalConfig: BaseAppModuleExtension.() -> Unit
     apply(plugin = "com.android.application")
     extensions.configure<BaseAppModuleExtension> {
         compileSdk = AppConfig.compileSdk
+		namespace = "de.shecken.grillshow"
 
         defaultConfig {
             minSdk = AppConfig.minSdk
@@ -37,12 +38,13 @@ fun Project.androidAppConfig(additionalConfig: BaseAppModuleExtension.() -> Unit
         }
 
         compileOptions {
-            sourceCompatibility = JavaVersion.VERSION_11
-            targetCompatibility = JavaVersion.VERSION_11
+            sourceCompatibility = JavaVersion.VERSION_17
+            targetCompatibility = JavaVersion.VERSION_17
         }
 
         buildFeatures {
             compose = true
+            buildConfig = true
         }
 
         composeOptions {
@@ -70,6 +72,7 @@ fun Project.androidLibraryConfig(
         buildTypes {
             buildFeatures {
                 compose = withCompose
+                buildConfig = true
             }
             release {
                 isMinifyEnabled = false
@@ -78,8 +81,8 @@ fun Project.androidLibraryConfig(
         }
 
         compileOptions {
-            sourceCompatibility = JavaVersion.VERSION_11
-            targetCompatibility = JavaVersion.VERSION_11
+            sourceCompatibility = JavaVersion.VERSION_17
+            targetCompatibility = JavaVersion.VERSION_17
         }
 
         composeOptions {

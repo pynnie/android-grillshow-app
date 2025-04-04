@@ -8,7 +8,9 @@ plugins {
     id("kotlin-android")
 }
 
-androidLibraryConfig(withCompose = true)
+androidLibraryConfig(withCompose = true) {
+    namespace = "de.shecken.grillshow.info"
+}
 
 dependencies {
     baseDependencies()
@@ -17,5 +19,5 @@ dependencies {
 
     implementation(AdditionalLibs.aboutLibsCore)
     implementation(AdditionalLibs.aboutLibsCompose)
-    implementation("com.google.accompanist:accompanist-webview:_")
+    implementation(libs.accompanist.webview)
 }

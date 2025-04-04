@@ -13,13 +13,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import de.shecken.grillshow.dashboard.R
+import de.shecken.grillshow.shared.R.*
 import de.shecken.grillshow.shared.ui.*
 import de.shecken.grillshow.vo.RecipeListItemVo
-import org.koin.androidx.compose.getViewModel
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun CategoryScreen(viewModel: CategoryViewModel = getViewModel()) {
+fun CategoryScreen(viewModel: CategoryViewModel = koinViewModel()) {
 
     val state by viewModel.screenState.collectAsStateWithLifecycle()
     CategoryScreen(state = state, onBackButtonClick = viewModel::goBack)
@@ -61,10 +61,10 @@ private fun HandleScreenState(modifier: Modifier, state: CategoryScreenState) {
 private fun Failure(onReloadButtonClick: () -> Unit) {
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         Message(
-            title = stringResource(id = R.string.category_error_title),
-            message = stringResource(id = R.string.category_error_message),
-            buttonText = stringResource(id = R.string.category_error_button),
-            imageRes = R.drawable.ninja,
+            title = stringResource(id = string.category_error_title),
+            message = stringResource(id = string.category_error_message),
+            buttonText = stringResource(id = string.category_error_button),
+            imageRes = drawable.ninja,
             onButtonClick = onReloadButtonClick
         )
     }

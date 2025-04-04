@@ -23,17 +23,17 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
-import de.shecken.grillshow.dashboard.R
+import de.shecken.grillshow.shared.R
 import de.shecken.grillshow.vo.RecipeDetailsVo
 import de.shecken.grillshow.shared.GrillshowTheme
 import de.shecken.grillshow.shared.ui.BackButton
 import de.shecken.grillshow.shared.ui.Message
 import de.shecken.grillshow.shared.ui.FavIconButton
 import de.shecken.grillshow.shared.ui.FullScreenLoadingIndicator
-import org.koin.androidx.compose.getViewModel
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
-internal fun DetailsScreen(viewModel: DetailsViewModel = getViewModel()) {
+internal fun DetailsScreen(viewModel: DetailsViewModel = koinViewModel()) {
 
     val state: DetailsScreenState by viewModel.detailsScreenState.collectAsStateWithLifecycle()
 

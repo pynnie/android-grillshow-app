@@ -16,16 +16,16 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import de.shecken.grillshow.info.R
+import de.shecken.grillshow.shared.R
 import de.shecken.grillshow.info.vo.InfoItemVo
 import de.shecken.grillshow.info.vo.SocialMediaItemVo
 import de.shecken.grillshow.shared.GrillshowTheme
 
-import org.koin.androidx.compose.getViewModel
+import org.koin.androidx.compose.koinViewModel
 
 
 @Composable
-fun InfoScreen(viewModel: InfoViewModel = getViewModel()) {
+fun InfoScreen(viewModel: InfoViewModel = koinViewModel()) {
 
     val version by viewModel.versionName.collectAsStateWithLifecycle()
     InfoScreen(

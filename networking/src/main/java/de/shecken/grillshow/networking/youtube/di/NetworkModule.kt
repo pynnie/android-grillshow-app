@@ -4,8 +4,8 @@ import com.chuckerteam.chucker.api.ChuckerCollector
 import com.chuckerteam.chucker.api.ChuckerInterceptor
 import com.chuckerteam.chucker.api.RetentionManager.Period.ONE_HOUR
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
-import de.shecken.networking.BuildConfig
-import de.shecken.networking.BuildConfig.YOUTUBE_DATA_API_BASE_URL
+import de.shecken.grillshow.networking.BuildConfig
+import de.shecken.grillshow.networking.BuildConfig.YOUTUBE_DATA_API_BASE_URL
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType

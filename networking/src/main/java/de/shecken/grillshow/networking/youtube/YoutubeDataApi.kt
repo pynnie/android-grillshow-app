@@ -1,7 +1,7 @@
 package de.shecken.grillshow.networking.youtube
 
+import de.shecken.grillshow.networking.BuildConfig
 import de.shecken.grillshow.networking.youtube.response.PlaylistItemListResponse
-import de.shecken.networking.BuildConfig
 import retrofit2.http.GET
 import retrofit2.http.Headers
 import retrofit2.http.Query

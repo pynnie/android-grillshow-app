@@ -11,12 +11,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.mikepenz.aboutlibraries.ui.compose.LibrariesContainer
 import com.mikepenz.aboutlibraries.ui.compose.LibraryDefaults
-import de.shecken.grillshow.info.R
+import de.shecken.grillshow.shared.R
 import de.shecken.grillshow.shared.ui.BackButton
-import org.koin.androidx.compose.getViewModel
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun LicensesScreen(viewModel: LicensesViewModel = getViewModel()) {
+fun LicensesScreen(viewModel: LicensesViewModel = koinViewModel()) {
     LicensesScreen(onBackButtonClick = viewModel::onBackButtonClicked)
 }
 

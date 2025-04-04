@@ -3,7 +3,7 @@ package de.shecken.grillshow.info.ui
 import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import de.shecken.grillshow.info.R
+import de.shecken.grillshow.shared.R
 import de.shecken.grillshow.info.interactor.InfoInteractor
 import de.shecken.grillshow.legal.LegalScreenType
 import de.shecken.grillshow.navigation.InfoRouter

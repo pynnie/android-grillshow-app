@@ -10,6 +10,7 @@ import de.shecken.favorites.navigation.favoritesRoute
 import de.shecken.favorites.navigation.favoritesScreen
 import de.shecken.grillshow.legal.LegalScreenType
 import de.shecken.grillshow.navigation.*
+import de.shecken.grillshow.shared.R
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.*
@@ -74,7 +75,6 @@ internal class Router(
     override fun goBack() {
         navController.navigateUp()
     }
-
     override fun shareRecipe(recipeId: String) {
         val sendIntent: Intent = Intent().apply {
             action = Intent.ACTION_SEND

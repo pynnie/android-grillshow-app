@@ -8,7 +8,9 @@ plugins {
     id("kotlin-kapt")
 }
 
-androidLibraryConfig(withCompose = false)
+androidLibraryConfig(withCompose = false) {
+    namespace = "de.shecken.grillshow.database"
+}
 
 dependencies {
     baseDependencies()

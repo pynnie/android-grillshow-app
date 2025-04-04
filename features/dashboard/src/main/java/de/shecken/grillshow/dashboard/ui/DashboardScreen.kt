@@ -54,7 +54,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
-import de.shecken.grillshow.dashboard.R
+import de.shecken.grillshow.shared.R
 import de.shecken.grillshow.shared.GrillshowTheme
 import de.shecken.grillshow.shared.ui.Divider
 import de.shecken.grillshow.shared.ui.FavIconButton
@@ -62,10 +62,10 @@ import de.shecken.grillshow.shared.ui.FullScreenLoadingIndicator
 import de.shecken.grillshow.shared.ui.Message
 import de.shecken.grillshow.vo.CategoryVo
 import de.shecken.grillshow.vo.RecipeListItemVo
-import org.koin.androidx.compose.getViewModel
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
-internal fun DashboardScreen(viewModel: DashboardViewModel = getViewModel()) {
+internal fun DashboardScreen(viewModel: DashboardViewModel = koinViewModel()) {
     val state by viewModel.screenState.collectAsStateWithLifecycle()
     DashboardScreen(
         state = state,

@@ -14,6 +14,7 @@ plugins {
 }
 
 androidLibraryConfig(withCompose = false) {
+    namespace = "de.shecken.grillshow.networking"
     defaultConfig {
         val props = Properties().apply {
             load(FileInputStream(File(rootProject.rootDir, "local.properties")))
