@@ -14,10 +14,10 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.accompanist.web.WebView
 import com.google.accompanist.web.rememberWebViewState
 import de.shecken.grillshow.shared.ui.BackButton
-import org.koin.androidx.compose.getViewModel
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun LegalScreen(viewModel: LegalViewModel = getViewModel()) {
+fun LegalScreen(viewModel: LegalViewModel = koinViewModel()) {
 
     val type by viewModel.type.collectAsStateWithLifecycle()
     LegalScreen(type = type, onBackButtonClick = viewModel::onBackButtonClick)
